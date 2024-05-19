@@ -19,5 +19,5 @@
   - ⚫ A page for admins to manage events: create, update, delete events.
   - ⚫ A list of users registered for each event.
 
-![Alt text](EventManagementSystem/wwwroot/imgs/Event.svg)
+![Alt text](EventManagementSystem/wwwroot/imgs/Mini%20Event%20(1).svg)
 <!-- <img src="EventManagementSystem/wwwroot/imgs/Event.png" alt="Alt text" /> --!>
