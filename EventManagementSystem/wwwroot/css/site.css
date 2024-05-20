@@ -18,6 +18,30 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
-  background-color: rgb(65, 61, 77);
+    background: url("/imgs/davide-ragusa-gcDwzUGuUoI-unsplash.jpg") no-repeat fixed;
+    background-size: cover;
+}
+
+/*.navbar {
+    position: fixed;
+}*/
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #dc3545; /* Change to your desired color */
+    color: white; /* Change to your desired text color */
+}
+
+.jumbotron-detail-apple-pie {
+    background: url("https://images.unsplash.com/photo-1521610142770-4f09a2cdb252?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
+    opacity:0;
+}
+
+.jumbotron {
+    height: 60vh;
+    background-size: cover;
+}
+
+main {
+    color:aliceblue;
 }
