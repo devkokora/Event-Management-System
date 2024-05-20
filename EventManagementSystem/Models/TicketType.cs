@@ -11,7 +11,7 @@ namespace EventManagementSystem.Models
         [Required]
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
-        [StringLength(1000)]
+        [StringLength(400)]
         public string Detail { get; set; } = string.Empty;
         public float Price { get; set; } = default;
         public int? MaxCapital { get; set; }
