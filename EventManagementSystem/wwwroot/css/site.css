@@ -1,20 +1,20 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -32,16 +32,100 @@ body {
     color: white; /* Change to your desired text color */
 }
 
-.jumbotron-detail-apple-pie {
-    background: url("https://images.unsplash.com/photo-1521610142770-4f09a2cdb252?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    opacity:0;
+.jumbotron-detail-event-jui {
+     /*background: url("https://images.unsplash.com/photo-1521610142770-4f09a2cdb252?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;*/
+    opacity:1;
 }
 
-.jumbotron {
-    height: 60vh;
-    background-size: cover;
+.jumbotron .carousel-item {
+    height: 660px;
+    background-size:cover;
+}
+
+@media (max-height: 900px) {
+    .jumbotron .carousel-item {
+        height: 500px;
+    }
+}
+
+@media (max-width: 999px) {
+    .jumbotron .carousel-item {
+        height: 400px;
+    }
+}
+
+@media (max-width: 770px) {
+    .jumbotron .carousel-item {
+        height: 300px;
+    }
+}
+
+@media (max-width: 560px) {
+    .jumbotron .carousel-item {
+        height: 250px;
+    }
+}
+
+@media (max-width: 400px) {
+    .jumbotron .carousel-item {
+        height: 200px;
+    }
+}
+
+@media (max-width: 320px) {
+    .jumbotron .carousel-item {
+        height: auto;
+    }
 }
 
 main {
-    color:aliceblue;
+    color: aliceblue;
+}
+
+.counter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-index {
+    position:relative;
+    height: 40px;
+}
+
+    .search-index .input-search-index {
+        background-color: #fff;
+        border: 0;
+        font-size: 18px;
+        padding: 15px;
+        height: 40px;
+        width: 40px;
+        transition: width 0.3s ease;
+    }
+
+.btn-search-index {
+    background-color: white;
+    border: 0;
+    cursor: pointer;
+    font-size: 18px;
+    position:absolute;
+    top: 0;
+    left: 0px;
+    height: 40px;
+    width: 40px;
+    transition: transform 0.3s ease;
+}
+
+    .btn-search-index:focus,
+    .input-search-index:focus {
+        outline: none;
+    }
+
+.search-index.active .input-search-index {
+    width: 300px;
+}
+
+.search-index.active .btn-search-index {
+    transform: translateX(298px);
 }
