@@ -7,16 +7,16 @@ namespace EventManagementSystem.Models
     {
         [Key]
         public int Id { get; set; }
-        [StringLength(1000)]
+        [StringLength(500)]
         public string Detail { get; set; } = string.Empty;
 
         [ForeignKey("TicketType")]
         public int TicketTypeId { get; set; }
         [Required]
-        public int TicketType { get; set; }
+        public TicketType? TicketType { get; set; }
 
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         [Required]
         public User User { get; set; } = default!;
     }

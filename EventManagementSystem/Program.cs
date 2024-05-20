@@ -1,7 +1,25 @@
+using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EventManagementSystemDbContextConnection"));
+    options.EnableSensitiveDataLogging();
+});
+
+builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<EventManagementSystemDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<RoleInitializer>();
+
 
 var app = builder.Build();
 
@@ -18,6 +36,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
