@@ -1,0 +1,10 @@
+﻿@inherits LayoutComponentBase
+
+<NavMenu></NavMenu>
+<div class="container">
+    <main role="main" class="pb-5 pt-5">
+        @Body
+    </main>
+</div>
+
+@((MarkupString)File.ReadAllText(Environment.CurrentDirectory + "\\wwwroot\\html\\footer.html"))

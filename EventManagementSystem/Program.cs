@@ -1,12 +1,18 @@
 using EventManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using EventManagementSystem.App;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient();
+
+builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
@@ -42,5 +48,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseAntiforgery(); // blazor protect anonymous data
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
 
 app.Run();
