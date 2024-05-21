@@ -37,47 +37,6 @@ body {
     opacity:1;
 }
 
-.jumbotron .carousel-item {
-    height: 660px;
-    background-size:cover;
-}
-
-@media (max-height: 900px) {
-    .jumbotron .carousel-item {
-        height: 500px;
-    }
-}
-
-@media (max-width: 999px) {
-    .jumbotron .carousel-item {
-        height: 400px;
-    }
-}
-
-@media (max-width: 770px) {
-    .jumbotron .carousel-item {
-        height: 300px;
-    }
-}
-
-@media (max-width: 560px) {
-    .jumbotron .carousel-item {
-        height: 250px;
-    }
-}
-
-@media (max-width: 400px) {
-    .jumbotron .carousel-item {
-        height: 200px;
-    }
-}
-
-@media (max-width: 320px) {
-    .jumbotron .carousel-item {
-        height: auto;
-    }
-}
-
 main {
     color: aliceblue;
 }
@@ -128,4 +87,60 @@ main {
 
 .search-index.active .btn-search-index {
     transform: translateX(298px);
+}
+
+
+.overview-static {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 600;
+    color: #dc3545;
+    color: #dc3545;
+    position: absolute;
+    background-color: rgb(0 0 0 / 0.75);
+    border-radius: 100px;
+    box-shadow: inset 0px 0px 40px 16px rgb(255 255 255 / 0.60);
+    padding: 0;
+    margin: 0;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    opacity: 1;
+    top: 25vh;
+}
+
+@media (max-width: 767px) {
+    .overview-static {
+        top: 6vh;
+    }
+}
+
+
+/*@media (max-width: 300px) {
+    .overview-static {
+        top: 12vh;
+    }
+}*/
+/*.carousel-container {
+    top:220px;
+    position: fixed;
+    opacity: 1;
+}
+
+.carousel-item {
+    width: 1296px;*/ /* Set your desired width */
+/*height: 250px;*/ /* Set your desired height */
+/*overflow: hidden;*/ /* Hide the overflow of the image */
+/*border-radius: 100px;*/ /* Optional: Add rounded corners */
+/*}
+
+    .carousel-item img {
+        width: 100%;*/ /* Make the image fill the container horizontally */
+/*height: auto;*/ /* Maintain aspect ratio */
+/*object-fit: cover;*/ /* Crop the image to cover the container */
+/*}*/
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }

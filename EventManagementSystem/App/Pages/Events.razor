@@ -1,0 +1,13 @@
+﻿@page "/events/{category?}"
+
+@rendermode InteractiveServer
+<h3>SearchEvent @Category</h3>
+@code {
+    [Parameter]
+    public string? Category { get; set; }
+
+    //protected override void OnParametersSet()
+    //{
+    //    Category = Category ?? "All";
+    //}
+}
