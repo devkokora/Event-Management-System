@@ -2,11 +2,11 @@
 
 @rendermode InteractiveServer
 
-<div class="jumbotron jumbotron-@Category-event pt-2">
+<div class="jumbotron jumbotron-@Category-event pt-5">
     <div class="container">
-        <h1 class="display-3 text-black" style="font-family:fantasy;">
-            <strong style="-webkit-text-stroke: 1px white;">@(Category is null ? "EVENTS" : Category.ToUpper())</strong>
-        </h1>
+        <h2 class="display-5 text-danger text-center" style="font-weight:600;">
+            <strong style="-webkit-text-stroke: white 1px;">@(($"{Category} EVENTS").ToUpper())</strong>
+        </h2>
     </div>
 </div>
 <div class="container-fluid event-container pt-3 bg-dark">
@@ -38,8 +38,8 @@
     [Parameter]
     public string? Category { get; set; }
 
-    //protected override void OnParametersSet()
-    //{
-    //    Category = Category ?? "All";
-    //}
+    protected override void OnParametersSet()
+    {
+        Category ??= string.Empty;
+    }
 }

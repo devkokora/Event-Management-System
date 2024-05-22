@@ -1,7 +1,7 @@
 ﻿<header>
     <nav class="navbar navbar-expand-lg bg-dark border-bottom border-secondary fixed-top">
         <div class="container">
-            <a class="navbar-brand text-bg-danger px-2 rounded-2 fw-bold" asp-controller="Home" asp-action="Index">EventJui</a>
+            <a class="navbar-brand text-bg-danger px-2 rounded-2 fw-bold" href="/">EventJui</a>
             <button class="navbar-toggler bg-danger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -77,10 +77,12 @@
                             Admin Controller
                         </a>
                         <ul class="dropdown-menu bg-dark-subtle">
-                            <li><a class="dropdown-item" href="#">New Event</a></li>
-                            <li><a class="dropdown-item" href="#">Event dashboard</a></li>
+                            <li><a class="dropdown-item" href="/admin">Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">User dashboard</a></li>
+                            <li><a class="dropdown-item" href="/admin/eventsmanager/create">New Event</a></li>
+                            <li><a class="dropdown-item" href="/admin/eventsmanager">Event dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/admin/usersmanager">User dashboard</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
