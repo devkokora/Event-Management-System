@@ -15,7 +15,7 @@ namespace EventManagementSystem.Models
         public string Description { get; set; } = string.Empty;
 
         [ForeignKey("User")]
-        public string UserId{ get; set; }
+        public string? UserId{ get; set; }
         [Required]
         public User User { get; set; } = default!;
 
@@ -32,7 +32,7 @@ namespace EventManagementSystem.Models
         public double Longitude { get; set; }
         public string Country { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
-        public string Directions { get; set; } = string.Empty;
+        public string? Image { get; set; }
         public List<Transport>? Transports { get; set; }
 
         public ICollection<Category>? Categories { get; set; }

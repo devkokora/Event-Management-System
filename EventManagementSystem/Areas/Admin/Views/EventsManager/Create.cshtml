@@ -1,0 +1,156 @@
+﻿<div class="container bg-dark py-5 px-5">
+    <form class="px-5">
+        <fieldset style="padding-left: 15em; padding-right: 15em;">
+            <legend>Create Event</legend>
+            <div>
+                <label for="eventName" class="form-label mt-4">Title</label>
+                <input type="text" class="form-control" id="eventName" placeholder="required*">
+            </div>
+            <div>
+                <label for="shortDesciptionTextarea" class="form-label mt-4">Short Description</label>
+                <textarea class="form-control" id="shortDesciptionTextarea" rows="1" placeholder="Maximum 50 words"></textarea>
+            </div>
+            <div>
+                <label for="fullDesciptionTextarea" class="form-label mt-4">Full Description</label>
+                <textarea class="form-control" id="fullDesciptionTextarea" rows="3" placeholder="Maximum 1000 words"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-6 mt-4">
+                    <label for="startEventDate">Start Event Date</label>
+                    <input class="form-control" type="date" id="startEventDate" name="startEventDate">
+                </div>
+                <div class="col-6 mt-4">
+                    <label for="endEventDate">End Event Date</label>
+                    <input class="form-control" type="date" id="endEventDate" name="endEventDate">
+                </div>
+            </div>
+            <div>
+                <label for="venueName" class="form-label mt-4">Venue Name</label>
+                <input type="text" class="form-control" id="venueName" placeholder="Venue Name">
+            </div>
+            <div class="row mt-4 d-flex justify-content-center">
+                @*Map*@
+                <div class="col-12" id="map" style="width: 620px; height: 320px;"></div>
+                <div class="col-6 mt-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Latitude</span>
+                        <input id="latitude" type="text" class="form-control" aria-label="latitude input" aria-describedby="inputGroup-sizing-sm" style="max-width:80%;" disabled="">
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Longitude</span>
+                        <input id="longitude" type="text" class="form-control" aria-label="longitude input" aria-describedby="inputGroup-sizing-sm" style="max-width:80%;" disabled="">
+                    </div>
+                </div>
+            </div>
+            @*<div class="mt-4">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d144.9630576156693!3d-37.81410797975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau"
+                        width="600"
+                        height="450"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"></iframe>
+            </div>*@
+            <div class="row">
+                <div class="col-6">
+                    <label for="countrySelect" class="form-label mt-4">Country*</label>
+                    <select class="form-select" id="countrySelect">
+                        <option value="Thailand" selected>Thailand</option>
+                        <option value="Togo">Togo</option>
+                        <option value="Tokelau">Tokelau</option>
+                        <option value="Tonga">Tonga</option>
+                        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                        <option value="Tunisia">Tunisia</option>
+                        <option value="Turkey">Turkey</option>
+                        <option value="Turkmenistan">Turkmenistan</option>
+                        <option value="Turks and Caicos">Turks and Caicos Islands</option>
+                        <option value="Tuvalu">Tuvalu</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Ukraine">Ukraine</option>
+                        <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United States">United States</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="cityName" class="form-label mt-4">City</label>
+                    <input type="text" class="form-control" id="cityName" placeholder="required">
+                </div>
+            </div>
+            <div>
+                <label for="formFile" class="form-label mt-4">Image</label>
+                <input class="form-control" type="file" id="formFile">
+            </div>
+            <div></div>
+            <div class="row">
+                <div class="col-6">
+                    <fieldset>
+                        <legend class="mt-4">Categories*</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="categoriesRadios" id="categoriesRadios1" value="option1" checked="">
+                            <label class="form-check-label" for="categoriesRadios1">
+                                Sport
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="categoriesRadios" id="categoriesRadios2" value="option2">
+                            <label class="form-check-label" for="optionsRadios2">
+                                Conferences
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-6">
+                    <fieldset>
+                        <legend class="mt-4">Transports</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Car
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Airplane
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="mt-4 text-end">
+                <button class="btn btn-success">Create Event</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+
+<script>
+    const _lat = document.getElementById("latitude");
+    const _long = document.getElementById("longitude");
+    const initialMap = [13.736717, 100.523186];
+
+    var map = L.map('map').setView(initialMap, 6);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    var marker = L.marker(initialMap).addTo(map);
+
+    function onMapClick(e) {
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+
+        console.log("lat = " + e.latlng.lat);
+        console.log("long = " + e.latlng.lng);
+        _lat.value = e.latlng.lat;
+        _long.value = e.latlng.lng;
+    }
+    map.on('click', onMapClick);
+</script>

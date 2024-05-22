@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@600&display=swap');
+
 html {
     font-size: 14px;
 }
@@ -18,6 +20,7 @@ html {
 }
 
 body {
+    font-family: 'Lato', sans-serif;
     background: url("/imgs/davide-ragusa-gcDwzUGuUoI-unsplash.jpg") no-repeat fixed;
     background-size: cover;
 }
@@ -82,7 +85,8 @@ main {
 
 .jumbotron-sport-event {
     background: url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=100&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: -330px;
+    background-position-y: bottom;
+    display: block;
 }
 
 .jumbotron-conferences-event {
@@ -92,7 +96,7 @@ main {
 
 .jumbotron-expo-event {
     background: url("https://media.cntraveler.com/photos/605d11969d9a95de47693362/16:9/w_1920,c_limit/210115_Expo_Sustainability%20Pavilion_drone%20shot%20(6).jpg") no-repeat fixed;
-    background-position-y: -70px;
+    background-position-y: bottom;
 }
 
 .jumbotron-concert-event {
@@ -102,17 +106,17 @@ main {
 
 .jumbotron-festival-event {
     background: url("https://images.unsplash.com/photo-1505224628533-c4fc42c389e0?q=100&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: -350px;
+    background-position-y: bottom;
 }
 
 .jumbotron-art-event {
     background: url("https://images.unsplash.com/photo-1541264161754-445bbdd7de52?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: -420px;
+    background-position-y: bottom;
 }
 
 .jumbotron-community-event {
     background: url("https://images.squarespace-cdn.com/content/v1/5b33e7389772ae094e7fed7d/b0a8a9c1-dcde-46a3-ac0a-b0b0077bbd28/harry-grout-4bzC0Bi12vY-unsplash.jpg?format=1500w") no-repeat fixed;
-    background-position-y: -640px;
+    background-position-y: bottom;
 }
 
 .jumbotron {
@@ -125,9 +129,7 @@ main {
 }*/
 
 .overview-static {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: 600;
-    color: #dc3545;
     color: #dc3545;
     position: absolute;
     background-color: rgb(0 0 0 / 0.75);
