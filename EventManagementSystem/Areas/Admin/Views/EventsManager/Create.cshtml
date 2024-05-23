@@ -1,59 +1,66 @@
 ﻿<div class="container bg-dark py-5 px-5">
-    <form class="px-5">
-        <fieldset style="padding-left: 15em; padding-right: 15em;">
-            <legend>Create Event</legend>
-            <div>
-                <label for="eventName" class="form-label mt-4">Title</label>
-                <input type="text" class="form-control" id="eventName" placeholder="required*">
-            </div>
-            <div>
-                <label for="shortDesciptionTextarea" class="form-label mt-4">Short Description</label>
-                <textarea class="form-control" id="shortDesciptionTextarea" rows="1" placeholder="Maximum 50 words"></textarea>
+    <form class="px-md-5">
+        <fieldset class="px-lg-5">
+            <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <label for="eventName" class="form-label mt-4">Title</label>
+                        <input type="text" class="form-control" id="eventName" placeholder="required*">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="shortDesciptionTextarea" class="form-label mt-4">Short Description</label>
+                        <textarea class="form-control" id="shortDesciptionTextarea" rows="1" placeholder="Maximum 50 words"></textarea>
+                    </div>
+                </div>
             </div>
             <div>
                 <label for="fullDesciptionTextarea" class="form-label mt-4">Full Description</label>
                 <textarea class="form-control" id="fullDesciptionTextarea" rows="3" placeholder="Maximum 1000 words"></textarea>
             </div>
             <div class="row">
-                <div class="col-6 mt-4">
-                    <label for="startEventDate">Start Event Date</label>
+                <div class="col-md-4">
+                    <label for="startEventDate" class="form-label mt-4">Start Event Date</label>
                     <input class="form-control" type="date" id="startEventDate" name="startEventDate">
                 </div>
-                <div class="col-6 mt-4">
-                    <label for="endEventDate">End Event Date</label>
+                <div class="col-md-4">
+                    <label for="endEventDate" class="form-label mt-4">End Event Date</label>
                     <input class="form-control" type="date" id="endEventDate" name="endEventDate">
                 </div>
+                <div class="col-md-4">
+                    <label for="venueName" class="form-label mt-4">Venue Name</label>
+                    <input type="text" class="form-control" id="venueName" placeholder="Venue Name">
+                </div>
             </div>
-            <div>
-                <label for="venueName" class="form-label mt-4">Venue Name</label>
-                <input type="text" class="form-control" id="venueName" placeholder="Venue Name">
-            </div>
+
             <div class="row mt-4 d-flex justify-content-center">
                 @*Map*@
-                <div class="col-12" id="map" style="width: 620px; height: 320px;"></div>
-                <div class="col-6 mt-2">
+                <div class="col-12" id="map" style="width: 1000px; height: 320px;"></div>
+                <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Latitude</span>
-                        <input id="latitude" type="text" class="form-control" aria-label="latitude input" aria-describedby="inputGroup-sizing-sm" style="max-width:80%;" disabled="">
+                        <input id="latitude" type="text" class="form-control w-25" aria-label="latitude input" aria-describedby="inputGroup-sizing-sm" disabled="">
                     </div>
                 </div>
-                <div class="col-6 mt-2">
+                <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Longitude</span>
-                        <input id="longitude" type="text" class="form-control" aria-label="longitude input" aria-describedby="inputGroup-sizing-sm" style="max-width:80%;" disabled="">
+                        <input id="longitude" type="text" class="form-control w-25" aria-label="longitude input" aria-describedby="inputGroup-sizing-sm" disabled="">
                     </div>
                 </div>
             </div>
             @*<div class="mt-4">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d144.9630576156693!3d-37.81410797975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau"
-                        width="600"
-                        height="450"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"></iframe>
-            </div>*@
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d144.9630576156693!3d-37.81410797975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau"
+                            width="600"
+                            height="450"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"></iframe>
+                </div>*@
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6">
                     <label for="countrySelect" class="form-label mt-4">Country*</label>
                     <select class="form-select" id="countrySelect">
                         <option value="Thailand" selected>Thailand</option>
@@ -73,7 +80,7 @@
                         <option value="United States">United States</option>
                     </select>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     <label for="cityName" class="form-label mt-4">City</label>
                     <input type="text" class="form-control" id="cityName" placeholder="required">
                 </div>
@@ -84,7 +91,7 @@
             </div>
             <div></div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6">
                     <fieldset>
                         <legend class="mt-4">Categories*</legend>
                         <div class="form-check">
@@ -101,7 +108,7 @@
                         </div>
                     </fieldset>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     <fieldset>
                         <legend class="mt-4">Transports</legend>
                         <div class="form-check">
@@ -119,8 +126,48 @@
                     </fieldset>
                 </div>
             </div>
+            <div>
+                <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
+                <select class="form-select w-auto" id="ticketTpyeCount">
+                    <option value="0" selected>Free</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                <div id="ticketTypesContainer">
+                    @*<div class="row">
+                            <div class="col-12">
+                                <hr />
+                                <span class="text-secondary">Ticket type #1</span>
+                            </div>
+                            <div class="col-6">
+                                <label for="ticketName" class="form-label mt-4">Name</label>
+                                <input type="text" class="form-control" id="ticketName" placeholder="name">
+                            </div>
+                            <div class="col-6">
+                                <label for="ticketName" class="form-label mt-4">Detail</label>
+                                <input type="text" class="form-control" id="ticketName" placeholder="detail">
+                            </div>
+                            <div class="col-6">
+                                <label for="ticketName" class="form-label mt-4">Price</label>
+                                <input type="text" class="form-control" id="ticketName" placeholder="price">
+                            </div>
+                            <div class="col-6">
+                                <label for="ticketName" class="form-label mt-4">Max Capital</label>
+                                <input type="text" class="form-control" id="ticketName" placeholder="max">
+                            </div>
+                        </div>*@
+                </div>
+            </div>
             <div class="mt-4 text-end">
-                <button class="btn btn-success">Create Event</button>
+                <button class="btn btn-outline-success">Create Event</button>
             </div>
         </fieldset>
     </form>
@@ -128,6 +175,7 @@
 
 
 <script>
+    // Map
     const _lat = document.getElementById("latitude");
     const _long = document.getElementById("longitude");
     const initialMap = [13.736717, 100.523186];
@@ -153,4 +201,46 @@
         _long.value = e.latlng.lng;
     }
     map.on('click', onMapClick);
+
+    //Add number of tickettype
+    document.getElementById("ticketTpyeCount").addEventListener("change", function () {
+        const ticketTypeCount = parseInt(this.value);
+        const ticketTypeContainer = document.getElementById("ticketTypesContainer");
+        ticketTypeContainer.innerHTML = "";
+
+        for (let i = 0; i < ticketTypeCount; i++) {
+            const ticketType = document.createElement("div");
+            ticketType.className = "row"
+
+            ticketType.innerHTML = `
+                        <div class="col-12">
+                        <hr />
+                        <span class="text-secondary">Ticket type No.${i + 1}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticketName${i + 1}" class="form-label mt-4">Name</label>
+                            <span class="text-secondary">#${i + 1}</span>
+                            <input type="text" class="form-control" id="ticketName${i + 1}" placeholder="name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticketDetail${i + 1}" class="form-label mt-4">Detail</label>
+                            <span class="text-secondary">#${i + 1}</span>
+                            <input type="text" class="form-control" id="ticketDetail${i + 1}" placeholder="detail">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticketPrice${i + 1}" class="form-label mt-4">Price</label>
+                            <span class="text-secondary">#${i + 1}</span>
+                            <input type="text" class="form-control" id="ticketPrice${i + 1}" placeholder="price">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticketCapital${i + 1}" class="form-label mt-4">Max Capital</label>
+                            <span class="text-secondary">#${i + 1}</span>
+                            <input type="text" class="form-control" id="ticketCapital${i + 1}" placeholder="max capital">
+                        </div>
+            `;
+            ticketTypeContainer.appendChild(ticketType);
+        }
+    });
+    // Trigger change event on page load to initialize the form
+    document.getElementById("ticketTpyeCount").dispatchEvent(new Event("change"));
 </script>
