@@ -104,18 +104,18 @@
         </div>
     </nav>
 </header>
-<div class="offcanvas offcanvas-end bg-dark border-start border-secondary box-shadow" id="user-profile-offcanvas"
+<div class="offcanvas offcanvas-end bg-dark border-start border-secondary" data-bs-scroll="true" tabindex="-1" id="user-profile-offcanvas"
      style="width:300px; border-radius:20px 0 0 20px">
     <div class="offcanvas-header">
         <div type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></div>
     </div>
     <div class="offcanvas-body text-white bg-dark" style="border-radius: 20px 0 0 20px;">
         <div class="list-group">
-            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-user"></i> Your profile</a>
+            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-user"></i> profile</a>
             <hr />
-            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-id-card"></i> Register</a>
-            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-door-open"></i> Logout</a>
+            <a asp-controller="Home" asp-action="Signup" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-id-card"></i> Signup</a>
+            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-right-to-bracket"></i> Signin</a>
+            <a href="#" class="list-group-item-black list-group-item-action my-1 link-dark text-white-50"><i class="fa-solid fa-door-open"></i> Signout</a>
         </div>
     </div>
 </div>

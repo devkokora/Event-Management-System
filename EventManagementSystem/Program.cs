@@ -54,7 +54,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
     );
 
-
 app.UseAntiforgery(); // blazor protect anonymous data
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
