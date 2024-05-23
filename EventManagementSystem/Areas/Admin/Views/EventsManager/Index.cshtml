@@ -1,5 +1,49 @@
-﻿<div class="container-fluid bg-dark py-5">
-    <p class="h1">
-        All Events
-    </p>
+﻿<div class="container pt-4 pb-4 bg-dark">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <p class="h4">Event Manager</p>
+        </div>
+        <div class="col-md-6">
+            <form class="container-fluid">
+                <div class="input-group">
+                    <input type="text" class="form-control border-0" placeholder="Search event: eg. title, detail, category, city" aria-label="Search" aria-describedby="navbar-search" style="outline:none; box-shadow:none;">
+                    <button class="btn btn-warning" style="outline:none; box-shadow:none;">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive navbar-nav-scroll">
+        <table class="table table-striped table-hover table-borderless table-dark text-center">
+            <thead>
+                <tr>
+                    <th scope="col"><a href="">id</a></th>
+                    <th scope="col"><a href="">Title</a></th>
+                    <th scope="col"><a href="">Category</a></th>
+                    <th scope="col"><a href="">City</a></th>
+                    <th scope="col"><a href="">Creat at</a></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody style="font-size:15px;">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>MEMORIAL DAY WEEKEND HIP HOP</td>
+                        <td>Community</td>
+                        <td>Bangkok</td>
+                        <td>25/06/2024</td>
+                        <td>
+                            <button class="btn btn-outline-success">View</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-link" style="outline:none; box-shadow:none;" href="">Previous</a>
+            <a class="btn btn-link" style="outline:none; box-shadow:none;" href="">Next</a>
+        </div>
+    </div>
+    
 </div>
