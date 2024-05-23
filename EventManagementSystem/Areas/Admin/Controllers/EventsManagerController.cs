@@ -6,6 +6,7 @@ namespace EventManagementSystem.Areas.Admin.Controllers
     [Area("Admin")]
     public class EventsManagerController : Controller
     {
+        private Event? _event;
         public async Task<IActionResult> Index()
         {
             return View();
@@ -22,7 +23,7 @@ namespace EventManagementSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Event? _event)
+        public async Task<IActionResult> Create(Event? @event)
         {
             return RedirectToAction(nameof(Index));
         }
