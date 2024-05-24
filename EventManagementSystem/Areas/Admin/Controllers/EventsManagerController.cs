@@ -10,11 +10,6 @@ namespace EventManagementSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             return View();
-        }        
-
-        public async Task<IActionResult> Detail(int? id)
-        {
-            return View();
         }
 
         public async Task<IActionResult> Create()
