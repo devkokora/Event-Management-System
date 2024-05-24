@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using EventManagementSystem.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // for identity
+builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
 builder.Services.AddHttpClient();
-
-builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
@@ -20,14 +21,22 @@ builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EventManagementSystemDbContext>();
+//use one Identity
+//builder.Services.AddDefaultIdentity<User> ().AddEntityFrameworkStores<EventManagementSystemDbContext>();
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<EventManagementSystemDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 1;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredUniqueChars = 0;
+})
+    .AddDefaultUI()
+    .AddEntityFrameworkStores<EventManagementSystemDbContext>();
 
 builder.Services.AddScoped<RoleInitializer>();
-
 
 var app = builder.Build();
 
@@ -55,9 +64,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
     );
+app.MapRazorPages(); // for identity
 
 app.UseAntiforgery(); // blazor protect anonymous data
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
+
+using (var scope = app.Services.CreateScope()) // Calling RoleInitializer
+{
+    var roleInitializer = scope.ServiceProvider.GetRequiredService<RoleInitializer>();
+    roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
+}
 
 app.Run();

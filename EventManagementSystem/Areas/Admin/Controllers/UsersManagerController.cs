@@ -1,9 +1,11 @@
 ﻿using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersManagerController : Controller
     {
         public async Task<IActionResult> Index()

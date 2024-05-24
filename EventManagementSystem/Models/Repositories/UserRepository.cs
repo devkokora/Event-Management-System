@@ -16,7 +16,22 @@ namespace EventManagementSystem.Models.Repositories
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> Create(User user, string password)
+        public Task<IdentityResult> ChangeDisplayName(int userId, string newDisplayName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResult> ChangeEmail(int userId, string confirmPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResult> ChangePassword(int userId, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        /*public async Task<IdentityResult> Create(User user, string password)
         {
             if (user.Email is not null && user.UserName is not null)
             {
@@ -37,9 +52,9 @@ namespace EventManagementSystem.Models.Repositories
             else
             {
                 return IdentityResult.Failed(new IdentityError { Description = "Name or email is not found." });
-            }        
+            }
 
-            user.Create_at = DateTime.Now;            
+            user.Create_at = DateTime.Now;
 
             var createSuccess = await _userManager.CreateAsync(user, password);
             await _userManager.AddToRoleAsync(user, nameof(UserRoles.User));
@@ -50,7 +65,7 @@ namespace EventManagementSystem.Models.Repositories
             }
 
             return createSuccess;
-        }
+        }*/
 
         public async Task<IdentityResult> Edit(User user, string? newPassword = null)
         {
@@ -62,7 +77,7 @@ namespace EventManagementSystem.Models.Repositories
             }
 
             userToEdit.Email = user.Email;
-            userToEdit.UserName = user.UserName;
+            userToEdit.UserName = user.Email;
 
             if (!string.IsNullOrEmpty(newPassword))
             {
