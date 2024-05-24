@@ -4,6 +4,7 @@ using EventManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementSystem.Migrations
 {
     [DbContext(typeof(EventManagementSystemDbContext))]
-    partial class EventManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240524155206_addDisplayName")]
+    partial class addDisplayName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,7 +241,7 @@ namespace EventManagementSystem.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UserAddressId")
+                    b.Property<int>("UserAddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -256,8 +259,7 @@ namespace EventManagementSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("UserAddressId")
-                        .IsUnique()
-                        .HasFilter("[UserAddressId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -504,7 +506,9 @@ namespace EventManagementSystem.Migrations
                 {
                     b.HasOne("EventManagementSystem.Models.UserAddress", "UserAddress")
                         .WithOne("User")
-                        .HasForeignKey("EventManagementSystem.Models.User", "UserAddressId");
+                        .HasForeignKey("EventManagementSystem.Models.User", "UserAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserAddress");
                 });
