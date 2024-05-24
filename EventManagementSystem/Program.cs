@@ -20,7 +20,9 @@ builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
-builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EventManagementSystemDbContext>();
+
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<EventManagementSystemDbContext>()
     .AddDefaultTokenProviders();
 
@@ -42,7 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
