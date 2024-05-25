@@ -46,54 +46,23 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -126,20 +95,21 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
                 user.DisplayName = Input.DisplayName;
                 user.Create_at = DateTime.Now;
 
-                var createUserResult =  await _userManager.CreateAsync(user, Input.Password);
+                var createUserResult = await _userManager.CreateAsync(user, Input.Password);
 
                 if (createUserResult.Succeeded)
                 {
-                    var anyAdmin = await _userManager.FindByEmailAsync("admin@eventjui.com");
-                    IdentityResult addToRoleResult;
-                    if (anyAdmin is not null)
-                    {
-                        addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.User));
-                    }
-                    else
-                    {
-                        addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.Admin));
-                    }
+                    //var addAdmin = await _userManager.FindByNameAsync("admin@eventjui.com");
+                    //IdentityResult addToRoleResult;
+                    //if (addAdmin is not null)
+                    //{
+                    //    await _userManager.RemoveFromRoleAsync(user, nameof(UserRoles.User));
+                    //    addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.Admin));
+                    //}
+                    //else
+                    //{
+                    var addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.User));
+                    //}
 
                     if (addToRoleResult.Succeeded)
                     {

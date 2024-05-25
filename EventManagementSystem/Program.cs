@@ -5,6 +5,8 @@ using EventManagementSystem.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,11 @@ builder.Services.AddRazorPages(); // for identity
 builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<RoleInitializer>();
+builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>(); // 
+builder.Services.AddScoped<UserManager<User>>();
+builder.Services.AddScoped<SignInManager<User>>();
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
@@ -35,8 +42,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
     .AddDefaultUI()
     .AddEntityFrameworkStores<EventManagementSystemDbContext>();
-
-builder.Services.AddScoped<RoleInitializer>();
 
 var app = builder.Build();
 
@@ -70,10 +75,21 @@ app.UseAntiforgery(); // blazor protect anonymous data
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
 
-using (var scope = app.Services.CreateScope()) // Calling RoleInitializer
+using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
 {
-    var roleInitializer = scope.ServiceProvider.GetRequiredService<RoleInitializer>();
+    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
     roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
+}
+
+using (var scopeAddAdmin = app.Services.CreateScope())
+{
+    var adminManager = scopeAddAdmin.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var admin = await adminManager.FindByNameAsync("admin@eventjui.com");
+    if (admin is not null)
+    {
+        var changeRoleResult = await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
+        Console.WriteLine(changeRoleResult.ToString());
+    }
 }
 
 app.Run();

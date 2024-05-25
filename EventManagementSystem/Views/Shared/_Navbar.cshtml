@@ -78,27 +78,37 @@
                             <li><a class="dropdown-item" href="/events">All events</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Admin Controller
-                        </a>
-                        <ul class="dropdown-menu bg-dark-subtle">
-                            <li><a class="dropdown-item" href="/admin">Dashboard</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/admin/eventsmanager/create">New Event</a></li>
-                            <li><a class="dropdown-item" href="/admin/eventsmanager">Event manager</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/admin/usersmanager">User manager</a></li>
-                        </ul>
-                    </li>
-                    @*<li class="nav-item">
-                            <div class="search-index">
-                                <input type="text" class="input-search-index" placeholder="I'm Grimstoey...?">
-                                <button class="btn-search-index bg-dark text-white">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                    @{var user = await UserManager.GetUserAsync(User);
+                        if (user is not null &&
+                           UserManager.IsInRoleAsync(user, nameof(UserRoles.Admin)).Result)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin Controller
+                                </a>
+                                <ul class="dropdown-menu bg-dark-subtle">
+                                    <li><a class="dropdown-item" href="/admin">Dashboard</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/admin/eventsmanager/create">New Event</a></li>
+                                    <li><a class="dropdown-item" href="/admin/eventsmanager">Event manager</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/admin/usersmanager">User manager</a></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                    <li class="nav-item" style="padding-top: 0.15em;">
+                        @*data-enhance-nav="false"*@
+                        <form class="container-fluid">
+                            <div class="input-group">
+                                <input type="text" class="form-control border-0" placeholder="Search" aria-label="Search" aria-describedby="navbar-search">
                             </div>
-                        </li>*@
+                        </form>
+                        @*<form class="d-flex" role="search">
+                                <input class="form-control me-2 border-0" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-danger" type="submit">Search</button>
+                            </form>*@
+                    </li>
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
