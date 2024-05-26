@@ -11,6 +11,8 @@ namespace EventManagementSystem.Models
         [Required]
         [StringLength(100)]
         public string Title { get; set; } = string.Empty;
+        [StringLength(150)]
+        public string ShortDescription { get; set; } = string.Empty;
         [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
 
@@ -28,13 +30,20 @@ namespace EventManagementSystem.Models
         [Required]
         [StringLength(100)]
         public string VenueName { get; set; } = string.Empty;
+        [Required]
         public double Latitude { get; set; }
+        [Required]
         public double Longitude { get; set; }
+        [Required]
+        [StringLength(60)]
         public string Country { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
+        [Required]
+        [StringLength(200)]
+        public string Address { get; set; } = string.Empty;
         public string? Image { get; set; }
         public List<Transport>? Transports { get; set; }
 
+        [Required]
         public ICollection<Category>? Categories { get; set; }
         public ICollection<TicketType>? TicketTypes { get; set; }
         public ICollection<Feedback>? Feedbacks { get; set; }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
+using EventManagementSystem.Areas.Admin.Models.Repositories;
+using EventManagementSystem.Models.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,8 @@ builder.Services.AddScoped<RoleInitializer>();
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>(); // 
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>>();
+builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
