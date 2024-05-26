@@ -1,37 +1,40 @@
-﻿<div class="container bg-dark py-5 px-5">
-    <form class="px-md-5">
+﻿@model EventViewModel
+<div class="container bg-dark py-5 px-5">
+    <form class="px-md-5" method="post">
+    <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
             <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
             <div class="row">
                 <div class="col-md-6">
                     <div>
-                        <label for="eventName" class="form-label mt-4">Title</label>
-                        <input type="text" class="form-control" id="eventName" placeholder="required*">
+                        <label asp-for="@Model.Event.Title" class="form-label mt-4">Title</label>
+                        <input asp-for="@Model.Event.Title" type="text" class="form-control" placeholder="required*">
+                        <span asp-validation-for="@Model.Event.Title" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div>
-                        <label for="shortDesciptionTextarea" class="form-label mt-4">Short Description</label>
-                        <textarea class="form-control" id="shortDesciptionTextarea" rows="1" placeholder="Maximum 50 words"></textarea>
+                        <label asp-for="@Model.Event.ShortDescription" class="form-label mt-4">Short Description</label>
+                        <textarea asp-for="@Model.Event.ShortDescription" class="form-control" rows="1" placeholder="Maximum 50 words"></textarea>
                     </div>
                 </div>
             </div>
             <div>
-                <label for="fullDesciptionTextarea" class="form-label mt-4">Full Description</label>
-                <textarea class="form-control" id="fullDesciptionTextarea" rows="3" placeholder="Maximum 1000 words"></textarea>
+                <label  asp-for="@Model.Event.Description" class="form-label mt-4">Full Description</label>
+                <textarea asp-for="@Model.Event.Description" class="form-control" rows="3" placeholder="Maximum 1000 words"></textarea>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <label for="startEventDate" class="form-label mt-4">Start Event Date</label>
-                    <input class="form-control" type="date" id="startEventDate" name="startEventDate">
+                    <label asp-for="@Model.Event.StartDate" class="form-label mt-4">Start Event Date</label>
+                    <input asp-for="@Model.Event.StartDate" class="form-control" type="date" name="startEventDate">
                 </div>
                 <div class="col-md-4">
-                    <label for="endEventDate" class="form-label mt-4">End Event Date</label>
-                    <input class="form-control" type="date" id="endEventDate" name="endEventDate">
+                    <label asp-for="@Model.Event.EndDate" class="form-label mt-4">End Event Date</label>
+                    <input asp-for="@Model.Event.EndDate" class="form-control" type="date" name="endEventDate">
                 </div>
                 <div class="col-md-4">
-                    <label for="venueName" class="form-label mt-4">Venue Name</label>
-                    <input type="text" class="form-control" id="venueName" placeholder="Venue Name">
+                    <label asp-for="@Model.Event.VenueName" class="form-label mt-4">Venue Name</label>
+                    <input asp-for="@Model.Event.VenueName" type="text" class="form-control"placeholder="Venue Name">
                 </div>
             </div>
 
@@ -40,8 +43,8 @@
                 <div class="col-12" id="map" style="width: 1000px; height: 320px;"></div>
                 <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Latitude</span>
-                        <input id="latitude" type="text" class="form-control w-25" aria-label="latitude input" aria-describedby="inputGroup-sizing-sm" disabled="">
+                        <span asp-for="@Model.Event.Latitude" class="input-group-text">Latitude</span>
+                        <input asp-for="@Model.Event.Latitude" id="latitude" type="text" class="form-control w-25" aria-label="latitude input" disabled="">
                     </div>
                 </div>
                 <div class="col-md-6 mt-2">
@@ -60,29 +63,13 @@
                             loading="lazy"></iframe>
                 </div>*@
             <div class="row">
-                <div class="col-md-6">
-                    <label for="countrySelect" class="form-label mt-4">Country*</label>
-                    <select class="form-select" id="countrySelect">
-                        <option value="Thailand" selected>Thailand</option>
-                        <option value="Togo">Togo</option>
-                        <option value="Tokelau">Tokelau</option>
-                        <option value="Tonga">Tonga</option>
-                        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                        <option value="Tunisia">Tunisia</option>
-                        <option value="Turkey">Turkey</option>
-                        <option value="Turkmenistan">Turkmenistan</option>
-                        <option value="Turks and Caicos">Turks and Caicos Islands</option>
-                        <option value="Tuvalu">Tuvalu</option>
-                        <option value="Uganda">Uganda</option>
-                        <option value="Ukraine">Ukraine</option>
-                        <option value="United Arab Emirates">United Arab Emirates</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="United States">United States</option>
-                    </select>
+                <div class="col-md-4">
+                    <label for="countryName" class="form-label mt-4">Country</label>
+                    <input type="text" class="form-control" id="countryName" placeholder="required">
                 </div>
-                <div class="col-md-6">
-                    <label for="cityName" class="form-label mt-4">City</label>
-                    <input type="text" class="form-control" id="cityName" placeholder="required">
+                <div class="col-md-8">
+                    <label for="addressName" class="form-label mt-4">Address</label>
+                    <input type="text" class="form-control" id="addressName" placeholder="required">
                 </div>
             </div>
             <div>
@@ -180,14 +167,14 @@
     const _long = document.getElementById("longitude");
     const initialMap = [13.736717, 100.523186];
 
-    var map = L.map('map').setView(initialMap, 6);
+    let map = L.map('map').setView(initialMap, 6);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    var marker = L.marker(initialMap).addTo(map);
+    let marker = L.marker(initialMap).addTo(map);
 
     function onMapClick(e) {
         if (marker) {
@@ -195,12 +182,40 @@
         }
         marker = L.marker(e.latlng).addTo(map);
 
-        console.log("lat = " + e.latlng.lat);
-        console.log("long = " + e.latlng.lng);
-        _lat.value = e.latlng.lat;
-        _long.value = e.latlng.lng;
+        const latitude = e.latlng.lat;
+        const longitude = e.latlng.lng
+
+        _lat.value = latitude;
+        _long.value = longitude;
+        getCountryAndCity(latitude, longitude);
     }
     map.on('click', onMapClick);
+
+    // Get Country and City
+    const _countryName = document.getElementById("countryName");
+    const _addressName = document.getElementById("addressName");
+    function getCountryAndCity(lat, lng) {
+        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`;
+
+        fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+                _countryName.value = data.address.country;
+
+                const boundaryAddress = ["quarter", "suburb", "city", "postcode", "town", "state", "municipality", "county"];
+                const address = []
+                Object.entries(data.address).forEach(([key, value]) => {
+                    if (value !== undefined && boundaryAddress.includes(key))
+                        address.push(value)
+                    console.log(`${key}, ${value}`)
+                })
+
+                _addressName.value = address.join(", ");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     //Add number of tickettype
     document.getElementById("ticketTpyeCount").addEventListener("change", function () {
