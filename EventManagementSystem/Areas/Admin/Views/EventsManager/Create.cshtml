@@ -1,7 +1,7 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
     <form class="px-md-5" method="post">
-    <div asp-validation-for="All" class="text-danger"></div>
+        <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
             <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
             <div class="row">
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div>
-                <label  asp-for="@Model.Event.Description" class="form-label mt-4">Full Description</label>
+                <label asp-for="@Model.Event.Description" class="form-label mt-4">Full Description</label>
                 <textarea asp-for="@Model.Event.Description" class="form-control" rows="3" placeholder="Maximum 1000 words"></textarea>
             </div>
             <div class="row">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-4">
                     <label asp-for="@Model.Event.VenueName" class="form-label mt-4">Venue Name</label>
-                    <input asp-for="@Model.Event.VenueName" type="text" class="form-control"placeholder="Venue Name">
+                    <input asp-for="@Model.Event.VenueName" type="text" class="form-control" placeholder="Venue Name">
                 </div>
             </div>
 
@@ -43,14 +43,14 @@
                 <div class="col-12" id="map" style="width: 1000px; height: 320px;"></div>
                 <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
-                        <span asp-for="@Model.Event.Latitude" class="input-group-text">Latitude</span>
+                        <span class="input-group-text">Latitude</span>
                         <input asp-for="@Model.Event.Latitude" id="latitude" type="text" class="form-control w-25" aria-label="latitude input" disabled="">
                     </div>
                 </div>
                 <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Longitude</span>
-                        <input id="longitude" type="text" class="form-control w-25" aria-label="longitude input" aria-describedby="inputGroup-sizing-sm" disabled="">
+                        <span class="input-group-text">Longitude</span>
+                        <input asp-for="@Model.Event.Longitude" id="longitude" type="text" class="form-control w-25" aria-label="longitude input" disabled="">
                     </div>
                 </div>
             </div>
@@ -64,34 +64,32 @@
                 </div>*@
             <div class="row">
                 <div class="col-md-4">
-                    <label for="countryName" class="form-label mt-4">Country</label>
-                    <input type="text" class="form-control" id="countryName" placeholder="required">
+                    <label asp-for="@Model.Event.Country" class="form-label mt-4">Country</label>
+                    <input asp-for="@Model.Event.Country" id="countryName" type="text" class="form-control" placeholder="required">
                 </div>
                 <div class="col-md-8">
-                    <label for="addressName" class="form-label mt-4">Address</label>
-                    <input type="text" class="form-control" id="addressName" placeholder="required">
+                    <label asp-for="@Model.Event.Address" class="form-label mt-4">Address</label>
+                    <input asp-for="@Model.Event.Address" id="addressName" type="text" class="form-control" placeholder="required">
                 </div>
             </div>
             <div>
-                <label for="formFile" class="form-label mt-4">Image</label>
-                <input class="form-control" type="file" id="formFile">
+                <label asp-for="@Model.Event.Image" class="form-label mt-4">Image</label>
+                <input asp-for="@Model.Event.Image" class="form-control" type="file">
             </div>
             <div></div>
             <div class="row">
                 <div class="col-md-6">
                     <fieldset>
-                        <legend class="mt-4">Categories*</legend>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="categoriesRadios" id="categoriesRadios1" value="option1" checked="">
-                            <label class="form-check-label" for="categoriesRadios1">
-                                Sport
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="categoriesRadios" id="categoriesRadios2" value="option2">
-                            <label class="form-check-label" for="optionsRadios2">
-                                Conferences
-                            </label>
+                        @*<legend class="mt-4">Categories</legend>
+                            <div class="form-check">
+                                <input for="@Model.Event.Categories" class="form-check-input" type="radio" name="categoriesRadios" asp- value="option1" checked="">
+                                <label for="@Model.Event.Categories" class="form-check-label" asp-items="@Model.Categories" mutiple="multiple">
+                                    Sport
+                                </label>
+                            </div>*@
+                        <div class="form-group mt-4">
+                            <label asp-for="@Model.Event.Category" class="control-label"></label>
+                            <select asp-for="@Model.Event.Category" class="form-control" asp-items="@Model.Categories"></select>
                         </div>
                     </fieldset>
                 </div>
@@ -99,8 +97,8 @@
                     <fieldset>
                         <legend class="mt-4">Transports</legend>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input asp-for="@Model.Event.Transports" class="form-check-input" type="checkbox" value="" >
+                            <label asp-for="@Model.Event.Transports" class="form-check-label" itemid="@Model.Tra">
                                 Car
                             </label>
                         </div>

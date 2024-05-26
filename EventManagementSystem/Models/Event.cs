@@ -44,7 +44,7 @@ namespace EventManagementSystem.Models
         public List<Transport>? Transports { get; set; }
 
         [Required]
-        public ICollection<Category>? Categories { get; set; }
+        public Category Category { get; set; }
         public ICollection<TicketType>? TicketTypes { get; set; }
         public ICollection<Feedback>? Feedbacks { get; set; }
     }
