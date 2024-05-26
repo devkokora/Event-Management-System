@@ -23,9 +23,9 @@ namespace EventManagementSystem.Models
 
         public DateTime Create_at { get; set; } = DateTime.Now;
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         [Required]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         [Required]
         [StringLength(100)]

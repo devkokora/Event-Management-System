@@ -15,6 +15,7 @@ namespace EventManagementSystem.Areas.Admin.Controllers
     {
         private readonly IAdminEventRepository _adminEventRepository;
         private readonly IEventRepository _eventRepository;
+        private const int MaximumTicketTypes = 10;
 
         public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository)
         {
@@ -31,24 +32,16 @@ namespace EventManagementSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var categories = Enum.GetValues(typeof(Category)).Cast<Category>();
-            IEnumerable<SelectListItem> categoriesListItem = new SelectList(categories);
-
-            var transports = Enum.GetValues(typeof(Transport)).Cast<Transport>();
-            IEnumerable<SelectListItem> transportsListItem = new SelectList(transports);
-
             var viewModel = new EventViewModel()
             {
                 Event = new Event(),
-                Categories = categoriesListItem,
-                Transports = transportsListItem
             };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Event? @event)
+        public async Task<IActionResult> Create(EventViewModel eventViewModel)
         {
             return RedirectToAction(nameof(Index));
         }

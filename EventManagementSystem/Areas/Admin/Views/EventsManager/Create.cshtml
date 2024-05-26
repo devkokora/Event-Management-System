@@ -1,6 +1,14 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
     <form class="px-md-5" method="post">
+        <input asp-for="@Model.Event.UserId"/>
+        @for (int i = 0; i < Model.TicketTypes.Count; i++)
+        {
+            <input asp-for="@Model.TicketTypes[i].Name" type="text" id="templateName_@i" hidden />
+            <input asp-for="@Model.TicketTypes[i].Detail" type="text" id="templateDetail_@i" hidden />
+            <input asp-for="@Model.TicketTypes[i].Price" type="number" id="templatePrice_@i" hidden />
+            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="number" id="templateMaxCapital_@i" hidden />
+        }
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
             <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
@@ -26,11 +34,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <label asp-for="@Model.Event.StartDate" class="form-label mt-4">Start Event Date</label>
-                    <input asp-for="@Model.Event.StartDate" class="form-control" type="date" name="startEventDate">
+                    <input asp-for="@Model.Event.StartDate" class="form-control" type="date" />
                 </div>
                 <div class="col-md-4">
                     <label asp-for="@Model.Event.EndDate" class="form-label mt-4">End Event Date</label>
-                    <input asp-for="@Model.Event.EndDate" class="form-control" type="date" name="endEventDate">
+                    <input asp-for="@Model.Event.EndDate" class="form-control" type="date" />
                 </div>
                 <div class="col-md-4">
                     <label asp-for="@Model.Event.VenueName" class="form-label mt-4">Venue Name</label>
@@ -44,24 +52,16 @@
                 <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text">Latitude</span>
-                        <input asp-for="@Model.Event.Latitude" id="latitude" type="text" class="form-control w-25" aria-label="latitude input" disabled="">
+                        <input asp-for="@Model.Event.Latitude" id="latitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="latitude input" readonly>
                     </div>
                 </div>
                 <div class="col-md-6 mt-2">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text">Longitude</span>
-                        <input asp-for="@Model.Event.Longitude" id="longitude" type="text" class="form-control w-25" aria-label="longitude input" disabled="">
+                        <input asp-for="@Model.Event.Longitude" id="longitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="longitude input" readonly>
                     </div>
                 </div>
             </div>
-            @*<div class="mt-4">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d144.9630576156693!3d-37.81410797975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau"
-                            width="600"
-                            height="450"
-                            style="border:0;"
-                            allowfullscreen=""
-                            loading="lazy"></iframe>
-                </div>*@
             <div class="row">
                 <div class="col-md-4">
                     <label asp-for="@Model.Event.Country" class="form-label mt-4">Country</label>
@@ -80,13 +80,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <fieldset>
-                        @*<legend class="mt-4">Categories</legend>
-                            <div class="form-check">
-                                <input for="@Model.Event.Categories" class="form-check-input" type="radio" name="categoriesRadios" asp- value="option1" checked="">
-                                <label for="@Model.Event.Categories" class="form-check-label" asp-items="@Model.Categories" mutiple="multiple">
-                                    Sport
-                                </label>
-                            </div>*@
                         <div class="form-group mt-4">
                             <label asp-for="@Model.Event.Category" class="control-label"></label>
                             <select asp-for="@Model.Event.Category" class="form-control" asp-items="@Model.Categories"></select>
@@ -96,18 +89,15 @@
                 <div class="col-md-6">
                     <fieldset>
                         <legend class="mt-4">Transports</legend>
-                        <div class="form-check">
-                            <input asp-for="@Model.Event.Transports" class="form-check-input" type="checkbox" value="" >
-                            <label asp-for="@Model.Event.Transports" class="form-check-label" itemid="@Model.Tra">
-                                Car
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Airplane
-                            </label>
-                        </div>
+                        @for (int i = 0; i < Model.Transports.Count(); i++)
+                        {
+                            <div class="form-check">
+                                <input asp-for="@Model.SelectedTransports[i]" type="checkbox" class="form-check-input" value="@Model.Transports[i].Text" id="transport_@Model.Transports[i].Text" />
+                                <label asp-for="@Model.SelectedTransports[i]" class="form-check-label" for="transport_@Model.Transports[i].Text">
+                                    @Model.Transports[i].Text
+                                </label>
+                            </div>
+                        }
                     </fieldset>
                 </div>
             </div>
@@ -115,41 +105,12 @@
                 <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
                 <select class="form-select w-auto" id="ticketTpyeCount">
                     <option value="0" selected>Free</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
                 </select>
-                <div id="ticketTypesContainer">
-                    @*<div class="row">
-                            <div class="col-12">
-                                <hr />
-                                <span class="text-secondary">Ticket type #1</span>
-                            </div>
-                            <div class="col-6">
-                                <label for="ticketName" class="form-label mt-4">Name</label>
-                                <input type="text" class="form-control" id="ticketName" placeholder="name">
-                            </div>
-                            <div class="col-6">
-                                <label for="ticketName" class="form-label mt-4">Detail</label>
-                                <input type="text" class="form-control" id="ticketName" placeholder="detail">
-                            </div>
-                            <div class="col-6">
-                                <label for="ticketName" class="form-label mt-4">Price</label>
-                                <input type="text" class="form-control" id="ticketName" placeholder="price">
-                            </div>
-                            <div class="col-6">
-                                <label for="ticketName" class="form-label mt-4">Max Capital</label>
-                                <input type="text" class="form-control" id="ticketName" placeholder="max">
-                            </div>
-                        </div>*@
-                </div>
+                <div id="ticketTypesContainer"></div>
             </div>
             <div class="mt-4 text-end">
                 <button class="btn btn-outline-success">Create Event</button>
@@ -226,32 +187,46 @@
             ticketType.className = "row"
 
             ticketType.innerHTML = `
-                        <div class="col-12">
-                        <hr />
-                        <span class="text-secondary">Ticket type No.${i + 1}</span>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ticketName${i + 1}" class="form-label mt-4">Ticket type</label>
-                            <span class="text-secondary">#${i + 1}</span>
-                            <input type="text" class="form-control" id="ticketName${i + 1}" placeholder="name">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ticketDetail${i + 1}" class="form-label mt-4">Detail</label>
-                            <span class="text-secondary">#${i + 1}</span>
-                            <input type="text" class="form-control" id="ticketDetail${i + 1}" placeholder="detail">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ticketPrice${i + 1}" class="form-label mt-4">Price</label>
-                            <span class="text-secondary">#${i + 1}</span>
-                            <input type="text" class="form-control" id="ticketPrice${i + 1}" placeholder="price">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ticketCapital${i + 1}" class="form-label mt-4">Max Capital</label>
-                            <span class="text-secondary">#${i + 1}</span>
-                            <input type="text" class="form-control" id="ticketCapital${i + 1}" placeholder="max capital">
-                        </div>
+            <div class="col-12">
+                <hr />
+                <span class="text-secondary">Ticket type No.${i + 1}</span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Ticket type</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="text" class="form-control" id="ticketTypeName_${i}" placeholder="name">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Detail</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="text" class="form-control" id="ticketTypeDetail_${i}" placeholder="detail">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Price</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="number" class="form-control" id="ticketTypePrice_${i}" placeholder="price">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Max Capital</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="number" class="form-control" id="ticketTypeMaxCapital_${i}" placeholder="max capital">
+            </div>
             `;
             ticketTypeContainer.appendChild(ticketType);
+
+            // Update hidden inputs based on the visible input values
+            document.getElementById(`ticketTypeName_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateName_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypeDetail_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateDetail_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypePrice_${i}`).addEventListener("input", function () {
+                document.getElementById(`templatePrice_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypeMaxCapital_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateMaxCapital_${i}`).value = this.value;
+            });
         }
     });
     // Trigger change event on page load to initialize the form

@@ -9,20 +9,28 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using EventManagementSystem.Areas.Admin.Models.Repositories;
 using EventManagementSystem.Models.Repositories;
+using EventManagementSystem.Initializers;
+using EventManagementSystem.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // for identity
+builder.Services.AddControllersWithViews(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DateOnlyModelBinderProvider()); // Custom ModelBinder
+});
+
+builder.Services.AddRazorPages(); // for identity ui
 builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
-builder.Services.AddHttpClient();
-
-builder.Services.AddScoped<RoleInitializer>();
-builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>(); // 
+/* Provide ClaimsPrincipal in Blazor */
+builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>>();
+/* Provide ClaimsPrincipal in Blazor */
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<RoleInitializer>();
 builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 
