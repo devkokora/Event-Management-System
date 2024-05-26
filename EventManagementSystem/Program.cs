@@ -32,9 +32,6 @@ builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
-//use one Identity
-//builder.Services.AddDefaultIdentity<User> ().AddEntityFrameworkStores<EventManagementSystemDbContext>();
-
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
