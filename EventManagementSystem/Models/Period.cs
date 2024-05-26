@@ -2,7 +2,9 @@
 {
     public enum Period
     {
-        Now,
+        Day,
+        Month,
+        Year,
         Future,
         Past
     }

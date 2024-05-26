@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Data;
 
-namespace EventManagementSystem.Models
+namespace EventManagementSystem.Initializers
 {
     public class RoleInitializer : IdentityRole
     {

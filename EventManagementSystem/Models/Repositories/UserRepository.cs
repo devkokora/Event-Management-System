@@ -99,7 +99,7 @@ namespace EventManagementSystem.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Event>> GetAllEvent(int userId, int ticketId, Period period = Period.Now)
+        public Task<IEnumerable<Event>> GetAllEvent(int userId, int ticketId, Period period = Period.Month)
         {
             throw new NotImplementedException();
         }
