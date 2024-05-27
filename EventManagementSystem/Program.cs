@@ -11,6 +11,7 @@ using EventManagementSystem.Areas.Admin.Models.Repositories;
 using EventManagementSystem.Models.Repositories;
 using EventManagementSystem.Initializers;
 using EventManagementSystem.ModelBinders;
+using NuGet.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,6 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add b
 /* Provide ClaimsPrincipal in Blazor */
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<UserManager<User>>();
-builder.Services.AddScoped<SignInManager<User>>();
 /* Provide ClaimsPrincipal in Blazor */
 
 builder.Services.AddHttpClient();

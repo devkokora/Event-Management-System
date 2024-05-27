@@ -1,0 +1,23 @@
+﻿.card-container {
+    flex: 0 0 auto;
+}
+
+.pagination-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+    .dot.active {
+        background-color: #eb4756;
+        border: 1px solid #212529;
+    }

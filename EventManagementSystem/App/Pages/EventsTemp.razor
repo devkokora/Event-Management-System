@@ -1,0 +1,45 @@
+﻿@page "/events_2/{category?}"
+
+@rendermode InteractiveServer
+
+<div class="jumbotron jumbotron-@Category-event pt-5">
+    <div class="container">
+        <h2 class="display-5 text-danger text-center" style="font-weight:600;">
+            <strong style="-webkit-text-stroke: white 1px;">@(($"{Category} EVENTS").ToUpper())</strong>
+        </h2>
+    </div>
+</div>
+<div class="container-fluid event-container pt-3 bg-dark">
+    <div class="row justify-content-center">
+        @for (int i = 1; i <= 12; i++)
+        {
+            <div class="col-lg-3 col-md-4 mb-4 px-1">
+                <div class="card bg-dark text-white border-secondary">
+                    <div class="img-container" style="height: 12rem; overflow: hidden; ">
+                        <img src="imgs/festival-img/events_@(i.ToString("00")).JPG"
+                             class="card-img-top" alt="Event Image"
+                             style="width: 100%; height: 100%; object-fit: cover; ">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    @*<ul class="list-group list-group-flush">
+                            <li class="list-group-item">Date</li>
+                            <li class="list-group-item">Price</li>
+                        </ul>*@
+                        <a href="/events" class="card-link p-2 text-center">Enter</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string? Category { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Category ??= string.Empty;
+    }
+}
