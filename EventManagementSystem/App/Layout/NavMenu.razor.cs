@@ -1,4 +1,5 @@
 ﻿using EventManagementSystem.Models;
+using EventManagementSystem.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,14 +14,19 @@ public partial class NavMenu : ComponentBase
     private AuthenticationStateProvider? AuthenticationStateProvider { get; set; }
     [Inject]
     private UserManager<User>? UserManager { get; set; }
-    private User? UserLogin { get; set; }
+    [Inject]
+    private IUserService UserService { get; set; }
+    private User? CurrentUser { get; set; }
     private bool isAdmin = false;
 
     protected override async Task OnInitializedAsync()
     {       
-        if (UserLogin is null)
+        if (UserService.User is null && UserService.IsLogin)
         {
-            await Task.Delay(250);
+            await Console.Out.WriteLineAsync();
+            await Console.Out.WriteLineAsync("Delay 404");
+            await Console.Out.WriteLineAsync();
+            await Task.Delay(404);
             if (AuthenticationStateProvider is not null && UserManager is not null)
             {
                 AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -28,12 +34,22 @@ public partial class NavMenu : ComponentBase
 
                 if (UserClaims.Identity!.IsAuthenticated)
                 {
-                    UserLogin = await UserManager.GetUserAsync(UserClaims);
-                    if (UserLogin is not null)
+                    CurrentUser = await UserManager.GetUserAsync(UserClaims);
+                    if (CurrentUser is not null)
                     {
-                        isAdmin = await UserManager.IsInRoleAsync(UserLogin, nameof(UserRoles.Admin));
+                        isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
                     }
                 }
+                UserService.User = CurrentUser;
+                UserService.IsAdmin = isAdmin;
+            }
+        }
+        else
+        {
+            if (UserService.IsLogin)
+            {
+                CurrentUser = UserService.User;
+                isAdmin = UserService.IsAdmin;
             }
         }
     }

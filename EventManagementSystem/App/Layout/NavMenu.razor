@@ -72,7 +72,7 @@
                             <li><a class="dropdown-item" href="/events">All events</a></li>
                         </ul>
                     </li>
-                    @if (UserLogin is not null && isAdmin)
+                    @if (CurrentUser is not null && isAdmin)
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,7 +97,7 @@
                         </form>
                     </li>
                 </ul>
-                @if (UserLogin is not null)
+                @if (CurrentUser is not null)
                 {
                     <div class="d-flex">
                         <div class="btn btn-outline-dark text-white p-0" type="button" data-bs-toggle="offcanvas"
@@ -110,10 +110,10 @@
                 {
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                            <a class="nav-link text-white" id="register" href="Identity/Account/Register">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                            <a class="nav-link text-white" id="login" href="Identity/Account/Login">Login</a>
                         </li>
                     </ul>
                 }
@@ -121,7 +121,7 @@
         </div>
     </nav>
 </header>
-@if (UserLogin is not null)
+@if (CurrentUser is not null)
 {
     <div class="offcanvas offcanvas-end bg-dark border-start border-secondary" data-bs-scroll="true" tabindex="-1" id="user-profile-offcanvas"
          style="width:300px; border-radius:20px 0 0 20px">
@@ -130,12 +130,12 @@
         </div>
         <div class="offcanvas-body text-white bg-dark" style="border-radius: 20px 0 0 20px;">
             <div class="list-group">
-                <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                    Hello @(UserLogin.DisplayName)
+                <a id="manage" class="nav-link text-white" href="Identity/Account/Manage/Index" title="Manage">
+                    Hello @(CurrentUser.DisplayName)
                 </a>
                 <hr />
-                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="Home">
-                    <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">Logout</button>
+                <form>
+                    <a  id="logout" href="/Identity/Account/Logout" class="nav-link btn btn-link text-white border-0 text-start">Logout</a>
                 </form>
             </div>
         </div>
