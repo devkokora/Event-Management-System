@@ -1,5 +1,4 @@
 ﻿@page "/events/{category?}"
-
 @rendermode InteractiveServer
 
 <div class="jumbotron jumbotron-@Category-event pt-5">
@@ -9,37 +8,112 @@
         </h2>
     </div>
 </div>
-<div class="container-fluid event-container pt-3 bg-dark">
-    <div class="row justify-content-center">
+<div class="container-fluid event-container pt-4 pb-5 bg-dark">
+    <p class="h2 fw-bold text-center">Upcomming @Category</p>
+    <div class="row overflow-x-auto">
         @for (int i = 1; i <= 12; i++)
         {
-            <div class="col-lg-3 col-md-4 mb-4 px-1">
+            <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
+                 style="@(CurrentGroup_Up == GetGroup(i) ? "display: block;" : "display: none;")">
                 <div class="card bg-dark text-white border-secondary">
-                    <div class="img-container" style="height: 12rem; overflow: hidden; ">
+                    <div class="img-container" style="height: 12rem; overflow: hidden;">
                         <img src="imgs/festival-img/events_@(i.ToString("00")).JPG"
                              class="card-img-top" alt="Event Image"
-                             style="width: 100%; height: 100%; object-fit: cover; ">
+                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
-                    @*<ul class="list-group list-group-flush">
-                            <li class="list-group-item">Date</li>
-                            <li class="list-group-item">Price</li>
-                        </ul>*@
-                        <a href="/events" class="card-link p-2 text-center">Enter</a>
+                    <a href="/events" class="card-link p-2 text-center">Enter</a>
                 </div>
             </div>
         }
     </div>
+    <div class="pagination-dots text-center">
+        @for (int i = 1; i <= TotalGroups; i++)
+        {
+            int selected = i;
+            string filter = "upcomming";
+            <span class="dot @(CurrentGroup_Up == selected ? "active" : "")"
+                  @onclick="() => ShowGroup(selected, filter)"></span>
+        }
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <span class="h5 fw-bold ">Other @Category</span>
+        </div>
+        <div class="col-md-9">
+            <form class="container-fluid">
+                <div class="input-group justify-content-end">
+                    <input type="text" class="form-control border-0" placeholder="Search on @(Category)." aria-label="Search" aria-describedby="navbar-search" style="max-width:350px;">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row overflow-x-auto">
+        @for (int i = 1; i <= 12; i++)
+        {
+            <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
+                 style="@(CurrentGroup_Hot == GetGroup(i) ? "display: block;" : "display: none;")">
+                <div class="card bg-dark text-white border-secondary">
+                    <div class="img-container" style="height: 12rem; overflow: hidden;">
+                        <img src="imgs/festival-img/events_@(i.ToString("00")).JPG"
+                             class="card-img-top" alt="Event Image"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <a href="/events" class="card-link p-2 text-center">Enter</a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="pagination-dots text-center">
+        @for (int i = 1; i <= TotalGroups; i++)
+        {
+            int selected = i;
+            string filter = "hot";
+            <span class="dot @(CurrentGroup_Hot == selected ? "active" : "")"
+                  @onclick="() => ShowGroup(selected, filter)"></span>
+        }
+    </div>
 </div>
+
 @code {
+    [Inject]
+    private IEventRepository _eventRepository { get; set; } = default!;
+
+    public IEnumerable<Event>? AllEvents { get; set; }
+
+    private int CurrentGroup_Up { get; set; } = 1;
+    private int CurrentGroup_Hot { get; set; } = 1;
+
+    private int TotalGroups { get; set; } = 3;
+    private int NumberOnGroup { get; set; } = 20;
+
     [Parameter]
     public string? Category { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         Category ??= string.Empty;
+        AllEvents = await _eventRepository.GetAllByTypeAsync(Category);
+    }
+
+    private int GetGroup(int index)
+    {
+        return (index - 1) / (3 + 1) + 1;
+    }
+
+    private void ShowGroup(int group, string filter)
+    {
+        if (filter == "upcomming")
+            CurrentGroup_Up = group;
+        else
+            CurrentGroup_Hot = group;
     }
 }

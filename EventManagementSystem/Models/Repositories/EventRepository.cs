@@ -1,56 +1,65 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EventManagementSystem.Models.Repositories
 {
     public class EventRepository : IEventRepository
     {
         private readonly EventManagementSystemDbContext _eventManagementSystemDbContext;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public EventRepository(EventManagementSystemDbContext eventManagementSystemDbContext)
         {
             _eventManagementSystemDbContext = eventManagementSystemDbContext;
         }
 
-        public Task<string?> EventInformation(int eventId)
+        public async Task<Event?> GetByIdAsync(int eventId)
         {
-            throw new NotImplementedException();
+            return await _eventManagementSystemDbContext.Events.FindAsync(eventId);
         }
 
-        public async Task<IEnumerable<Event>> GetAll()
+        public async Task<IEnumerable<Event>> GetAllAsync()
         {
             return await _eventManagementSystemDbContext.Events
-                .OrderByDescending(e => e.Id)
+                .OrderBy(e => e.Id)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public Task<IEnumerable<Event>> GetAllByType(string typeName)
+        public async Task<IEnumerable<Event>> GetAllByTypeAsync(string? typeName)
+        {
+            if (string.IsNullOrEmpty(typeName))
+                return await GetAllAsync();
+
+            return await _eventManagementSystemDbContext.Events
+                .Where(e => nameof(e.Category).Equals(typeName, StringComparison.CurrentCultureIgnoreCase))
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+
+        public Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Ticket>> GetAllTicket(int eventId, int ticketTypeId)
+        public Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TicketType>> GetAllTicketType(int eventId)
+        public Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Event?> GetById(int eventId)
+        public Task<TicketType?> GetTicketTypeByIdAsync(int eventId, int ticketTypeId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Ticket?> GetTicketById(int eventId, int ticketTypeId, int ticketId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TicketType?> GetTicketTypeById(int eventId, int ticketTypeId)
+        public Task<string?> EventInformationAsync(int eventId)
         {
             throw new NotImplementedException();
         }

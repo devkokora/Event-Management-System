@@ -2,13 +2,13 @@
 {
     public interface IEventRepository
     {
-        public Task<Event?> GetById(int eventId);
-        public Task<IEnumerable<Event>> GetAll();
-        public Task<IEnumerable<Event>> GetAllByType(string typeName);
-        public Task<TicketType?> GetTicketTypeById(int eventId, int ticketTypeId);
-        public Task<IEnumerable<TicketType>> GetAllTicketType(int eventId);
-        public Task<Ticket?> GetTicketById(int eventId, int ticketTypeId, int ticketId);
-        public Task<IEnumerable<Ticket>> GetAllTicket(int eventId, int ticketTypeId);
-        public Task<string?> EventInformation(int eventId);
+        Task<Event?> GetByIdAsync(int eventId);
+        Task<IEnumerable<Event>> GetAllAsync();
+        Task<IEnumerable<Event>> GetAllByTypeAsync(string? typeName);
+        Task<TicketType?> GetTicketTypeByIdAsync(int eventId, int ticketTypeId);
+        Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId);
+        Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId);
+        Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId);
+        Task<string?> EventInformationAsync(int eventId);
     }
 }

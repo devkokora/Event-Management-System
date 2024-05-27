@@ -28,7 +28,7 @@ namespace EventManagementSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Event> events = await _eventRepository.GetAll();
+            IEnumerable<Event> events = await _eventRepository.GetAllAsync();
 
             return View(events);
         }
