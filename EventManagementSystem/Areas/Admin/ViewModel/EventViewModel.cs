@@ -1,4 +1,5 @@
 ﻿using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EventManagementSystem.Areas.Admin.ViewModel
@@ -9,7 +10,7 @@ namespace EventManagementSystem.Areas.Admin.ViewModel
         public Event Event { get; set; } = default!;
         public IEnumerable<SelectListItem> Categories { get; set; }
         public List<SelectListItem> Transports { get; set; }
-        public List<TicketType> TicketTypes { get; set; }
+        public List<TicketType>? TicketTypes { get; set; }
         public string[] SelectedTransports { get; set; }
 
         public EventViewModel()
@@ -20,9 +21,11 @@ namespace EventManagementSystem.Areas.Admin.ViewModel
             var transports = Enum.GetValues(typeof(Transport)).Cast<Transport>();
             Transports = new SelectList(transports).ToList();
 
-            TicketTypes = Enumerable.Repeat(new TicketType(), MaximumTicketTypes).ToList();
+            TicketTypes = [.. Enumerable.Repeat(new TicketType(), MaximumTicketTypes)];
 
             SelectedTransports = new string[Enum.GetValues(typeof(Transport)).Length];
+            //[.. Enumerable.Repeat<string?>(null, Enum.GetValues(typeof(Transport)).Length)];
+            // [.. Enumerable.Repeat("", Enum.GetValues(typeof(Transport)).Length)]; //Error
         }
     }
 }

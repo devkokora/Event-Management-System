@@ -8,18 +8,16 @@ namespace EventManagementSystem.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; } = string.Empty;
         [StringLength(400)]
-        public string Detail { get; set; } = string.Empty;
+        public string? Detail { get; set; }
         public float Price { get; set; } = default;
         public int? MaxCapital { get; set; }
         public ICollection<Ticket>? Tickets { get; set; }
 
         [ForeignKey("Event")]
         public int EventId { get; set; }
-        [Required]
-        public Event Event { get; set; } = default!;
+        public Event? Event { get; set; } = default!;
     }
 }
