@@ -11,7 +11,6 @@ namespace EventManagementSystem.Areas.Admin.ViewModel
         public IEnumerable<SelectListItem> Categories { get; set; }
         public List<SelectListItem> Transports { get; set; }
         public List<TicketType>? TicketTypes { get; set; }
-        public string[] SelectedTransports { get; set; }
 
         public EventViewModel()
         {
@@ -22,10 +21,6 @@ namespace EventManagementSystem.Areas.Admin.ViewModel
             Transports = new SelectList(transports).ToList();
 
             TicketTypes = [.. Enumerable.Repeat(new TicketType(), MaximumTicketTypes)];
-
-            SelectedTransports = new string[Enum.GetValues(typeof(Transport)).Length];
-            //[.. Enumerable.Repeat<string?>(null, Enum.GetValues(typeof(Transport)).Length)];
-            // [.. Enumerable.Repeat("", Enum.GetValues(typeof(Transport)).Length)]; //Error
         }
     }
 }
