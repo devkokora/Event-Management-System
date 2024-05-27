@@ -4,17 +4,25 @@ namespace EventManagementSystem.Areas.Admin.Models.Repositories
 {
     public class AdminEventRepository : IAdminEventRepository
     {
-        public Task<int> Create(Event newEvent)
+        private readonly EventManagementSystemDbContext _eventManagementSystemDbContext;
+
+        public AdminEventRepository(EventManagementSystemDbContext eventManagementSystemDbContext)
+        {
+            _eventManagementSystemDbContext = eventManagementSystemDbContext;
+        }
+
+        public async Task<int> CreateAsync(Event newEvent)
+        {
+            await _eventManagementSystemDbContext.Events.AddAsync(newEvent);
+            return await _eventManagementSystemDbContext.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteAsync(int eventId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> Delete(int eventId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> Edit(Event editEvent)
+        public Task<int> EditAsync(Event editEvent)
         {
             throw new NotImplementedException();
         }

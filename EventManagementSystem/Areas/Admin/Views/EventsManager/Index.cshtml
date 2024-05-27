@@ -1,4 +1,5 @@
-﻿<div class="container pt-4 pb-4 bg-dark">
+﻿@model IEnumerable<Event>
+<div class="container pt-4 pb-4 bg-dark">
     <div class="row mb-3">
         <div class="col-md-6">
             <p class="h4">Event Manager</p>
@@ -25,14 +26,14 @@
                 </tr>
             </thead>
             <tbody style="font-size:15px;">
-                @for (int i = 1; i <= 10; i++)
+                @foreach (var ev in Model)
                 {
                     <tr>
-                        <th scope="row">@i</th>
-                        <td>MEMORIAL DAY WEEKEND HIP HOP</td>
-                        <td>Community</td>
-                        <td>Bangkok</td>
-                        <td>25/06/2024</td>
+                        <th scope="row">@ev.Id</th>
+                        <td>@ev.Title</td>
+                        <td>@ev.Category</td>
+                        <td>@ev.Country</td>
+                        <td>@ev.Create_at</td>
                         <td>
                             <button class="btn btn-outline-success">View</button>
                         </td>

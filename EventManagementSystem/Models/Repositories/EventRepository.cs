@@ -1,16 +1,28 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+
 namespace EventManagementSystem.Models.Repositories
 {
     public class EventRepository : IEventRepository
     {
+        private readonly EventManagementSystemDbContext _eventManagementSystemDbContext;
+
+        public EventRepository(EventManagementSystemDbContext eventManagementSystemDbContext)
+        {
+            _eventManagementSystemDbContext = eventManagementSystemDbContext;
+        }
+
         public Task<string?> EventInformation(int eventId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Event>> GetAll()
+        public async Task<IEnumerable<Event>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _eventManagementSystemDbContext.Events
+                .OrderByDescending(e => e.Id)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public Task<IEnumerable<Event>> GetAllByType(string typeName)

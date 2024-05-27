@@ -1,7 +1,6 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
     <form class="px-md-5" method="post">
-        <input asp-for="@Model.Event.UserId"/>
         @for (int i = 0; i < Model.TicketTypes.Count; i++)
         {
             <input asp-for="@Model.TicketTypes[i].Name" type="text" id="templateName_@i" hidden />
@@ -92,9 +91,9 @@
                         @for (int i = 0; i < Model.Transports.Count(); i++)
                         {
                             <div class="form-check">
-                                <input asp-for="@Model.SelectedTransports[i]" type="checkbox" class="form-check-input" value="@Model.Transports[i].Text" id="transport_@Model.Transports[i].Text" />
-                                <label asp-for="@Model.SelectedTransports[i]" class="form-check-label" for="transport_@Model.Transports[i].Text">
-                                    @Model.Transports[i].Text
+                                <input asp-for="@Model.SelectedTransports[i]" type="checkbox" class="form-check-input" value="@Model.Transports[i].Text"  />
+                                <label asp-for="@Model.SelectedTransports[i]" class="form-check-label" >
+                                    @(Model.Transports[i].Text[..1].ToUpper() + @Model.Transports[i].Text[1..])
                                 </label>
                             </div>
                         }

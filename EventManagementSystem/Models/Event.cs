@@ -18,10 +18,9 @@ namespace EventManagementSystem.Models
 
         [ForeignKey("User")]
         public string? UserId{ get; set; }
-        [Required]
-        public User User { get; set; } = default!;
+        public User? User { get; set; }
 
-        public DateTime Create_at { get; set; } = DateTime.Now;
+        public DateTime Create_at { get; set; }
         [Required]
         public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         [Required]

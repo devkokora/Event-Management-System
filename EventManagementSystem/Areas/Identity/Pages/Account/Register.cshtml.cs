@@ -99,17 +99,7 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
 
                 if (createUserResult.Succeeded)
                 {
-                    //var addAdmin = await _userManager.FindByNameAsync("admin@eventjui.com");
-                    //IdentityResult addToRoleResult;
-                    //if (addAdmin is not null)
-                    //{
-                    //    await _userManager.RemoveFromRoleAsync(user, nameof(UserRoles.User));
-                    //    addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.Admin));
-                    //}
-                    //else
-                    //{
                     var addToRoleResult = await _userManager.AddToRoleAsync(user, nameof(UserRoles.User));
-                    //}
 
                     if (addToRoleResult.Succeeded)
                     {
