@@ -71,10 +71,10 @@ namespace EventManagementSystem.Areas.Admin.Controllers
                             Address = eventViewModel.Event.Address,
                             Image = eventViewModel.Event.Image,
                             Transports = eventViewModel.Transports
-                            .Where(t => eventViewModel.SelectedTransports.Contains(t.Text))
+                            .Where(t => t.Value == "true")
                             .Select(st => (Transport)Enum.Parse(typeof(Transport), st.Text)).ToList(),
                             Category = eventViewModel.Event.Category,
-                            TicketTypes = eventViewModel.TicketTypes
+                            TicketTypes = eventViewModel.TicketTypes?
                             .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList()
                         };
 
@@ -83,7 +83,6 @@ namespace EventManagementSystem.Areas.Admin.Controllers
                     }
                 }
             }
-            eventViewModel.SelectedTransports = new string[Enum.GetValues(typeof(Transport)).Length];
             return View(eventViewModel);
         }
 

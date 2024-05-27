@@ -3,10 +3,10 @@
     <form class="px-md-5" method="post">
         @for (int i = 0; i < Model.TicketTypes.Count; i++)
         {
-            <input asp-for="@Model.TicketTypes[i].Name" type="text" id="templateName_@i" hidden />
-            <input asp-for="@Model.TicketTypes[i].Detail" type="text" id="templateDetail_@i" hidden />
-            <input asp-for="@Model.TicketTypes[i].Price" type="number" id="templatePrice_@i" hidden />
-            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="number" id="templateMaxCapital_@i" hidden />
+            <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i "/>
+            <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i "/>
+            <input asp-for="@Model.TicketTypes[i].Price" type="hidden" id="templatePrice_@i" hidden />
+            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i "/>
         }
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
@@ -91,8 +91,9 @@
                         @for (int i = 0; i < Model.Transports.Count(); i++)
                         {
                             <div class="form-check">
-                                <input asp-for="@Model.SelectedTransports[i]" type="checkbox" class="form-check-input" value="@Model.Transports[i].Text"  />
-                                <label asp-for="@Model.SelectedTransports[i]" class="form-check-label" >
+                                <input type="hidden" asp-for="@Model.Transports[i].Text " />
+                                <input asp-for="@Model.Transports[i].Value" type="checkbox" class="form-check-input" />
+                                <label asp-for="@Model.Transports[i].Value" class="form-check-label">
                                     @(Model.Transports[i].Text[..1].ToUpper() + @Model.Transports[i].Text[1..])
                                 </label>
                             </div>
