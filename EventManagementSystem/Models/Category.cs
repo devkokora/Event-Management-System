@@ -10,8 +10,5 @@
         Art,
         Community,
         Holiday,
-        Observances,
-        Politic,
-        Academic
     }
 }

@@ -7,6 +7,7 @@ namespace EventManagementSystem.Services
         User? User{ get; set; }
         bool IsAdmin { get; set; }
         bool IsLogin { get; set; }
+        bool IsInitialize { get; set; }
         void SignIn();
         void SignOut();
     }
