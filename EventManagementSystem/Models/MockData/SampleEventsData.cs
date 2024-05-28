@@ -1,8 +1,8 @@
-﻿using Humanizer;
-using System;
-using System.Runtime.CompilerServices;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using dotenv.net;
 
-namespace EventManagementSystem.Models.Initializers
+namespace EventManagementSystem.Models.MockData
 {
     public static class SampleEventsData
     {
@@ -204,6 +204,11 @@ namespace EventManagementSystem.Models.Initializers
                 }
             };
 
+        public static List<Tuple<string, string>> GetTitleAndShortDescription(string category)
+        {
+            return TitleAndShortDescription[category];
+        }
+
         public static string GetRandomDescription()
         {
             var descriptions = new string[]
@@ -305,35 +310,30 @@ namespace EventManagementSystem.Models.Initializers
             return array[rnd.Next(array.Length)];
         }
 
-        public static string GetRandomImgUrlBytype(string category)
+        public static List<string> GetAllImgsUrlBytype(string category)
         {
-            Dictionary<string, string[]> urlByCategory = new()
+            DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+            var cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+            cloudinary.Api.Secure = true;
+
+            string folderName = $"{category.ToLower()}";
+
+            var listParams = new ListResourcesByPrefixParams()
             {
-                { "Sport", new string[] {
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907154/EventManager/sport/events_20_nlkgve.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907153/EventManager/sport/events_19_lxxnft.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907152/EventManager/sport/events_18_eeoafq.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907151/EventManager/sport/events_17_dxdddw.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907151/EventManager/sport/events_16_bwtihr.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907150/EventManager/sport/events_15_auodw2.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907149/EventManager/sport/events_14_qtbnri.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907148/EventManager/sport/events_13_qx949t.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907148/EventManager/sport/events_12_cktk3u.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907147/EventManager/sport/events_11_mxacog.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907146/EventManager/sport/events_10_o048px.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907145/EventManager/sport/events_09_fdydoa.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907145/EventManager/sport/events_08_zifuye.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907144/EventManager/sport/events_07_yasxvb.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907143/EventManager/sport/events_06_ui249j.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907142/EventManager/sport/events_05_dvoyxf.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907142/EventManager/sport/events_04_gzm0ba.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907141/EventManager/sport/events_03_udo4en.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907140/EventManager/sport/events_02_n6f3ul.jpg",
-                    "https://res.cloudinary.com/daifhbplu/image/upload/v1716907139/EventManager/sport/events_01_qiztaw.jpg"
-                    }
-                },
+                Prefix = $"{folderName}/",
+                Type = "upload",
+                MaxResults = 20
             };
-            return "";
+
+            var resourceList = cloudinary.ListResources(listParams);
+            var urlList = new List<string>();
+
+            foreach (var res in resourceList.Resources)
+            {
+                urlList.Add(res.SecureUrl.ToString());
+            }
+
+            return urlList;
         }
 
         public static List<Transport> GetRandomTransport()

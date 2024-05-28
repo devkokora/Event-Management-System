@@ -9,9 +9,9 @@ namespace EventManagementSystem.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Title { get; set; } = string.Empty;
-        [StringLength(60)]
+        [StringLength(100)]
         public string ShortDescription { get; set; } = string.Empty;
         [StringLength(1000)]
         public string Description { get; set; } = string.Empty;

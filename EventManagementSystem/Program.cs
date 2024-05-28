@@ -13,6 +13,7 @@ using EventManagementSystem.Initializers;
 using EventManagementSystem.ModelBinders;
 using NuGet.Versioning;
 using EventManagementSystem.Services;
+using EventManagementSystem.Models.MockData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,12 @@ using (var scopeAddAdmin = app.Services.CreateScope())
         var changeRoleResult = await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
         Console.WriteLine(changeRoleResult.ToString());
     }
+}
+
+using (var scopeDbInit = app.Services.CreateScope())
+{
+    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
+    DbInitializer.Seed(context);
 }
 
 app.Run();

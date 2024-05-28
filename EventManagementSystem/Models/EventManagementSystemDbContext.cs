@@ -31,6 +31,12 @@ namespace EventManagementSystem.Models
             builder.Entity<User>()
                 .HasOne(u => u.UserAddress)
                 .WithOne(ua => ua.User);
+
+            builder.Entity<User>()
+                .HasMany(u => u.Events)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
