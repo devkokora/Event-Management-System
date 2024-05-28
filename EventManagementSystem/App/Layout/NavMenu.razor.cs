@@ -20,12 +20,9 @@ public partial class NavMenu : ComponentBase
     private bool isAdmin = false;
 
     protected override async Task OnInitializedAsync()
-    {       
-        if (UserService.User is null && UserService.IsLogin)
+    {
+        if (UserService.User is null && (UserService.IsLogin || !UserService.IsInitialize))
         {
-            await Console.Out.WriteLineAsync();
-            await Console.Out.WriteLineAsync("Delay 404");
-            await Console.Out.WriteLineAsync();
             await Task.Delay(404);
             if (AuthenticationStateProvider is not null && UserManager is not null)
             {
@@ -38,11 +35,14 @@ public partial class NavMenu : ComponentBase
                     if (CurrentUser is not null)
                     {
                         isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
+                        UserService.User = CurrentUser;
+                        UserService.IsLogin = true;
+                        if (isAdmin)
+                            UserService.IsAdmin = isAdmin;
                     }
-                }
-                UserService.User = CurrentUser;
-                UserService.IsAdmin = isAdmin;
+                }                
             }
+            UserService.IsInitialize = true;
         }
         else
         {

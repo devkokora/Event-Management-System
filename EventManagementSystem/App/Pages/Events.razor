@@ -1,37 +1,38 @@
-﻿@page "/events/{category?}"
+﻿@page "/events/{categoryname?}"
 @rendermode InteractiveServer
 
-<div class="jumbotron jumbotron-@Category-event pt-5">
+<div class="jumbotron jumbotron-@CategoryName-event pt-5">
     <div class="container">
         <h2 class="display-5 text-danger text-center" style="font-weight:600;">
-            <strong style="-webkit-text-stroke: white 1px;">@(($"{Category} EVENTS").ToUpper())</strong>
+            <strong style="-webkit-text-stroke: white 1px;">@(($"{CategoryName} EVENTS").ToUpper())</strong>
         </h2>
     </div>
 </div>
 <div class="container-fluid event-container pt-4 pb-5 bg-dark">
-    <p class="h2 fw-bold text-center">Upcomming @Category</p>
+    <p class="h2 fw-bold text-center">Upcomming @CategoryName</p>
     <div class="row overflow-x-auto">
-        @for (int i = 1; i <= 12; i++)
-        {
-            <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
-                 style="@(CurrentGroup_Up == GetGroup(i) ? "display: block;" : "display: none;")">
-                <div class="card bg-dark text-white border-secondary">
-                    <div class="img-container" style="height: 12rem; overflow: hidden;">
-                        <img src="imgs/festival-img/events_@(i.ToString("00")).JPG"
-                             class="card-img-top" alt="Event Image"
-                             style="width: 100%; height: 100%; object-fit: cover;">
+        @if (UpComingEvents is not null)
+            for (int i = 0; i < UpComingEvents.Count; i++)
+            {
+                <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
+                     style="@(CurrentGroup_Up == GetGroup(i) ? "display: block;" : "display: none;")">
+                    <div class="card bg-dark text-white border-secondary">
+                        <div class="img-container" style="height: 12rem; overflow: hidden;">
+                            <img src="imgs/festival-img/events_@((rnd.Next(0,200)%20).ToString("00")).JPG"
+                                 class="card-img-top" alt="Event Image"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@UpComingEvents[i].Title</h5>
+                            <p class="card-text">@UpComingEvents[i].ShortDescription</p>
+                        </div>
+                        <a href="/events/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                    <a href="/events" class="card-link p-2 text-center">Enter</a>
                 </div>
-            </div>
-        }
+            }
     </div>
     <div class="pagination-dots text-center">
-        @for (int i = 1; i <= TotalGroups; i++)
+        @for (int i = 1; i <= TotalUpComingGroups; i++)
         {
             int selected = i;
             string filter = "upcomming";
@@ -42,38 +43,39 @@
     <hr />
     <div class="row mb-3">
         <div class="col-md-3">
-            <span class="h5 fw-bold ">Other @Category</span>
+            <span class="h5 fw-bold ">Other @CategoryName</span>
         </div>
         <div class="col-md-9">
             <form class="container-fluid">
                 <div class="input-group justify-content-end">
-                    <input type="text" class="form-control border-0" placeholder="Search on @(Category)." aria-label="Search" aria-describedby="navbar-search" style="max-width:350px;">
+                    <input type="text" class="form-control border-0" placeholder="Search on @(CategoryName)." aria-label="Search" aria-describedby="navbar-search" style="max-width:350px;">
                 </div>
             </form>
         </div>
     </div>
     <div class="row overflow-x-auto">
-        @for (int i = 1; i <= 12; i++)
-        {
-            <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
-                 style="@(CurrentGroup_Hot == GetGroup(i) ? "display: block;" : "display: none;")">
-                <div class="card bg-dark text-white border-secondary">
-                    <div class="img-container" style="height: 12rem; overflow: hidden;">
-                        <img src="imgs/festival-img/events_@(i.ToString("00")).JPG"
-                             class="card-img-top" alt="Event Image"
-                             style="width: 100%; height: 100%; object-fit: cover;">
+        @if (AllEvents is not null)
+            for (int i = 0; i < AllEvents.Count(); i++)
+            {
+                <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
+                     style="@(CurrentGroup_Hot == GetGroup(i) ? "display: block;" : "display: none;")">
+                    <div class="card bg-dark text-white border-secondary">
+                        <div class="img-container" style="height: 12rem; overflow: hidden;">
+                            <img src="imgs/festival-img/events_@((rnd.Next(0,200)%20).ToString("00")).JPG"
+                                 class="card-img-top" alt="Event Image"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@AllEvents[i].Title</h5>
+                            <p class="card-text">@AllEvents[i].ShortDescription</p>
+                        </div>
+                        <a href="/events/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                    <a href="/events" class="card-link p-2 text-center">Enter</a>
                 </div>
-            </div>
-        }
+            }
     </div>
     <div class="pagination-dots text-center">
-        @for (int i = 1; i <= TotalGroups; i++)
+        @for (int i = 1; i <= TotalUpAllGroups; i++)
         {
             int selected = i;
             string filter = "hot";
@@ -87,26 +89,40 @@
     [Inject]
     private IEventRepository _eventRepository { get; set; } = default!;
 
-    public IEnumerable<Event>? AllEvents { get; set; }
+    public List<Event>? AllEvents { get; private set; }
+    public List<Event>? UpComingEvents { get; private set; }
 
     private int CurrentGroup_Up { get; set; } = 1;
     private int CurrentGroup_Hot { get; set; } = 1;
 
-    private int TotalGroups { get; set; } = 3;
-    private int NumberOnGroup { get; set; } = 20;
+    private int TotalUpComingGroups { get; set; } = default;
+    private int TotalUpAllGroups { get; set; } = default;
+
+    private Random rnd = new Random();
 
     [Parameter]
-    public string? Category { get; set; }
+    public string? CategoryName { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        Category ??= string.Empty;
-        AllEvents = await _eventRepository.GetAllByTypeAsync(Category);
+        CategoryName ??= string.Empty;
+        AllEvents = [.. await _eventRepository
+            .GetAllByTypeAsync(CategoryName)];
+
+        if (AllEvents is not null)
+        {
+            UpComingEvents = [.. AllEvents
+                .OrderBy(e => e.StartDate)
+                .Take(12)];
+
+            TotalUpAllGroups = (int)Math.Ceiling((double)AllEvents.Count() / 4);
+            TotalUpComingGroups = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
+        }
     }
 
     private int GetGroup(int index)
     {
-        return (index - 1) / (3 + 1) + 1;
+        return index / (3 + 1) + 1;
     }
 
     private void ShowGroup(int group, string filter)

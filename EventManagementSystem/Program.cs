@@ -25,11 +25,11 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages(); // for identity ui
 builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
-/* Provide ClaimsPrincipal in Blazor */
+/* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddSingleton<IUserService, UserService>();
-/* Provide ClaimsPrincipal in Blazor */
+/* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<RoleInitializer>();

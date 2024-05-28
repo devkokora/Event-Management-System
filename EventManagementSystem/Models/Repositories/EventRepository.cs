@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -29,15 +30,17 @@ namespace EventManagementSystem.Models.Repositories
 
         public async Task<IEnumerable<Event>> GetAllByTypeAsync(string? typeName)
         {
-            if (string.IsNullOrEmpty(typeName))
-                return await GetAllAsync();
-
-            return await _eventManagementSystemDbContext.Events
-                .Where(e => nameof(e.Category).Equals(typeName, StringComparison.CurrentCultureIgnoreCase))
-                .AsNoTracking()
-                .ToListAsync();
+            var toDay = DateOnly.FromDateTime(DateTime.Now);
+            if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
+            {
+                return await _eventManagementSystemDbContext.Events
+                    .Where(e => e.Category.Equals((Category)existingCategory))
+                    .Where(e => e.StartDate >= toDay)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+            return await GetAllAsync();
         }
-
 
         public Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId)
         {
