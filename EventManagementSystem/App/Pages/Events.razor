@@ -9,8 +9,8 @@
     </div>
 </div>
 <div class="container-fluid event-container pt-4 pb-5 bg-dark">
-    <p class="h2 fw-bold text-center">Upcomming @CategoryName</p>
-    <div class="row overflow-x-auto">
+    <p class="h2 fw-bold text-center">Upcomming @CategoryName event</p>
+    <div class="row">
         @if (UpComingEvents is not null)
             for (int i = 0; i < UpComingEvents.Count; i++)
             {
@@ -18,7 +18,7 @@
                      style="@(CurrentGroup_Up == GetGroup(i) ? "display: block;" : "display: none;")">
                     <div class="card bg-dark text-white border-secondary">
                         <div class="img-container" style="height: 12rem; overflow: hidden;">
-                            <img src="imgs/festival-img/events_@((rnd.Next(0,200)%20).ToString("00")).JPG"
+                            <img src="@UpComingEvents[i].Image"
                                  class="card-img-top" alt="Event Image"
                                  style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -27,6 +27,15 @@
                             <p class="card-text">@UpComingEvents[i].ShortDescription</p>
                         </div>
                         <a href="/events/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
+                        <div class="container px-2 pb-3">
+                            <div class="progress bg-black">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: @(days[i] + "%");" aria-valuemax="80">
+                                </div>
+                                <div class="ps-2">
+                                    start in @CalcUpcommingDate(UpComingEvents[i].StartDate) days
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -43,7 +52,7 @@
     <hr />
     <div class="row mb-3">
         <div class="col-md-3">
-            <span class="h5 fw-bold ">Other @CategoryName</span>
+            <span class="h5 fw-bold ">Other @CategoryName event</span>
         </div>
         <div class="col-md-9">
             <form class="container-fluid">
@@ -58,10 +67,10 @@
             for (int i = 0; i < AllEvents.Count(); i++)
             {
                 <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
-                     style="@(CurrentGroup_Hot == GetGroup(i) ? "display: block;" : "display: none;")">
+                     style="@(CurrentGroup_All == GetGroup(i) ? "display: block;" : "display: none;")">
                     <div class="card bg-dark text-white border-secondary">
                         <div class="img-container" style="height: 12rem; overflow: hidden;">
-                            <img src="imgs/festival-img/events_@((rnd.Next(0,200)%20).ToString("00")).JPG"
+                            <img src="@AllEvents[i].Image"
                                  class="card-img-top" alt="Event Image"
                                  style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -78,9 +87,8 @@
         @for (int i = 1; i <= TotalUpAllGroups; i++)
         {
             int selected = i;
-            string filter = "hot";
-            <span class="dot @(CurrentGroup_Hot == selected ? "active" : "")"
-                  @onclick="() => ShowGroup(selected, filter)"></span>
+            <span class="dot @(CurrentGroup_All == selected ? "active" : "")"
+                  @onclick="() => ShowGroup(selected)"></span>
         }
     </div>
 </div>
@@ -93,7 +101,7 @@
     public List<Event>? UpComingEvents { get; private set; }
 
     private int CurrentGroup_Up { get; set; } = 1;
-    private int CurrentGroup_Hot { get; set; } = 1;
+    private int CurrentGroup_All { get; set; } = 1;
 
     private int TotalUpComingGroups { get; set; } = default;
     private int TotalUpAllGroups { get; set; } = default;
@@ -106,17 +114,18 @@
     protected override async Task OnParametersSetAsync()
     {
         CategoryName ??= string.Empty;
-        AllEvents = [.. await _eventRepository
-            .GetAllByTypeAsync(CategoryName)];
+        AllEvents = [.. await _eventRepository.GetAllByTypeAsync(CategoryName)];
 
         if (AllEvents is not null)
         {
-            UpComingEvents = [.. AllEvents
-                .OrderBy(e => e.StartDate)
-                .Take(12)];
+            UpComingEvents = [.. AllEvents.OrderBy(e => e.StartDate).Take(12)];
+
+            AllEvents = AllEvents.Where(ae => !UpComingEvents.Contains(ae)).ToList();
 
             TotalUpAllGroups = (int)Math.Ceiling((double)AllEvents.Count() / 4);
             TotalUpComingGroups = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
+
+            CalcWidthProcress(UpComingEvents);
         }
     }
 
@@ -125,11 +134,35 @@
         return index / (3 + 1) + 1;
     }
 
-    private void ShowGroup(int group, string filter)
+    private void ShowGroup(int group, string filter = "all")
     {
         if (filter == "upcomming")
             CurrentGroup_Up = group;
         else
-            CurrentGroup_Hot = group;
+            CurrentGroup_All = group;
+    }
+
+    private int CalcUpcommingDate(DateOnly dateOnly)
+    {
+        var days = (dateOnly.ToDateTime(new TimeOnly(0)) - DateTime.Now).Days;
+        return days;
+    }
+
+    private List<int> days = [];
+    private void CalcWidthProcress(List<Event> events)
+    {
+        int maxDay = 0;
+        foreach (var ev in events)
+        {
+            var day = (ev.StartDate.ToDateTime(new TimeOnly(0)) - DateTime.Now).Days;
+            if (maxDay < day)
+                maxDay = day;
+            days.Add(day);
+        }
+
+        for (int i = 0; i < days.Count; i++)
+        {
+            days[i] = (int)((float)days[i] / maxDay * 60);
+        }
     }
 }
