@@ -25,11 +25,12 @@
                         <div class="card-body">
                             <h5 class="card-title">@UpComingEvents[i].Title</h5>
                             <p class="card-text">@UpComingEvents[i].ShortDescription</p>
+                            <small class="text-end text-secondary">@UpComingEvents[i].Country - @UpComingEvents[i].StartDate</small>
                         </div>
                         <a href="/events/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                         <div class="container px-2 pb-3">
                             <div class="progress bg-black">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: @(days[i] + "%");" aria-valuemax="80">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: @(processDays[i] + "%");" aria-valuemax="80">
                                 </div>
                                 <div class="ps-2">
                                     start in @CalcUpcommingDate(UpComingEvents[i].StartDate) days
@@ -77,6 +78,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@AllEvents[i].Title</h5>
                             <p class="card-text">@AllEvents[i].ShortDescription</p>
+                            <small class="text-end text-secondary">@AllEvents[i].Country - @AllEvents[i].StartDate</small>
                         </div>
                         <a href="/events/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                     </div>
@@ -148,7 +150,7 @@
         return days;
     }
 
-    private List<int> days = [];
+    private List<int> processDays = [];
     private void CalcWidthProcress(List<Event> events)
     {
         int maxDay = 0;
@@ -157,12 +159,12 @@
             var day = (ev.StartDate.ToDateTime(new TimeOnly(0)) - DateTime.Now).Days;
             if (maxDay < day)
                 maxDay = day;
-            days.Add(day);
+            processDays.Add(day);
         }
 
-        for (int i = 0; i < days.Count; i++)
+        for (int i = 0; i < processDays.Count; i++)
         {
-            days[i] = (int)((float)days[i] / maxDay * 60);
+            processDays[i] = (int)((float)processDays[i] / maxDay * 60);
         }
     }
 }
