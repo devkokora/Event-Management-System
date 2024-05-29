@@ -1,4 +1,6 @@
-﻿using EventManagementSystem.Areas.Admin.Models.Repositories;
+﻿using CloudinaryDotNet;
+using dotenv.net;
+using EventManagementSystem.Areas.Admin.Models.Repositories;
 using EventManagementSystem.Areas.Admin.ViewModel;
 using EventManagementSystem.Models;
 using EventManagementSystem.Models.Repositories;
@@ -7,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EventManagementSystem.Areas.Admin.Controllers
 {
@@ -17,13 +21,15 @@ namespace EventManagementSystem.Areas.Admin.Controllers
         private readonly IAdminEventRepository _adminEventRepository;
         private readonly IEventRepository _eventRepository;
         private readonly UserManager<User> _userManager;
+        private readonly Cloudinary _cloudinary;
         private const int MaximumTicketTypes = 10;
 
-        public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager)
+        public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager, Cloudinary cloudinary, IWebHostEnvironment webHostEnvironment)
         {
             _adminEventRepository = adminEventRepository;
             _eventRepository = eventRepository;
             _userManager = userManager;
+            _cloudinary = cloudinary;
         }
 
         public async Task<IActionResult> Index()
@@ -54,32 +60,46 @@ namespace EventManagementSystem.Areas.Admin.Controllers
                     var isAdmin = await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
                     if (isAdmin)
                     {
-                        var newEvent = new Event()
-                        {
-                            Title = eventViewModel.Event.Title,
-                            ShortDescription = eventViewModel.Event.ShortDescription,
-                            Description = eventViewModel.Event.Description,
-                            UserId = user.Id,
-                            User = user,
-                            Create_at = DateTime.Now,
-                            StartDate = eventViewModel.Event.StartDate,
-                            EndDate = eventViewModel.Event.EndDate,
-                            VenueName = eventViewModel.Event.VenueName,
-                            Latitude = eventViewModel.Event.Latitude,
-                            Longitude = eventViewModel.Event.Longitude,
-                            Country = eventViewModel.Event.Country,
-                            Address = eventViewModel.Event.Address,
-                            Image = eventViewModel.Event.Image,
-                            Transports = eventViewModel.Transports
-                            .Where(t => t.Value == "true")
-                            .Select(st => (Transport)Enum.Parse(typeof(Transport), st.Text)).ToList(),
-                            Category = eventViewModel.Event.Category,
-                            TicketTypes = eventViewModel.TicketTypes?
-                            .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList()
-                        };
+                        var uploadResult = new ImageUploadResult();
 
-                        await _adminEventRepository.CreateAsync(newEvent);
-                        return RedirectToAction(nameof(Index));
+                        using (var stream = eventViewModel.ImagePath.OpenReadStream())
+                        {
+                            uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
+                            {
+                                File = new FileDescription(eventViewModel.ImagePath.FileName, stream),
+                                PublicId = $"EventManager/{eventViewModel.Event.Category}/{Guid.NewGuid()}"
+                            });
+                        }
+
+                        if (uploadResult != null)
+                        {
+                            var newEvent = new Event()
+                            {
+                                Title = eventViewModel.Event.Title,
+                                ShortDescription = eventViewModel.Event.ShortDescription,
+                                Description = eventViewModel.Event.Description,
+                                UserId = user.Id,
+                                User = user,
+                                Create_at = DateTime.Now,
+                                StartDate = eventViewModel.Event.StartDate,
+                                EndDate = eventViewModel.Event.EndDate,
+                                VenueName = eventViewModel.Event.VenueName,
+                                Latitude = eventViewModel.Event.Latitude,
+                                Longitude = eventViewModel.Event.Longitude,
+                                Country = eventViewModel.Event.Country,
+                                Address = eventViewModel.Event.Address,
+                                Image = uploadResult.Url.ToString(),
+                                Transports = eventViewModel.Transports
+                                .Where(t => t.Value == "true")
+                                .Select(st => (Transport)Enum.Parse(typeof(Transport), st.Text)).ToList(),
+                                Category = eventViewModel.Event.Category,
+                                TicketTypes = eventViewModel.TicketTypes?
+                                .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList()
+                            };
+
+                            await _adminEventRepository.CreateAsync(newEvent);
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
                 }
             }
