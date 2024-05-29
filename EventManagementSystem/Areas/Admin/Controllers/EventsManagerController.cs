@@ -1,16 +1,11 @@
 ﻿using CloudinaryDotNet;
-using dotenv.net;
-using EventManagementSystem.Areas.Admin.Models.Repositories;
-using EventManagementSystem.Areas.Admin.ViewModel;
-using EventManagementSystem.Models;
-using EventManagementSystem.Models.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Protocol;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Hosting;
+using EventManagementSystem.DataAccess.Repository;
+using EventManagementSystem.Models;
+using EventManagementSystem.Models.ViewModels;
 
 namespace EventManagementSystem.Areas.Admin.Controllers
 {
