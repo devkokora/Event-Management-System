@@ -22,6 +22,12 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventManagementSystem.DataAccess\EventManagementSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\EventManagementSystem.Model\EventManagementSystem.Models.csproj" />
   </ItemGroup>
 
 </Project>
