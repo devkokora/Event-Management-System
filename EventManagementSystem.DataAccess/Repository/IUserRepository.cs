@@ -8,6 +8,7 @@ namespace EventManagementSystem.DataAccess.Repository
         public Task<User?> GetByIdAsync(int userId);
         public Task<User?> GetByNameAsync(string name);
         public Task<IEnumerable<User>> GetAllAsync();
+        public Task<int> UpdateUserAsync(User user);
         public Task<Ticket?> GetTicketByIdAsync(int userId, int ticketId);
         public Task<IEnumerable<Ticket>> GetAllTicketAsync(int userId);
         public Task<Event?> GetEventByTicketAsync(int userId, int ticketId);

@@ -24,39 +24,3 @@ namespace EventManagementSystem.Models.ViewModels
         }
     }
 }
-
-/*using EventManagementSystem.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace EventManagementSystem.Areas.Admin.ViewModel
-{
-    public class EventViewModel
-    {
-        public Event Event { get; set; }
-        public IEnumerable<SelectListItem> Categories { get; set; }
-        public List<SelectListItem> Transports { get; set; }
-        public List<TicketType> TicketTypes { get; set; }
-
-        public string[] SelectedTransports { get; set; } = new string[Enum.GetValues(typeof(Transport)).Length];
-
-        public EventViewModel()
-        {
-            Event = new();
-            Categories = new List<SelectListItem>();
-            Transports = new();
-            TicketTypes = new List<TicketType>();
-            SelectedTransports = new string[Enum.GetValues(typeof(Transport)).Length];
-        }
-
-        public EventViewModel(Event newEvent,
-            IEnumerable<SelectListItem> categoriesListItem,
-            List<SelectListItem> transportsListItem,
-            int maximumTicketTypes)
-        {
-            Event = newEvent;
-            Categories = categoriesListItem;
-            Transports = transportsListItem;
-            TicketTypes = Enumerable.Repeat(new TicketType(), maximumTicketTypes).ToList();
-        }
-    }
-}*/

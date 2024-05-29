@@ -1,6 +1,7 @@
 ﻿using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EventManagementSystem.DataAccess.Repository
 {
@@ -16,7 +17,10 @@ namespace EventManagementSystem.DataAccess.Repository
 
         public async Task<Event?> GetByIdAsync(int eventId)
         {
-            return await _eventManagementSystemDbContext.Events.FindAsync(eventId);
+            return await _eventManagementSystemDbContext.Events
+                .Include(e => e.TicketTypes)
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
         }
 
         public async Task<IEnumerable<Event>> GetAllAsync()
@@ -56,14 +60,41 @@ namespace EventManagementSystem.DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public Task<TicketType?> GetTicketTypeByIdAsync(int eventId, int ticketTypeId)
+        public async Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId)
         {
-            throw new NotImplementedException();
+            return await _eventManagementSystemDbContext.TicketTypes
+                .Include(tt => tt.Event)
+                .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
         }
 
         public Task<string?> EventInformationAsync(int eventId)
         {
             throw new NotImplementedException();
+        }
+
+        // Use on test.
+        public async Task<int> UpdateTicketTypeAsync(Event updateEvent)
+        {
+            bool ticketTypeWithSameName = _eventManagementSystemDbContext.TicketTypes
+                .AsEnumerable()
+                .Any(tt => updateEvent.TicketTypes
+                .Any(ett => ett.Name == tt.Name && ett.Id != tt.Id && ett.EventId == tt.EventId));
+
+            if (ticketTypeWithSameName)
+                throw new Exception("A Tickket type with the same name already exists");
+
+
+            var eventToUpdate = await _eventManagementSystemDbContext.Events.FindAsync(updateEvent.Id);
+            if (eventToUpdate is not null)
+            {
+                eventToUpdate.TicketTypes = updateEvent.TicketTypes;
+                _eventManagementSystemDbContext.Events.Update(eventToUpdate);
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("The event to update can't be find");
+            }
         }
     }
 }

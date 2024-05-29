@@ -1,0 +1,69 @@
+﻿@model Event
+
+<div class="container-fluid bg-dark py-4 px-4">
+    <div class="text-white mb-2">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-start mb-2">
+                <h1>@Model.Title</h1>
+            </div>
+            <div class="col-md-6 text-secondary text-end">
+                <p class="mb-0">Posted by @Model.User.DisplayName</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <img src="@Model.Image" class="img-fluid mb-3" alt="Event Image" />
+            <p class="text-secondary">@Model.ShortDescription</p>
+            <p>@Model.Description</p>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="bg-dark p-3 mb-3">
+                <h4>Event Details</h4>
+                <p><strong>Country:</strong> @Model.Country</p>
+                <p><strong>Address:</strong> @Model.Address</p>
+                <p><strong>Venue Name:</strong> @Model.VenueName</p>
+                <p><strong>Start Date:</strong> @Model.StartDate.ToString("MMMM dd, yyyy")</p>
+                <p><strong>End Date:</strong> @Model.EndDate.ToString("MMMM dd, yyyy")</p>
+                <p>
+                    <strong>Transports:</strong>
+                    @if (Model.Transports != null && Model.Transports.Any())
+                    {
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var transport in Model.Transports)
+                            {
+                                <li>@transport</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>No transport information available.</span>
+                    }
+                </p>
+            </div>
+
+            <div class="mb-3">
+                <iframe src="@ViewBag.GoogleMap"
+                        width="100%" height="250" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <div class="bg-dark p-3">
+                <form asp-action="RegisterToEvent" method="get">
+                    <div class="form-group">
+                        <label for="selectticketTypeId" class="control-label">Select Ticket</label>
+                        <select name="ticketTypeId" class="form-select" id="selectticketTypeId">
+                            @foreach (var ticketType in Model.TicketTypes)
+                            {
+                                <option value="@ticketType.Id">@ticketType.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-success mt-3">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
