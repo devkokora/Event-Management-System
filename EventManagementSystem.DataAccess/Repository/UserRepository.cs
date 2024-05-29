@@ -9,12 +9,10 @@ namespace EventManagementSystem.DataAccess.Repository
     public class UserRepository : IUserRepository
     {
         private readonly EventManagementSystemDbContext _eventManagementSystemDbContext;
-        private readonly UserManager<User> _userManager;
 
         public UserRepository(EventManagementSystemDbContext eventManagementSystemDbContext, UserManager<User> userManager)
         {
             _eventManagementSystemDbContext = eventManagementSystemDbContext;
-            _userManager = userManager;
         }
 
         public Task<IdentityResult> ChangeDisplayNameAsync(int userId, string newDisplayName)
@@ -65,6 +63,18 @@ namespace EventManagementSystem.DataAccess.Repository
         public Task<Ticket?> GetTicketByIdAsync(int userId, int ticketId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> UpdateUserAsync(User user)
+        {
+            var existingUser = await _eventManagementSystemDbContext.Users.FindAsync(user.Id);
+            if (existingUser is not null)
+            {
+                existingUser.Tickets = user.Tickets;
+                _eventManagementSystemDbContext.Users.Update(existingUser);
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            return 0;
         }
     }
 }
