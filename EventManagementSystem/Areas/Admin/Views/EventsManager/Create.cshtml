@@ -1,6 +1,6 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
-    <form class="px-md-5" method="post">
+    <form class="px-md-5" asp-action="Create" method="post" enctype="multipart/form-data">
         @for (int i = 0; i < Model.TicketTypes.Count; i++)
         {
             <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i "/>
@@ -72,8 +72,8 @@
                 </div>
             </div>
             <div>
-                <label asp-for="@Model.Event.Image" class="form-label mt-4">Image</label>
-                <input asp-for="@Model.Event.Image" class="form-control" type="file">
+                <label asp-for="@Model.ImagePath" class="form-label mt-4">Image</label>
+                <input type="file" asp-for="@Model.ImagePath" class="form-control">
             </div>
             <div></div>
             <div class="row">

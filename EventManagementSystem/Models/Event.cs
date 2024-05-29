@@ -39,7 +39,7 @@ namespace EventManagementSystem.Models
         [Required]
         [StringLength(200)]
         public string Address { get; set; } = string.Empty;
-        public string? Image { get; set; }
+        public string Image { get; set; } = string.Empty;
         public List<Transport>? Transports { get; set; }
 
         [Required]

@@ -14,6 +14,10 @@ using EventManagementSystem.ModelBinders;
 using NuGet.Versioning;
 using EventManagementSystem.Services;
 using EventManagementSystem.Models.MockData;
+using CloudinaryDotNet;
+using System.Configuration;
+using Microsoft.CodeAnalysis.Options;
+using dotenv.net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +58,14 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
     .AddDefaultUI()
     .AddEntityFrameworkStores<EventManagementSystemDbContext>();
+
+builder.Services.AddSingleton(sp =>
+{
+    DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+    var cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+    cloudinary.Api.Secure = true;
+    return cloudinary;
+});
 
 var app = builder.Build();
 
