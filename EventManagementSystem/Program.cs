@@ -34,6 +34,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<RoleInitializer>();
 builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
@@ -87,6 +88,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
     );
+
 app.MapRazorPages(); // for identity
 
 app.UseAntiforgery(); // blazor protect anonymous data

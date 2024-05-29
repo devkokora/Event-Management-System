@@ -1,0 +1,25 @@
+﻿@model TicketType
+<div class="container-fluid d-flex justify-content-center mt-5">
+    <div class="bg-dark text-center py-4 rounded-5" style="width: 1000px;">
+        <form asp-action="RegisterToEvent" method="post" role="form">
+            <input asp-for="@Model.Id" type="hidden" />
+            <input asp-for="@Model.Name" type="hidden" />
+            <input asp-for="@Model.Detail" type="hidden" />
+            <input asp-for="@Model.Price" type="hidden" />
+            <input asp-for="@Model.Event" type="hidden" />
+            <input asp-for="@Model.EventId" type="hidden" />
+            <input asp-for="@Model.MaxCapital" type="hidden" />
+            <div>
+                <h1 class="text-success fw-bold">Comfirm your ticket</h1>
+                <hr/>
+                <p class="h4">@Model.Event?.Title</p>
+                <p class="h5 fw-bold text-danger">Ticket: @Model.Name</p>
+                <span>Detail: @Model.Detail</span>
+                <p>At @Model.Event?.VenueName, @Model.Event?.Country - @Model.Event?.Address</p>
+                <p class="h5">$ @Model.Price</p>
+            </div>
+            <button class="btn btn-success">Comfirm</button>
+        </form>
+        <a href="javascript:history.back()">back</a>
+    </div>
+</div>
