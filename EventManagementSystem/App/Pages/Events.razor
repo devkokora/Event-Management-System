@@ -97,7 +97,7 @@
 
 @code {
     [Inject]
-    private IEventRepository _eventRepository { get; set; } = default!;
+    private EventManagementSystem.DataAccess.Repository.IEventRepository _eventRepository { get; set; } = default!;
 
     public List<Event>? AllEvents { get; private set; }
     public List<Event>? UpComingEvents { get; private set; }
