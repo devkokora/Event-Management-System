@@ -37,6 +37,18 @@ namespace EventManagementSystem.DataAccess.Data
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.Entity<Ticket>()
+            //    .HasOne(t => t.User)
+            //    .WithMany(u => u.Tickets)
+            //    .HasForeignKey(t => t.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.Entity<Ticket>()
+            //    .HasOne(t => t.User)
+            //    .WithMany(u => u.Tickets)
+            //    .HasForeignKey(t => t.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

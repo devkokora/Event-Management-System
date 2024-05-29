@@ -27,7 +27,7 @@
                             <p class="card-text">@UpComingEvents[i].ShortDescription</p>
                             <small class="text-end text-secondary">@UpComingEvents[i].Country - @UpComingEvents[i].StartDate</small>
                         </div>
-                        <a href="/events/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
+                        <a href="/event/details/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                         <div class="container px-2 pb-3">
                             <div class="progress bg-black">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: @(processDays[i] + "%");" aria-valuemax="80">
@@ -80,7 +80,7 @@
                             <p class="card-text">@AllEvents[i].ShortDescription</p>
                             <small class="text-end text-secondary">@AllEvents[i].Country - @AllEvents[i].StartDate</small>
                         </div>
-                        <a href="/events/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
+                        <a href="/event/details/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                     </div>
                 </div>
             }
