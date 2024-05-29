@@ -2,22 +2,16 @@ using EventManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EventManagementSystem.App;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
-using EventManagementSystem.Areas.Admin.Models.Repositories;
-using EventManagementSystem.Models.Repositories;
 using EventManagementSystem.Initializers;
 using EventManagementSystem.ModelBinders;
-using NuGet.Versioning;
 using EventManagementSystem.Services;
-using EventManagementSystem.Models.MockData;
+using EventManagementSystem.MockData;
 using CloudinaryDotNet;
-using System.Configuration;
-using Microsoft.CodeAnalysis.Options;
 using dotenv.net;
+using EventManagementSystem.DataAccess.Data;
+using EventManagementSystem.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
