@@ -12,6 +12,7 @@ using CloudinaryDotNet;
 using dotenv.net;
 using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.DataAccess.Repository;
+using EventManagementSystem.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(options =>
 {
     options.ModelBinderProviders.Insert(0, new DateOnlyModelBinderProvider()); // Custom ModelBinder
+    options.Filters.Add<SaveRefererFilter>(); // Custom Filter
 });
 
 builder.Services.AddRazorPages(); // for identity ui

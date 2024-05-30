@@ -63,6 +63,7 @@ namespace EventManagementSystem.DataAccess.Repository
         public async Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId)
         {
             return await _eventManagementSystemDbContext.TicketTypes
+                .Include(tt => tt.Tickets)
                 .Include(tt => tt.Event)
                 .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
         }
