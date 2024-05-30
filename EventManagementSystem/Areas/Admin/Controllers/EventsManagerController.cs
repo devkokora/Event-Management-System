@@ -6,6 +6,7 @@ using CloudinaryDotNet.Actions;
 using EventManagementSystem.DataAccess.Repository;
 using EventManagementSystem.Models;
 using EventManagementSystem.Models.ViewModels;
+using EventManagementSystem.Utilities;
 
 namespace EventManagementSystem.Areas.Admin.Controllers;
 
@@ -26,12 +27,34 @@ public class EventsManagerController : Controller
         _userManager = userManager;
         _cloudinary = cloudinary;
     }
-
-    public async Task<IActionResult> Index()
+    private int maxItem = 9;
+    public async Task<IActionResult> Index(string sortBy, int? pageNumber, string? searchQuery)
     {
-        IEnumerable<Event> events = await _eventRepository.GetAllAsync();
+        ViewData["CurrentSort"] = sortBy;
+        ViewData["IdSortParam"] = string.IsNullOrEmpty(sortBy) || sortBy == "id_desc" ? "id" : "id_desc";
+        ViewData["NameSortParam"] = sortBy == "name" ? "name_desc" : "name";
+        ViewData["CategorySortParam"] = sortBy == "category" ? "category_desc" : "category";
+        ViewData["CountrySortParam"] = sortBy == "country" ? "country_desc" : "country";
+        ViewData["DateSortParam"] = sortBy == "date" ? "date_desc" : "date";
+        ViewData["CurrentSearch"] = searchQuery;
 
-        return View(events);
+        pageNumber ??= 1;
+
+        var events = await _adminEventRepository
+            .GetEventsSortedPagedAsync(sortBy, pageNumber, maxItem, searchQuery);
+
+        int count;
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            count = await _adminEventRepository.GetAllEventsCountAsync();
+        }
+        else
+        {
+            count = _adminEventRepository.GetAllEventsSearchCountAsync(searchQuery);
+        }
+
+
+        return View(new PaginatedList<Event>(events.ToList(), count, pageNumber.Value, maxItem));
     }
 
     public IActionResult Create()
