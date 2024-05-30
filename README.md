@@ -14,7 +14,7 @@
   - 🟢 Registration button/form for users to sign up for an event.
 5. **User Event Registration:** 
   - 🟢 Logged-in users can register for events.
-  - ⚫ Once registered, an event's capacity should decrease accordingly.
+  - 🟢 Once registered, an event's capacity should decrease accordingly.
 6. **Admin Dashboard:** 
   - ⚫ A page for admins to manage events: create, update, delete events.
   - ⚫ A list of users registered for each event.
