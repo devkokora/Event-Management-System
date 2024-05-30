@@ -1,4 +1,5 @@
 ﻿using EventManagementSystem.Models;
+using Microsoft.Extensions.Logging;
 
 namespace EventManagementSystem.DataAccess.Repository
 {
@@ -7,6 +8,7 @@ namespace EventManagementSystem.DataAccess.Repository
         Task<Event?> GetByIdAsync(int eventId);
         Task<IEnumerable<Event>> GetAllAsync();
         Task<int> UpdateTicketTypeAsync(Event updateEvent); // Use on test.
+        Task<int> UpdateVisitorCountAsync(int eventId);
         Task<IEnumerable<Event>> GetAllByTypeAsync(string? typeName);
         Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId);
         Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId);

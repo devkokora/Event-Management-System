@@ -22,9 +22,10 @@
                                  class="card-img-top" alt="Event Image"
                                  style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="height:180px">
                             <h5 class="card-title">@UpComingEvents[i].Title</h5>
-                            <p class="card-text">@UpComingEvents[i].ShortDescription</p>
+                            <hr />
+                            <p class="card-text">@(UpComingEvents[i].ShortDescription.Length > 48 ? UpComingEvents[i].ShortDescription.Substring(0, 48) + "..." : UpComingEvents[i].ShortDescription)</p>
                             <small class="text-end text-secondary">@UpComingEvents[i].Country - @UpComingEvents[i].StartDate</small>
                         </div>
                         <a href="/event/details/@UpComingEvents[i].Id" class="card-link p-2 text-center">Enter</a>
@@ -75,9 +76,10 @@
                                  class="card-img-top" alt="Event Image"
                                  style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="height:180px">
                             <h5 class="card-title">@AllEvents[i].Title</h5>
-                            <p class="card-text">@AllEvents[i].ShortDescription</p>
+                            <hr/>
+                            <p class="card-text">@(AllEvents[i].ShortDescription.Length > 48 ? AllEvents[i].ShortDescription.Substring(0, 48) + "..." : AllEvents[i].ShortDescription)</p>
                             <small class="text-end text-secondary">@AllEvents[i].Country - @AllEvents[i].StartDate</small>
                         </div>
                         <a href="/event/details/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
