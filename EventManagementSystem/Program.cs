@@ -37,6 +37,7 @@ builder.Services.AddScoped<RoleInitializer>();
 builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {

@@ -3,8 +3,9 @@
 <div class="container-fluid bg-dark py-4 px-4">
     <div class="text-white mb-2">
         <div class="row align-items-center">
-            <div class="col-md-9 text-start mb-2">
-                <h1>@Model.Title</h1>
+            <div class="col-md-9 text-start">
+                <span class="h1">@Model.Title</span>
+                <span class="text-secondary">visits: @Model.PageVisitorCount</span>
             </div>
             <div class="col-md-3 text-secondary text-end">
                 <p class="mb-0">Posted by @Model.User.DisplayName</p>
@@ -50,13 +51,15 @@
             </div>
 
             <div class="bg-warning-subtle text-black p-3 rounded-3">
-                <form asp-action="RegisterToEvent" method="get">
+                <form asp-action="ConfirmTicket" method="get">
                     <div class="form-group">
                         <label for="selectticketTypeId" class="control-label">Select Ticket</label>
                         <select name="ticketTypeId" class="form-select" id="selectticketTypeId">
                             @foreach (var ticketType in Model.TicketTypes)
                             {
-                                <option value="@ticketType.Id">@ticketType.Name</option>
+                                <option value="@ticketType.Id">
+                            @ticketType.Name - ฿@ticketType.Price @(ticketType.MaxCapital <= ticketType.TotalTicketsSold ? "(SOLD OUT)" : "")
+                                </option>
                             }
                         </select>
                     </div>

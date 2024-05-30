@@ -4,6 +4,7 @@ using EventManagementSystem.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementSystem.Migrations
 {
     [DbContext(typeof(EventManagementSystemDbContext))]
-    partial class EventManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530031124_addMoreFluentEF")]
+    partial class addMoreFluentEF
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,9 +66,6 @@ namespace EventManagementSystem.Migrations
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
-
-                    b.Property<int>("PageVisitorCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
@@ -182,9 +182,6 @@ namespace EventManagementSystem.Migrations
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
-
-                    b.Property<int>("TotalTicketsSold")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -485,13 +482,13 @@ namespace EventManagementSystem.Migrations
                     b.HasOne("EventManagementSystem.Models.TicketType", "TicketType")
                         .WithMany("Tickets")
                         .HasForeignKey("TicketTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EventManagementSystem.Models.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("TicketType");
