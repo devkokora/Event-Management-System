@@ -2,6 +2,8 @@
 using EventManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace EventManagementSystem.Controllers;
 
@@ -74,14 +76,21 @@ public class EventController : Controller
         if (ModelState.IsValid)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user is null)
-                return Redirect("/Identity/Login");
+            var existingEvent = await _eventRepository.GetByIdAsync(ticketType.EventId);
+
+            if (user is null || existingEvent is null)
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+            var exixstingTicketType = await _eventRepository.GetTicketTypeByIdAsync(ticketType.Id);
+            var numberOfTicket = exixstingTicketType!.Tickets is null ? 1 :
+                exixstingTicketType.Tickets.Count + 1;
 
             var ticket = new Ticket()
             {
-                Detail = $"Ticket stamp of {ticketType.Detail}",
+                Detail = $"Your ticket detail - Ticket No.{numberOfTicket} name: {ticketType.Detail}. At {existingEvent.VenueName}, {existingEvent.Country} - {existingEvent.Address} in {existingEvent.StartDate}.",
                 TicketTypeId = ticketType.Id,
-                TicketType = ticketType,
                 UserId = user.Id,
                 User = user
             };
@@ -89,10 +98,34 @@ public class EventController : Controller
             user.Tickets ??= [];
             user.Tickets.Add(ticket);
             var result = await _userRepository.UpdateUserAsync(user);
-            return RedirectToAction(nameof(SuccessfulRegister), ticketType);
+
+            var tickketJson = JsonConvert.SerializeObject(ticket, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            TempData["TicketSuccess"] = tickketJson;
+
+            return RedirectToAction(nameof(SuccessfulRegister));
         }
-        return Redirect
+
+        var backUrl = TempData["Referer"]?.ToString();
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
-    public IActionResult SuccessfulRegister(TicketType ticketType) => View(ticketType);
+    public IActionResult SuccessfulRegister()
+    {
+        var ticketJson = TempData["TicketSuccess"] as string;
+        if (!string.IsNullOrEmpty(ticketJson))
+        {
+            var ticket = JsonConvert.DeserializeObject<Ticket>(ticketJson);
+            return View(ticket);
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
 }
