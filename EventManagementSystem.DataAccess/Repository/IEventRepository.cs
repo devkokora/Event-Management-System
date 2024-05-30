@@ -14,6 +14,6 @@ namespace EventManagementSystem.DataAccess.Repository
         Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId);
         Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId);
         Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId);
-        Task<string?> EventInformationAsync(int eventId);
+        Task<string?> EventInformationAsync(int eventId);        
     }
 }

@@ -37,21 +37,7 @@ public class EventController : Controller
             var existingEvent = await _eventRepository.GetByIdAsync(id.Value);
             if (existingEvent is not null)
             {
-                await _eventRepository.UpdateVisitorCountAsync(existingEvent.Id);
-                /*if (existingEvent.TicketTypes?.Count == 0)
-                {
-                    existingEvent.TicketTypes = [];
-                    existingEvent.TicketTypes.Add(new TicketType()
-                    {
-                        Tickets = [],
-                        Name = "Free",
-                        Detail = $"Free Ticket on {existingEvent.Title}",
-                        EventId = existingEvent.Id,
-                        MaxCapital = int.MaxValue,
-                        Price = 0
-                    });
-                    await _eventRepository.UpdateTicketTypeAsync(existingEvent);
-                }*/
+                await _eventRepository.UpdateVisitorCountAsync(existingEvent.Id);                
 
                 ViewBag.GoogleMap = $"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d{existingEvent.Longitude}!3d{existingEvent.Latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau";
 

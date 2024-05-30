@@ -1,14 +1,17 @@
-﻿@model IEnumerable<Event>
+﻿@using EventManagementSystem.Utilities;
+@model PaginatedList<Event>
+
 <div class="container pt-4 pb-4 bg-dark">
     <div class="row mb-3">
         <div class="col-md-6">
-            <p class="h4">Event Manager</p>
+            <span class="h4">Event Manager</span>
+            <span class="text-secondary">Found @Model.AllItemsCount events.</span>
         </div>
         <div class="col-md-6">
-            <form class="container-fluid">
+            <form class="container-fluid" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="text" class="form-control border-0" placeholder="Search event: eg. title, detail, category, city" aria-label="Search" aria-describedby="navbar-search" style="outline:none; box-shadow:none;">
-                    <button class="btn btn-warning" style="outline:none; box-shadow:none;">Search</button>
+                    <input asp-for="SearchQuery" type="text" class="form-control border-0" placeholder="Search event: eg. title, detail, category, city" aria-label="Search" aria-describedby="navbar-search" style="outline:none; box-shadow:none;">
+                    <button type="submit" class="btn btn-warning" style="outline:none; box-shadow:none;">Search</button>
                 </div>
             </form>
         </div>
@@ -17,11 +20,31 @@
         <table class="table table-striped table-hover table-borderless table-dark text-center">
             <thead>
                 <tr>
-                    <th scope="col"><a href="">id</a></th>
-                    <th scope="col"><a href="">Title</a></th>
-                    <th scope="col"><a href="">Category</a></th>
-                    <th scope="col"><a href="">City</a></th>
-                    <th scope="col"><a href="">Creat at</a></th>
+                    <th scope="col">
+                        <a asp-action="Index" 
+                           asp-route-sortBy="@ViewData["IdSortParam"]"
+                           asp-route-searchQuery="@ViewData["CurrentSearch"]">Id</a>
+                    </th>
+                    <th scope="col">
+                        <a asp-action="Index" 
+                           asp-route-sortBy="@ViewData["NameSortParam"]"
+                           asp-route-searchQuery="@ViewData["CurrentSearch"]">Name</a>
+                    </th>
+                    <th scope="col">
+                        <a asp-action="Index" 
+                           asp-route-sortBy="@ViewData["CategorySortParam"]"
+                           asp-route-searchQuery="@ViewData["CurrentSearch"]">Category</a>
+                    </th>
+                    <th scope="col">
+                        <a asp-action="Index" 
+                           asp-route-sortBy="@ViewData["CountrySortParam"]"
+                           asp-route-searchQuery="@ViewData["CurrentSearch"]">Country</a>
+                    </th>
+                    <th scope="col">
+                        <a asp-action="Index" 
+                           asp-route-sortBy="@ViewData["DateSortParam"]"
+                           asp-route-searchQuery="@ViewData["CurrentSearch"]">Date</a>
+                    </th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -33,18 +56,35 @@
                         <td>@ev.Title</td>
                         <td>@ev.Category</td>
                         <td>@ev.Country</td>
-                        <td>@ev.Create_at</td>
+                        <td>@ev.StartDate</td>
                         <td>
-                            <button class="btn btn-outline-success">View</button>
+                            <a href="/event/details/@ev.Id" class="btn btn-outline-success">View</a>
+                            <a asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-outline-success">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@ev.Id" class="btn btn-outline-success">Delete</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
         <div>
-            <a class="btn btn-link" style="outline:none; box-shadow:none;" href="">Previous</a>
-            <a class="btn btn-link" style="outline:none; box-shadow:none;" href="">Next</a>
+            @{
+                var prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+                var nextDisabled = Model.HasNextPage ? "" : "disabled";
+            }
+            <a asp-action="Index"
+               asp-route-sortBy="@ViewData["CurrentSort"]"
+               asp-route-searchQuery="@ViewData["CurrentSearch"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               class="btn btn-link @prevDisabled" style="outline:none; box-shadow:none;">
+                Previous
+            </a>
+            <a asp-action="Index"
+               asp-route-sortBy="@ViewData["CurrentSort"]"
+               asp-route-searchQuery="@ViewData["CurrentSearch"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               class="btn btn-link @nextDisabled" style="outline:none; box-shadow:none;">
+                Next
+            </a>
         </div>
     </div>
-    
 </div>
