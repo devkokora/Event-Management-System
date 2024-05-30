@@ -45,9 +45,9 @@ namespace EventManagementSystem.DataAccess.Data
             //    .OnDelete(DeleteBehavior.Restrict);
 
             //builder.Entity<Ticket>()
-            //    .HasOne(t => t.User)
-            //    .WithMany(u => u.Tickets)
-            //    .HasForeignKey(t => t.UserId)
+            //    .HasOne(t => t.TicketType)
+            //    .WithMany(tt => tt.Tickets)
+            //    .HasForeignKey(t => t.TicketTypeId)
             //    .OnDelete(DeleteBehavior.Restrict);
         }
     }

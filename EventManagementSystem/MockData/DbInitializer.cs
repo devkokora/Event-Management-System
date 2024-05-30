@@ -1,8 +1,4 @@
-﻿using System.Composition;
-using System;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity;
-using EventManagementSystem.Services;
+﻿using System.Diagnostics;
 using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.Models;
 
@@ -23,6 +19,8 @@ public class DbInitializer
                 var imageUrls = SampleEventsData.GetAllImgsUrlBytype(categoty);
                 for (int i = 0; i < 20; i++)
                 {
+                    Event newEvent = new();
+
                     (var title, var shortDescription) = titleAndShortList[i];
                     var description = SampleEventsData.GetRandomDescription();
                     (var startDate, var endDate) = SampleEventsData.GetRandomStartEndDate();
@@ -32,26 +30,40 @@ public class DbInitializer
                     var address = SampleEventsData.GenerateRandomAddress(countryName);
                     var imageUrl = imageUrls[i];
                     var transports = SampleEventsData.GetRandomTransport();
+                    var ticketTypes = SampleEventsData.GetTicketType(newEvent);
+                    var pageVisitorCount = SampleEventsData.GetPageVisitorCount();
 
-                    Event newEvent = new()
+                    if (ticketTypes?.Count == 0)
                     {
-                        Title = title,
-                        ShortDescription = shortDescription,
-                        Description = description,
-                        Create_at = DateTime.Now,
-                        StartDate = startDate,
-                        EndDate = endDate,
-                        VenueName = venueName,
-                        Latitude = lat,
-                        Longitude = lng,
-                        Country = countryName,
-                        Address = address,
-                        Image = imageUrl,
-                        Transports = transports,
-                        Category = Enum.Parse<Category>(categoty),
-                        UserId = "e05558fb-2578-4d6a-8728-88704c057ebd"                        
-                    };
+                        ticketTypes.Add(new TicketType()
+                        {
+                            Tickets = [],
+                            Name = "Free",
+                            Detail = $"Free Ticket on {title}",
+                            Event = newEvent,
+                            MaxCapital = 10000,
+                            Price = 0
+                        });
+                    }
 
+                    newEvent.Title = title;
+                    newEvent.ShortDescription = shortDescription;
+                    newEvent.Description = description;
+                    newEvent.Create_at = DateTime.Now;
+                    newEvent.StartDate = startDate;
+                    newEvent.EndDate = endDate;
+                    newEvent.VenueName = venueName;
+                    newEvent.Latitude = lat;
+                    newEvent.Longitude = lng;
+                    newEvent.Country = countryName;
+                    newEvent.Address = address;
+                    newEvent.Image = imageUrl;
+                    newEvent.Transports = transports;
+                    newEvent.TicketTypes = ticketTypes;
+                    newEvent.PageVisitorCount = pageVisitorCount;
+                    newEvent.Category = Enum.Parse<Category>(categoty);
+                    newEvent.UserId = "e05558fb-2578-4d6a-8728-88704c057ebd";                     
+                    
                     context.Events.Add(newEvent);
                     context.SaveChanges();
                 }

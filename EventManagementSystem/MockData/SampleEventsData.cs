@@ -2,6 +2,7 @@
 using CloudinaryDotNet.Actions;
 using dotenv.net;
 using EventManagementSystem.Models;
+using System.Text;
 
 namespace EventManagementSystem.MockData
 {
@@ -321,7 +322,7 @@ namespace EventManagementSystem.MockData
 
             var resourceList = cloudinary.ListResources(new ListResourcesByPrefixParams()
             {
-                Prefix = $"{folderName}/",
+                Prefix = $"EventManager/{folderName}/",
                 Type = "upload",
                 MaxResults = 20
             });
@@ -348,6 +349,95 @@ namespace EventManagementSystem.MockData
             }
 
             return transports;
+        }
+
+        public static int GetPageVisitorCount()
+        {
+            return rnd.Next(1000, 50000);
+        }
+
+        public static List<TicketType> GetTicketType(Event hostEvent)
+        {
+            var ticketTypes = new List<TicketType>();
+            int numberOfTickket = rnd.Next(0, 10);
+
+            for (int i = 0; i < numberOfTickket; i++)
+            {
+                ticketTypes.Add(GenerateTicketType(hostEvent));
+            }
+
+            return [.. ticketTypes.OrderBy(tt => tt.Price)];
+        }
+
+        public static TicketType GenerateTicketType(Event hostEvent)
+        {
+            string[] prefixes =
+            {
+            "Super", "Mega", "Ultra", "Hyper", "Pro", "Elite", "VIP", "Prime", "Deluxe", "Ultimate",
+            "Master", "Champion", "Platinum", "Gold", "Silver", "Bronze", "Premium", "Exclusive", "Diamond", "Legend"
+            };
+
+            string[] postfixes =
+            {
+            "Pass", "Ticket", "Entry", "Access", "Permit", "Voucher", "Token", "Badge", "Card", "Invitation",
+            "Authorization", "Clearance", "License", "Permit", "Privilege", "Qualification", "Validation", "Certificate", "Approval", "Warrant"
+            };
+
+            string[] benefits =
+            {
+            "includes VIP seating", "provides backstage access", "comes with complimentary refreshments",
+            "grants early entry", "offers free merchandise", "includes a meet and greet with performers",
+            "provides priority parking", "includes a free event t-shirt", "offers premium viewing areas",
+            "grants access to exclusive lounges", "includes free photo opportunities",
+            "provides access to special workshops", "offers a guided tour", "includes a free meal",
+            "provides access to after-party events", "offers a dedicated concierge service",
+            "includes a special gift bag", "provides a reserved table", "includes free Wi-Fi", "offers express check-in"
+            };
+
+            string[] limitations =
+            {
+            "is non-transferable", "is non-refundable", "must be used on the event date",
+            "requires valid ID for entry", "cannot be combined with other offers",
+            "is limited to one per person", "is subject to availability", "may have blackout dates",
+            "is valid for one entry only", "is subject to change", "does not include transportation",
+            "is only valid for the main event", "cannot be resold", "is void if altered",
+            "requires advance reservation", "is only valid for specific areas", "is subject to terms and conditions",
+            "must be presented at entry", "is valid for specific shows only", "is only available for a limited time"
+            };
+
+            var name = $"{prefixes[rnd.Next(prefixes.Length)]} {postfixes[rnd.Next(postfixes.Length)]}";
+            int price = RoundDownToNearestSignificant(rnd.Next(100, 30000));
+            int maxCap = RoundDownToNearestSignificant(rnd.Next(100, 30000));
+
+            StringBuilder stringBuilderDetail = new();
+
+            stringBuilderDetail.Append($"The {name} ");
+            stringBuilderDetail.Append($"max cappital {maxCap} ");
+
+            int howLong = rnd.Next(2, 6);
+            for (int i = 0; i < howLong; i++)
+            {
+                stringBuilderDetail.Append($"{benefits[rnd.Next(benefits.Length)]} ");
+                stringBuilderDetail.Append($"and {limitations[rnd.Next(limitations.Length)]}. ");
+            }
+            
+            return new TicketType()
+            {
+                Tickets = [],
+                Name = name,
+                Detail = stringBuilderDetail.ToString(),
+                Price = price,
+                MaxCapital = maxCap,
+                TotalTicketsSold = rnd.Next(maxCap),
+                Event = hostEvent
+            };
+        }
+
+        static int RoundDownToNearestSignificant(int number)
+        {
+            int length = (int)Math.Floor(Math.Log10(number)) + 1;
+            int scale = (int)Math.Pow(10, length - 2);
+            return number - (number % scale);
         }
     }
 }
