@@ -6,19 +6,19 @@
             <input asp-for="@Model.Name" type="hidden" />
             <input asp-for="@Model.Detail" type="hidden" />
             <input asp-for="@Model.Price" type="hidden" />
-            <input asp-for="@Model.Event" type="hidden" />
             <input asp-for="@Model.EventId" type="hidden" />
             <input asp-for="@Model.MaxCapital" type="hidden" />
             <div>
-                <h1 class="text-success fw-bold">Comfirm your ticket</h1>
-                <hr/>
+                <h1 class="text-danger fw-bold">Comfirm your ticket</h1>
+                <hr />
                 <p class="h4">@Model.Event?.Title</p>
                 <p class="h5 fw-bold text-danger">Ticket: @Model.Name</p>
+                <p>Capital: @(Model.Tickets is null ? 0 : Model.Tickets.Count)/@Model.MaxCapital</p>
                 <span>Detail: @Model.Detail</span>
                 <p>At @Model.Event?.VenueName, @Model.Event?.Country - @Model.Event?.Address</p>
-                <p class="h5">$ @Model.Price</p>
+                <p class="h5 fw-bold text-success pb-2">Value $@Model.Price</p>
             </div>
-            <button class="btn btn-success">Comfirm</button>
+            <button class="btn btn-success mb-2">Comfirm</button>
         </form>
         <a href="javascript:history.back()">back</a>
     </div>
