@@ -10,10 +10,10 @@
   - 🟢 A public page displaying a list of all upcoming events.
   - 🟢 Each event item should show the title, date, location, and a brief description.
 4. **Event Details Page:** 
-  - ⚫ A detailed view of each event, showing full information and an option to register (if capacity allows).
-  - ⚫ Registration button/form for users to sign up for an event.
+  - 🟢 A detailed view of each event, showing full information and an option to register (if capacity allows).
+  - 🟢 Registration button/form for users to sign up for an event.
 5. **User Event Registration:** 
-  - ⚫ Logged-in users can register for events.
+  - 🟢 Logged-in users can register for events.
   - ⚫ Once registered, an event's capacity should decrease accordingly.
 6. **Admin Dashboard:** 
   - ⚫ A page for admins to manage events: create, update, delete events.
