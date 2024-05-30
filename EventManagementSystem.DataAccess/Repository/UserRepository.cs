@@ -74,7 +74,10 @@ namespace EventManagementSystem.DataAccess.Repository
                 _eventManagementSystemDbContext.Users.Update(existingUser);
                 return await _eventManagementSystemDbContext.SaveChangesAsync();
             }
-            return 0;
+            else
+            {
+                throw new ArgumentException("User not found.");
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace EventManagementSystem.Models
         [StringLength(400)]
         public string? Detail { get; set; }
         public float Price { get; set; }
+        public int TotalTicketsSold { get; set; }
         public int MaxCapital { get; set; }
         public ICollection<Ticket>? Tickets { get; set; }
 

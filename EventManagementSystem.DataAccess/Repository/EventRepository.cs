@@ -63,6 +63,7 @@ namespace EventManagementSystem.DataAccess.Repository
         public async Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId)
         {
             return await _eventManagementSystemDbContext.TicketTypes
+                .AsNoTracking()
                 .Include(tt => tt.Tickets)
                 .Include(tt => tt.Event)
                 .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
@@ -84,12 +85,26 @@ namespace EventManagementSystem.DataAccess.Repository
             if (ticketTypeWithSameName)
                 throw new Exception("A Tickket type with the same name already exists");
 
-
             var eventToUpdate = await _eventManagementSystemDbContext.Events.FindAsync(updateEvent.Id);
             if (eventToUpdate is not null)
             {
                 eventToUpdate.TicketTypes = updateEvent.TicketTypes;
                 _eventManagementSystemDbContext.Events.Update(eventToUpdate);
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("The event to update can't be find");
+            }
+        }
+
+        public async Task<int> UpdateVisitorCountAsync(int eventId)
+        {
+            var eventToUpdate = await _eventManagementSystemDbContext.Events.FindAsync(eventId);
+            if (eventToUpdate is not null)
+            {
+                eventToUpdate.PageVisitorCount++;
+                _eventManagementSystemDbContext.Update(eventToUpdate);
                 return await _eventManagementSystemDbContext.SaveChangesAsync();
             }
             else

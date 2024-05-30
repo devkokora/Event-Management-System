@@ -40,7 +40,7 @@ namespace EventManagementSystem.Models
         public string Address { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public List<Transport>? Transports { get; set; }
-
+        public int PageVisitorCount { get; set; }
         [Required]
         public Category Category { get; set; }
         public ICollection<TicketType>? TicketTypes { get; set; }

@@ -12,13 +12,15 @@ public class EventController : Controller
 {
     private readonly IEventRepository _eventRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ITicketTypeRepository _ticketTypeRepository;
     private readonly UserManager<User> _userManager;
 
-    public EventController(IEventRepository eventRepository, UserManager<User> userManager, IUserRepository userRepository)
+    public EventController(IEventRepository eventRepository, UserManager<User> userManager, IUserRepository userRepository, ITicketTypeRepository ticketTypeRepository)
     {
         _eventRepository = eventRepository;
         _userManager = userManager;
         _userRepository = userRepository;
+        _ticketTypeRepository = ticketTypeRepository;
     }
 
     [Route("Index")]
@@ -35,7 +37,8 @@ public class EventController : Controller
             var existingEvent = await _eventRepository.GetByIdAsync(id.Value);
             if (existingEvent is not null)
             {
-                if (existingEvent.TicketTypes?.Count == 0)
+                await _eventRepository.UpdateVisitorCountAsync(existingEvent.Id);
+                /*if (existingEvent.TicketTypes?.Count == 0)
                 {
                     existingEvent.TicketTypes = [];
                     existingEvent.TicketTypes.Add(new TicketType()
@@ -48,64 +51,75 @@ public class EventController : Controller
                         Price = 0
                     });
                     await _eventRepository.UpdateTicketTypeAsync(existingEvent);
-                }
+                }*/
 
                 ViewBag.GoogleMap = $"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d{existingEvent.Longitude}!3d{existingEvent.Latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau";
+
                 return View(existingEvent);
             }
         }
         return Redirect("/events");
     }
 
-    [Route("RegisterToEvent")]
-    public async Task<IActionResult> RegisterToEvent(int ticketTypeId)
+    [Route("ConfirmTicket")]
+    public async Task<IActionResult> ConfirmTicket(int ticketTypeId)
     {
         var ticketType = await _eventRepository.GetTicketTypeByIdAsync(ticketTypeId);
 
         if (ticketType is not null)
         {
-            return View(ticketType);
+            if (ticketType.TotalTicketsSold < ticketType.MaxCapital)
+            {
+                return View(ticketType);
+            }
+        }
+
+        var backUrl = TempData["Referer"]?.ToString();
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
         }
         return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]
-    [Route("RegisterToEvent")]
-    public async Task<IActionResult> RegisterToEvent(TicketType ticketType)
+    [Route("ConfirmTicket")]
+    public async Task<IActionResult> ConfirmTicket(TicketType ticketType)
     {
         if (ModelState.IsValid)
         {
             var user = await _userManager.GetUserAsync(User);
-            var existingEvent = await _eventRepository.GetByIdAsync(ticketType.EventId);
+            var existingTicketType = await _eventRepository.GetTicketTypeByIdAsync(ticketType.Id);
 
-            if (user is null || existingEvent is null)
+            if (user is null || existingTicketType is null || existingTicketType.Event is null)
             {
                 return Redirect("/Identity/Account/Login");
             }
 
-            var exixstingTicketType = await _eventRepository.GetTicketTypeByIdAsync(ticketType.Id);
-            var numberOfTicket = exixstingTicketType!.Tickets is null ? 1 :
-                exixstingTicketType.Tickets.Count + 1;
-
-            var ticket = new Ticket()
+            if (existingTicketType.TotalTicketsSold < existingTicketType.MaxCapital)
             {
-                Detail = $"Your ticket detail - Ticket No.{numberOfTicket} name: {ticketType.Detail}. At {existingEvent.VenueName}, {existingEvent.Country} - {existingEvent.Address} in {existingEvent.StartDate}.",
-                TicketTypeId = ticketType.Id,
-                UserId = user.Id,
-                User = user
-            };
+                existingTicketType.TotalTicketsSold++;
+                var ticket = new Ticket()
+                {
+                    Detail = $"Ticket detail - Ticket No.{existingTicketType.TotalTicketsSold} name: {existingTicketType.Detail} At {existingTicketType.Event.VenueName}, {existingTicketType.Event.Country} - {existingTicketType.Event.Address} in {existingTicketType.Event.StartDate}.",
+                    TicketTypeId = existingTicketType.Id,
+                    UserId = user.Id,
+                    User = user
+                };
 
-            user.Tickets ??= [];
-            user.Tickets.Add(ticket);
-            var result = await _userRepository.UpdateUserAsync(user);
+                user.Tickets ??= [];
+                user.Tickets.Add(ticket);
+                await _userRepository.UpdateUserAsync(user);
+                await _ticketTypeRepository.UpdateTicketTypeAsync(existingTicketType);
 
-            var tickketJson = JsonConvert.SerializeObject(ticket, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-            TempData["TicketSuccess"] = tickketJson;
+                var tickketJson = JsonConvert.SerializeObject(ticket, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                TempData["TicketSuccess"] = tickketJson;
 
-            return RedirectToAction(nameof(SuccessfulRegister));
+                return RedirectToAction(nameof(SuccessfulRegister));
+            }
         }
 
         var backUrl = TempData["Referer"]?.ToString();
@@ -117,6 +131,7 @@ public class EventController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Route("SuccessfulRegister")]
     public IActionResult SuccessfulRegister()
     {
         var ticketJson = TempData["TicketSuccess"] as string;
