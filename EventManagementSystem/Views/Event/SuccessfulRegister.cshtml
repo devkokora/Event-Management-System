@@ -1,0 +1,14 @@
+﻿@model Ticket
+<div class="container-fluid d-flex justify-content-center mt-5">
+    <div class="bg-dark text-center py-4 px-4 rounded-5" style="width: 1000px;">
+        <div>
+            <h1 class="text-success fw-bold">Congratulations!</h1>
+            <hr />
+            <p class="h4">Ticket: @Model.TicketType?.Name</p>
+            <p class="h5 fw-bold text-danger">Thank you @Model.User.DisplayName</p>
+            <p>@Model.Detail</p>
+            <p class="h5 fw-bold">See you soon.</p>
+        </div>
+        <a href="/events">Find another events</a>
+    </div>
+</div>
