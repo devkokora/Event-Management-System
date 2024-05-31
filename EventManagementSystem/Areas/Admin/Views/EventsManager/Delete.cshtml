@@ -1,114 +1,155 @@
 ﻿@model Event
-<div class="container bg-dark py-5 px-5">    
-        <div asp-validation-for="All" class="text-danger px-md-5"></div>
-        <fieldset class="px-lg-5">
-            <legend class="text-center h1 fw-bold">DELETE EVENT</legend>
-            <div class="row">
-                <div class="col-md-6">
-                    <div>
-                        <label asp-for="@Model.Title" class="form-label mt-4">Title</label>
-                        <input readonly asp-for="@Model.Title" type="text" class="form-control" placeholder="required*">
-                        <span asp-validation-for="@Model.Title" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <label asp-for="@Model.ShortDescription" class="form-label mt-4">Short Description</label>
-                        <textarea readonly asp-for="@Model.ShortDescription" class="form-control" rows="1" placeholder="Maximum 50 words"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label asp-for="@Model.Description" class="form-label mt-4">Full Description</label>
-                <textarea readonly asp-for="@Model.Description" class="form-control" rows="3" placeholder="Maximum 1000 words"></textarea>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label asp-for="@Model.StartDate" class="form-label mt-4">Start Event Date</label>
-                    <input readonly asp-for="@Model.StartDate" class="form-control" type="date" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="@Model.EndDate" class="form-label mt-4">End Event Date</label>
-                    <input readonly asp-for="@Model.EndDate" class="form-control" type="date" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="@Model.VenueName" class="form-label mt-4">Venue Name</label>
-                    <input readonly asp-for="@Model.VenueName" type="text" class="form-control" placeholder="Venue Name">
+<div class="container bg-dark py-5 px-5">
+    @{
+        string alertColor = "";
+        string tempDataAlerts = "";
+        if (TempData["Error"] is not null)
+        {
+            alertColor = "danger";
+            tempDataAlerts = TempData["Error"] as string;
+        }
+        else if (TempData["Success"] is not null)
+        {
+            alertColor = "success";
+            tempDataAlerts = TempData["Success"] as string;
+        }
+    }
+    @if (!string.IsNullOrEmpty(alertColor))
+    {
+        <div class="alert alert-@alertColor alert-dismissible fade show" role="alert">
+            <strong>@tempDataAlerts</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div asp-validation-for="All" class="text-danger px-md-5"></div>
+    <fieldset class="px-lg-5">
+        <legend class="text-center h1 fw-bold">DELETE EVENT</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    <label asp-for="@Model.Title" class="form-label mt-4">Title</label>
+                    <input readonly asp-for="@Model.Title" type="text" class="form-control" placeholder="required*">
+                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div>
+                    <label asp-for="@Model.ShortDescription" class="form-label mt-4">Short Description</label>
+                    <textarea readonly asp-for="@Model.ShortDescription" class="form-control" rows="1" placeholder="Maximum 50 words"></textarea>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label asp-for="@Model.Description" class="form-label mt-4">Full Description</label>
+            <textarea readonly asp-for="@Model.Description" class="form-control" rows="3" placeholder="Maximum 1000 words"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label asp-for="@Model.StartDate" class="form-label mt-4">Start Event Date</label>
+                <input readonly asp-for="@Model.StartDate" class="form-control" type="date" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="@Model.EndDate" class="form-label mt-4">End Event Date</label>
+                <input readonly asp-for="@Model.EndDate" class="form-control" type="date" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="@Model.VenueName" class="form-label mt-4">Venue Name</label>
+                <input readonly asp-for="@Model.VenueName" type="text" class="form-control" placeholder="Venue Name">
+            </div>
+        </div>
 
-            <div class="row mt-4 d-flex justify-content-center">
-                <div class="col-md-6 mt-2">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text">Latitude</span>
-                        <input asp-for="@Model.Latitude" id="latitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="latitude input" readonly>
+        <div class="row mt-4 d-flex justify-content-center">
+            <div class="col-md-6 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Latitude</span>
+                    <input asp-for="@Model.Latitude" id="latitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="latitude input" readonly>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Longitude</span>
+                    <input asp-for="@Model.Longitude" id="longitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="longitude input" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label asp-for="@Model.Country" class="form-label mt-4">Country</label>
+                <input readonly asp-for="@Model.Country" id="countryName" type="text" class="form-control" placeholder="required">
+            </div>
+            <div class="col-md-8">
+                <label asp-for="@Model.Address" class="form-label mt-4">Address</label>
+                <input readonly asp-for="@Model.Address" id="addressName" type="text" class="form-control" placeholder="required">
+            </div>
+        </div>
+        <div>
+            <label class="form-label mt-4">Image</label>
+            <input type="text" value="@Model.Image" class="form-control" disabled>
+        </div>
+        <div></div>
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset>
+                    <div class="form-group mt-4">
+                        <label asp-for="@Model.Category" class="control-label"></label>
+                        <select asp-for="@Model.Category" class="form-control disabled" disabled>
+                            <option selected>@Model.Category.ToString()</option>
+                        </select>
                     </div>
-                </div>
-                <div class="col-md-6 mt-2">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text">Longitude</span>
-                        <input asp-for="@Model.Longitude" id="longitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="longitude input" readonly>
-                    </div>
-                </div>
+                </fieldset>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label asp-for="@Model.Country" class="form-label mt-4">Country</label>
-                    <input readonly asp-for="@Model.Country" id="countryName" type="text" class="form-control" placeholder="required">
-                </div>
-                <div class="col-md-8">
-                    <label asp-for="@Model.Address" class="form-label mt-4">Address</label>
-                    <input readonly asp-for="@Model.Address" id="addressName" type="text" class="form-control" placeholder="required">
-                </div>
-            </div>
-            <div>
-                <label class="form-label mt-4">Image</label>
-                <input type="text" value="@Model.Image" class="form-control" disabled>
-            </div>
-            <div></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <fieldset>
-                        <div class="form-group mt-4">
-                            <label asp-for="@Model.Category" class="control-label"></label>
-                            <select asp-for="@Model.Category" class="form-control disabled" disabled>
-                                <option selected>@Model.Category.ToString()</option>
-                            </select>
+            <div class="col-md-6">
+                <fieldset>
+                    <legend class="mt-4">Transports</legend>
+                    @for (int i = 0; i < Model.Transports.Count(); i++)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" checked disabled />
+                            <label class="form-check-label">
+                                @(Model.Transports[i].ToString()[..1].ToUpper() + @Model.Transports[i].ToString()[1..])
+                            </label>
                         </div>
-                    </fieldset>
-                </div>
-                <div class="col-md-6">
-                    <fieldset>
-                        <legend class="mt-4">Transports</legend>
-                        @for (int i = 0; i < Model.Transports.Count(); i++)
-                        {
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked disabled />
-                                <label class="form-check-label">
-                                    @(Model.Transports[i].ToString()[..1].ToUpper() + @Model.Transports[i].ToString()[1..])
-                                </label>
-                            </div>
-                        }
-                    </fieldset>
-                </div>
+                    }
+                </fieldset>
             </div>
-            <div>
-                <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
-                <select class="form-select w-auto" id="ticketTpyeCount">
-                    <option value="0" selected>@Model.TicketTypes.Count</option>
-                </select>
-                <div id="ticketTypesContainer">
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-sm-6 text-center d-flex align-items-sm-center align-items-md-start justify-content-center justify-content-md-start">
+                    <div>
+                        <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
+                        <select class="form-select w-auto" id="ticketTpyeCount">
+                            <option value="0" selected>@Model.TicketTypes.Count</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <form asp-action="DeleteAllTicketType" method="post">
+                        <input type="hidden" asp-for="@Model.TicketTypes" />
+                        <div class="text-sm-end text-center pt-sm-5 pt-3">
+                            <button type="submit" class="btn btn-danger">Delete all ticket type</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="ticketTypesContainer" class="row">
                     @{
                         var tickettypes = Model.TicketTypes.ToList();
                     }
+
                     @for (int i = 0; i < tickettypes.Count; i++)
                     {
                         <div class="col-12">
                             <hr />
                             <span class="text-secondary">Ticket type No.@(i + 1)</span>
+                            <form asp-controller="EventsManager" asp-action="DeleteTicketType" method="post" >
+                                <div class="text-sm-end text-center">
+                                    <input name="ticketTypeId" value="@tickettypes[i].Id" hidden/>
+                                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                </div>
+                            </form>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label mt-4">Ticket type</label>
+                            <label class="form-label mt-4">Ticket type @tickettypes[i].Id</label>
                             <span class="text-secondary">#@(i + 1)</span>
                             <input value="@tickettypes[i].Name" type="text" class="form-control" readonly>
                         </div>
@@ -130,11 +171,12 @@
                     }
                 </div>
             </div>
-            <form asp-action="Delete" method="post">
-                <input type="hidden" asp-for="Id" />
-                <div class="mt-4 text-end">
-                    <button type="submit" class="btn btn-danger">Delete Event</button>
-                </div>
-            </form>
-        </fieldset>
+        </div>
+        <form asp-controller="EventsManager" asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mt-4 text-end">
+                <button type="submit" class="btn btn-danger">Delete Event</button>
+            </div>
+        </form>
+    </fieldset>
 </div>

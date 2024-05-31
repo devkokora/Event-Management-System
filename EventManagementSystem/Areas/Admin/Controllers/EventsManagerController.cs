@@ -7,6 +7,7 @@ using EventManagementSystem.DataAccess.Repository;
 using EventManagementSystem.Models;
 using EventManagementSystem.Models.ViewModels;
 using EventManagementSystem.Utilities;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EventManagementSystem.Areas.Admin.Controllers;
 
@@ -16,17 +17,25 @@ public class EventsManagerController : Controller
 {
     private readonly IAdminEventRepository _adminEventRepository;
     private readonly IEventRepository _eventRepository;
+    private readonly IAdminTicketTypeRepository _adminTicketTypeRepository;
     private readonly UserManager<User> _userManager;
     private readonly Cloudinary _cloudinary;
     private const int MaximumTicketTypes = 10;
 
-    public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager, Cloudinary cloudinary, IWebHostEnvironment webHostEnvironment)
+    public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager, Cloudinary cloudinary, IWebHostEnvironment webHostEnvironment, IAdminTicketTypeRepository adminTicketTypeRepository)
     {
         _adminEventRepository = adminEventRepository;
         _eventRepository = eventRepository;
         _userManager = userManager;
         _cloudinary = cloudinary;
+        _adminTicketTypeRepository = adminTicketTypeRepository;
     }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        TempData["Referer"] = context.HttpContext.Request.Headers.Referer.ToString();        
+    }
+
     private int maxItem = 20;
     public async Task<IActionResult> Index(string sortBy, int? pageNumber, string? searchQuery)
     {
@@ -179,16 +188,41 @@ public class EventsManagerController : Controller
         if (id is not null)
         {
             try
-            { 
+            {
                 await _adminEventRepository.DeleteAsync(id.Value);
-                TempData["Success"] = "Deleted event successfuly.";
+                TempData["Success"] = "Deleted event successfuly. 🤩";
             }
             catch (Exception ex)
             {
-                TempData["Error"] = $"Delete event data failed, {ex.Message}";
+                TempData["Error"] = $"Delete event data failed, {ex.Message} 🤬";
             }
         }
 
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteTicketType(int? ticketTypeId)
+    {
+        if (ticketTypeId is not null)
+        {
+            try
+            {
+                await _adminTicketTypeRepository.DeleteAsync(ticketTypeId.Value);
+                TempData["Success"] = $"Deleted ticket type id:{ticketTypeId} successfuly. 😎";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Delete ticket type data failed, {ex.Message} 🤬";
+            }
+        }
+
+        var backUrl = TempData["Referer"] as string;
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
         return RedirectToAction(nameof(Index));
     }
 }

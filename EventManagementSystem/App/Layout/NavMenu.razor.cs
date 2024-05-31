@@ -37,7 +37,7 @@ public partial class NavMenu : ComponentBase
                         UserService.User = CurrentUser;
                         UserService.IsLogin = true;
                         if (isAdmin)
-                            UserService.IsAdmin = isAdmin;
+                            UserService.IsAdmin = isAdmin;                        
                     }
                 }                
             }

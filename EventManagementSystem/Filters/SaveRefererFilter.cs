@@ -6,16 +6,10 @@ namespace EventManagementSystem.Filters
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var referer = context.HttpContext.Request.Headers["Referer"].ToString();
-            if (!string.IsNullOrEmpty(referer))
-            {
-                context.HttpContext.Response.Headers.Append("Referer", referer);
-            }
         }
     }
 }

@@ -1,13 +1,10 @@
-﻿@if (ViewBag.ExceptionDetails != null)
-{
-    <div>
-        <h3>Error Details:</h3>
-        <pre>@ViewBag.ExceptionDetails</pre>
+﻿<div class="container-fluid d-flex justify-content-center mt-5 ">
+        <div class="bg-secondary text-center p-4 rounded-5 background-container">
+                <div class="text-center text-black h1-family">
+                    <h1>Page not found.</h1>
+                    <h1 class="back-h1">Page not found.</h1>
+                    <img class="img-fluid" src="~/imgs/childboy.png" style="max-height:300px;"/>
+                </div>
+            <a href="/events" class="btn btn-danger text-white mt-3">Find another events</a>        
     </div>
-}
-else
-{
-    <div>
-        <h3>No exception details available.</h3>
-    </div>
-}
+</div>

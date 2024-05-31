@@ -87,7 +87,7 @@ public class EventController : Controller
                 existingTicketType.TotalTicketsSold++;
                 var ticket = new Ticket()
                 {
-                    Detail = $"Ticket detail - Ticket No.{existingTicketType.TotalTicketsSold} name: {existingTicketType.Detail} At {existingTicketType.Event.VenueName}, {existingTicketType.Event.Country} - {existingTicketType.Event.Address} in {existingTicketType.Event.StartDate}.",
+                    Detail = $"Ticket No.{existingTicketType.TotalTicketsSold}, name: {existingTicketType.Detail} At {existingTicketType.Event.VenueName}, {existingTicketType.Event.Country} - {existingTicketType.Event.Address} in {existingTicketType.Event.StartDate}.",
                     TicketTypeId = existingTicketType.Id,
                     UserId = user.Id,
                     User = user

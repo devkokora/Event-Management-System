@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<RoleInitializer>();
 builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
+builder.Services.AddScoped<IAdminTicketTypeRepository, AdminTicketTypeRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
