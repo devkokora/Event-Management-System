@@ -50,11 +50,6 @@ namespace EventManagementSystem.DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId)
         {
             throw new NotImplementedException();
@@ -67,11 +62,6 @@ namespace EventManagementSystem.DataAccess.Repository
                 .Include(tt => tt.Tickets)
                 .Include(tt => tt.Event)
                 .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
-        }
-
-        public Task<string?> EventInformationAsync(int eventId)
-        {
-            throw new NotImplementedException();
         }
 
         // Use on test.
@@ -110,6 +100,48 @@ namespace EventManagementSystem.DataAccess.Repository
             else
             {
                 throw new ArgumentException("The event to update can't be find");
+            }
+        }
+
+        public IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName)
+        {
+            var toDay = DateOnly.FromDateTime(DateTime.Now);
+            if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
+            {
+                return _eventManagementSystemDbContext.Events
+                .Where(e => e.Category.Equals((Category)existingCategory))
+                .Where(e => e.Title.Contains(searchQuery) ||
+                    e.ShortDescription.Contains(searchQuery) ||
+                    e.Description.Contains(searchQuery) ||
+                    e.Country.Contains(searchQuery) ||
+                    e.Address.Contains(searchQuery))
+                .AsNoTracking();
+            }
+            else
+            {
+                return _eventManagementSystemDbContext.Events
+                .Where(e => e.Title.Contains(searchQuery) ||
+                    e.ShortDescription.Contains(searchQuery) ||
+                    e.Description.Contains(searchQuery) ||
+                    e.Country.Contains(searchQuery) ||
+                    e.Address.Contains(searchQuery))
+                .AsNoTracking();
+            }
+        }
+
+        public IEnumerable<Event> GetAllByType(string? typeName)
+        {
+            var toDay = DateOnly.FromDateTime(DateTime.Now);
+            if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
+            {
+                return _eventManagementSystemDbContext.Events
+                    .Where(e => e.Category.Equals((Category)existingCategory))
+                .AsNoTracking();
+            }
+            else
+            {
+                return _eventManagementSystemDbContext.Events
+                .AsNoTracking();
             }
         }
     }
