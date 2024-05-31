@@ -1,0 +1,13 @@
+﻿@if (ViewBag.ExceptionDetails != null)
+{
+    <div>
+        <h3>Error Details:</h3>
+        <pre>@ViewBag.ExceptionDetails</pre>
+    </div>
+}
+else
+{
+    <div>
+        <h3>No exception details available.</h3>
+    </div>
+}

@@ -23,7 +23,6 @@ public partial class NavMenu : ComponentBase
     {
         if (UserService.User is null && (UserService.IsLogin || !UserService.IsInitialize))
         {
-            await Task.Delay(404);
             if (AuthenticationStateProvider is not null && UserManager is not null)
             {
                 AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
