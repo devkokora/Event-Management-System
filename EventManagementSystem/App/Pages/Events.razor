@@ -43,7 +43,7 @@
             }
     </div>
     <div class="pagination-dots text-center">
-        @for (int i = 1; i <= TotalUpComingGroups; i++)
+        @for (int i = 1; i <= TotalUpComingPages; i++)
         {
             int selected = i;
             string filter = "upcomming";
@@ -52,6 +52,7 @@
         }
     </div>
     <hr />
+
     <div class="row mb-3">
         <div class="col-md-3">
             <span class="h5 fw-bold ">Other @CategoryName event</span>
@@ -59,56 +60,80 @@
         <div class="col-md-9">
             <form class="container-fluid">
                 <div class="input-group justify-content-end">
-                    <input type="text" class="form-control border-0" placeholder="Search on @(CategoryName)." aria-label="Search" aria-describedby="navbar-search" style="max-width:350px;">
+                    <input type="text" class="border-0" placeholder="Search on @(CategoryName)." style="max-width:350px;"
+                           @bind-value="SearchText"
+                           @bind-value:event="oninput"
+                           @onkeypress="Search">
                 </div>
             </form>
         </div>
     </div>
     <div class="row overflow-x-auto">
-        @if (AllEvents is not null)
-            for (int i = 0; i < AllEvents.Count(); i++)
+        @if (OtherEvents is not null && OtherEvents.Count > 0)
+        {
+            for (int i = 0; i < OtherEvents.Count(); i++)
             {
                 <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
                      style="@(CurrentGroup_All == GetGroup(i) ? "display: block;" : "display: none;")">
                     <div class="card bg-dark text-white border-secondary">
                         <div class="img-container" style="height: 12rem; overflow: hidden;">
-                            <img src="@AllEvents[i].Image"
+                            <img src="@OtherEvents[i].Image"
                                  class="card-img-top" alt="Event Image"
                                  style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="card-body" style="height:180px">
-                            <h5 class="card-title">@AllEvents[i].Title</h5>
-                            <hr/>
-                            <p class="card-text">@(AllEvents[i].ShortDescription.Length > 48 ? AllEvents[i].ShortDescription.Substring(0, 48) + "..." : AllEvents[i].ShortDescription)</p>
-                            <small class="text-end text-secondary">@AllEvents[i].Country - @AllEvents[i].StartDate</small>
+                            <h5 class="card-title">@OtherEvents[i].Title</h5>
+                            <hr />
+                            <p class="card-text">@(OtherEvents[i].ShortDescription.Length > 48 ? OtherEvents[i].ShortDescription.Substring(0, 48) + "..." : OtherEvents[i].ShortDescription)</p>
+                            <small class="text-end text-secondary">@OtherEvents[i].Country - @OtherEvents[i].StartDate</small>
                         </div>
-                        <a href="/event/details/@AllEvents[i].Id" class="card-link p-2 text-center">Enter</a>
+                        <a href="/event/details/@OtherEvents[i].Id" class="card-link p-2 text-center">Enter</a>
                     </div>
                 </div>
             }
-    </div>
-    <div class="pagination-dots text-center">
-        @for (int i = 1; i <= TotalUpAllGroups; i++)
+            <div class="pagination-dots text-center">
+                @for (int i = 1; i <= TotalOtherPages; i++)
+                {
+                    int selected = i;
+                    <span class="dot @(CurrentGroup_All == selected ? "active" : "")"
+                          @onclick="() => ShowGroup(selected)"></span>
+                }
+            </div>
+        }
+        else
         {
-            int selected = i;
-            <span class="dot @(CurrentGroup_All == selected ? "active" : "")"
-                  @onclick="() => ShowGroup(selected)"></span>
+            <div class="container-fluid d-flex align-items-center justify-content-center" style="height:430px;">
+                <div class="text-center">
+                    <h2>Event not found.</h2>
+                    <img src="imgs/eventnotfound.png" style="width:350px;" />
+                </div>
+            </div>
+            <div class="pagination-dots text-center">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    int selected = i;
+                    <span class="dot"></span>
+                }
+            </div>
         }
     </div>
+
 </div>
 
 @code {
     [Inject]
-    private EventManagementSystem.DataAccess.Repository.IEventRepository _eventRepository { get; set; } = default!;
+    private IEventRepository _eventRepository { get; set; } = default!;
 
-    public List<Event>? AllEvents { get; private set; }
-    public List<Event>? UpComingEvents { get; private set; }
+    public List<Event> OtherEvents { get; private set; } = [];
+    public List<Event> UpComingEvents { get; private set; } = [];
 
     private int CurrentGroup_Up { get; set; } = 1;
     private int CurrentGroup_All { get; set; } = 1;
 
-    private int TotalUpComingGroups { get; set; } = default;
-    private int TotalUpAllGroups { get; set; } = default;
+    private int TotalUpComingPages { get; set; } = default;
+    private int TotalOtherPages { get; set; } = default;
+
+    private string SearchText = "";
 
     private Random rnd = new Random();
 
@@ -118,16 +143,16 @@
     protected override async Task OnParametersSetAsync()
     {
         CategoryName ??= string.Empty;
-        AllEvents = [.. await _eventRepository.GetAllByTypeAsync(CategoryName)];
+        OtherEvents = [.. await _eventRepository.GetAllByTypeAsync(CategoryName)];
 
-        if (AllEvents is not null)
+        if (OtherEvents is not null)
         {
-            UpComingEvents = [.. AllEvents.OrderBy(e => e.StartDate).Take(12)];
+            UpComingEvents = [.. OtherEvents.OrderBy(e => e.StartDate).Take(12)];
 
-            AllEvents = AllEvents.Where(ae => !UpComingEvents.Contains(ae)).ToList();
+            OtherEvents = OtherEvents.Where(other => !UpComingEvents.Contains(other)).ToList();
 
-            TotalUpAllGroups = (int)Math.Ceiling((double)AllEvents.Count() / 4);
-            TotalUpComingGroups = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
+            TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+            TotalUpComingPages = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
 
             CalcWidthProcress(UpComingEvents);
         }
@@ -167,6 +192,26 @@
         for (int i = 0; i < processDays.Count; i++)
         {
             processDays[i] = (int)((float)processDays[i] / maxDay * 60);
+        }
+    }
+
+    private void Search()
+    {
+        OtherEvents.Clear();
+        if (_eventRepository is not null)
+        {
+            if (SearchText.Length >= 3)
+            {
+                OtherEvents = [.. _eventRepository.SearchEventByType(SearchText, CategoryName)];
+                OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Title == other.Title))];
+                TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+            }
+            else
+            {
+                OtherEvents = [.. _eventRepository.GetAllByType(CategoryName)];
+                OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Title == other.Title))];
+                TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+            }
         }
     }
 }

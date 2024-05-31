@@ -11,9 +11,9 @@ namespace EventManagementSystem.DataAccess.Repository
         Task<int> UpdateVisitorCountAsync(int eventId);
         Task<IEnumerable<Event>> GetAllByTypeAsync(string? typeName);
         Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId);
-        Task<IEnumerable<TicketType>> GetAllTicketTypeAsync(int eventId);
         Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId);
         Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId);
-        Task<string?> EventInformationAsync(int eventId);        
+        IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName);
+        IEnumerable<Event> GetAllByType(string? typeName);
     }
 }
