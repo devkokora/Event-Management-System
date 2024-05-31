@@ -19,6 +19,7 @@ namespace EventManagementSystem.Services
             User = default;
             IsAdmin = default;
             IsLogin = false;
+            IsInitialize = false;
         }
     }
 }
