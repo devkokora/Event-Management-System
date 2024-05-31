@@ -19,9 +19,27 @@ namespace EventManagementSystem.DataAccess.Repository
             return await _eventManagementSystemDbContext.SaveChangesAsync();
         }
 
-        public Task<int> DeleteAsync(int eventId)
+        public async Task<int> DeleteAsync(int eventId)
         {
-            throw new NotImplementedException();
+            var eventToDelete = await _eventManagementSystemDbContext.Events.FindAsync(eventId);
+
+            if (eventToDelete is not null)
+            {
+                var ticketTypeInEvent = await _eventManagementSystemDbContext.TicketTypes
+                    .AnyAsync(tt => tt.EventId == eventToDelete.Id);
+
+                if (ticketTypeInEvent)
+                {
+                    throw new Exception("Ticket type is exist, Delete Ticket type before deleting the Event.");
+                }
+
+                _eventManagementSystemDbContext.Events.Remove(eventToDelete);
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Event id to deleted not found.");
+            }
         }
 
         public Task<int> EditAsync(Event editEvent)
@@ -30,7 +48,7 @@ namespace EventManagementSystem.DataAccess.Repository
         }
 
         public async Task<int> GetAllEventsCountAsync()
-        {
+        {            
             return await _eventManagementSystemDbContext.Events.CountAsync();
         }
 

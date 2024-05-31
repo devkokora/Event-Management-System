@@ -60,10 +60,13 @@
         <div class="col-md-9">
             <form class="container-fluid">
                 <div class="input-group justify-content-end">
-                    <input type="text" class="border-0" placeholder="Search on @(CategoryName)." style="max-width:350px;"
+                    <input type="text" 
+                           class="border-0" 
+                           placeholder="Search on @(string.IsNullOrEmpty(CategoryName) ? "events" : CategoryName)." 
+                           style="max-width:350px;"
                            @bind-value="SearchText"
                            @bind-value:event="oninput"
-                           @onkeypress="Search">
+                           @onkeyup="Search">
                 </div>
             </form>
         </div>
@@ -121,97 +124,5 @@
 </div>
 
 @code {
-    [Inject]
-    private IEventRepository _eventRepository { get; set; } = default!;
-
-    public List<Event> OtherEvents { get; private set; } = [];
-    public List<Event> UpComingEvents { get; private set; } = [];
-
-    private int CurrentGroup_Up { get; set; } = 1;
-    private int CurrentGroup_All { get; set; } = 1;
-
-    private int TotalUpComingPages { get; set; } = default;
-    private int TotalOtherPages { get; set; } = default;
-
-    private string SearchText = "";
-
-    private Random rnd = new Random();
-
-    [Parameter]
-    public string? CategoryName { get; set; }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        CategoryName ??= string.Empty;
-        OtherEvents = [.. await _eventRepository.GetAllByTypeAsync(CategoryName)];
-
-        if (OtherEvents is not null)
-        {
-            UpComingEvents = [.. OtherEvents.OrderBy(e => e.StartDate).Take(12)];
-
-            OtherEvents = OtherEvents.Where(other => !UpComingEvents.Contains(other)).ToList();
-
-            TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
-            TotalUpComingPages = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
-
-            CalcWidthProcress(UpComingEvents);
-        }
-    }
-
-    private int GetGroup(int index)
-    {
-        return index / (3 + 1) + 1;
-    }
-
-    private void ShowGroup(int group, string filter = "all")
-    {
-        if (filter == "upcomming")
-            CurrentGroup_Up = group;
-        else
-            CurrentGroup_All = group;
-    }
-
-    private int CalcUpcommingDate(DateOnly dateOnly)
-    {
-        var days = (dateOnly.ToDateTime(new TimeOnly(0)) - DateTime.Now).Days;
-        return days;
-    }
-
-    private List<int> processDays = [];
-    private void CalcWidthProcress(List<Event> events)
-    {
-        int maxDay = 0;
-        foreach (var ev in events)
-        {
-            var day = (ev.StartDate.ToDateTime(new TimeOnly(0)) - DateTime.Now).Days;
-            if (maxDay < day)
-                maxDay = day;
-            processDays.Add(day);
-        }
-
-        for (int i = 0; i < processDays.Count; i++)
-        {
-            processDays[i] = (int)((float)processDays[i] / maxDay * 60);
-        }
-    }
-
-    private void Search()
-    {
-        OtherEvents.Clear();
-        if (_eventRepository is not null)
-        {
-            if (SearchText.Length >= 3)
-            {
-                OtherEvents = [.. _eventRepository.SearchEventByType(SearchText, CategoryName)];
-                OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Title == other.Title))];
-                TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
-            }
-            else
-            {
-                OtherEvents = [.. _eventRepository.GetAllByType(CategoryName)];
-                OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Title == other.Title))];
-                TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
-            }
-        }
-    }
+    
 }

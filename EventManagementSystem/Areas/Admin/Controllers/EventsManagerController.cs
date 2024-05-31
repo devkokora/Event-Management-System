@@ -27,7 +27,7 @@ public class EventsManagerController : Controller
         _userManager = userManager;
         _cloudinary = cloudinary;
     }
-    private int maxItem = 9;
+    private int maxItem = 20;
     public async Task<IActionResult> Index(string sortBy, int? pageNumber, string? searchQuery)
     {
         ViewData["CurrentSort"] = sortBy;
@@ -53,6 +53,11 @@ public class EventsManagerController : Controller
             count = _adminEventRepository.GetAllEventsSearchCountAsync(searchQuery);
         }
 
+        var exceptionDetail = HttpContext.Items["ExceptionDetails"] as string;
+        if (!string.IsNullOrEmpty(exceptionDetail))
+        {
+            ViewBag.ExceptionDetails = exceptionDetail;
+        }
 
         return View(new PaginatedList<Event>(events.ToList(), count, pageNumber.Value, maxItem));
     }
@@ -132,7 +137,8 @@ public class EventsManagerController : Controller
                         };
 
                         await _adminEventRepository.CreateAsync(newEvent);
-                        return RedirectToAction(nameof(Index));
+                        TempData["Success"] = $"The event {newEvent.Title} was create successfully.";
+                        return Redirect($"/event/details/{newEvent.Id}");
                     }
                 }
             }
@@ -140,7 +146,7 @@ public class EventsManagerController : Controller
         return View(eventViewModel);
     }
 
-    public async Task<IActionResult> Edit(int? id)
+    public async Task<IActionResult> Edit(int id)
     {
         return View();
     }
@@ -151,14 +157,38 @@ public class EventsManagerController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(int id)
     {
-        return View();
+        var eventToDelete = await _eventRepository.GetByIdAsync(id);
+        if (eventToDelete is not null)
+        {
+            return View(eventToDelete);
+        }
+
+        var backUrl = TempData["Referer"] as string;
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int? id)
     {
+        if (id is not null)
+        {
+            try
+            { 
+                await _adminEventRepository.DeleteAsync(id.Value);
+                TempData["Success"] = "Deleted event successfuly.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Delete event data failed, {ex.Message}";
+            }
+        }
+
         return RedirectToAction(nameof(Index));
     }
 }

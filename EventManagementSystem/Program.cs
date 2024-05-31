@@ -91,6 +91,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
     );
+app.MapControllerRoute(
+    name: "catchall",
+    pattern: "{*url}",
+    defaults: new { controller = "CatchAll", action = "Index" }
+    );
 
 app.MapRazorPages(); // for identity
 

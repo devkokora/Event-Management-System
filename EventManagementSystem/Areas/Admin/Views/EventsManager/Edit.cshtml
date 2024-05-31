@@ -1,5 +1,234 @@
-﻿<div class="container-fluid bg-dark py-5">
-    <p class="h1">
-        Edit Event
-    </p>
+﻿@model EventViewModel
+<div class="container bg-dark py-5 px-5">
+    <form class="px-md-5" asp-action="Create" method="post" enctype="multipart/form-data">
+        @for (int i = 0; i < Model.TicketTypes.Count; i++)
+        {
+            <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i" />
+            <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i" />
+            <input asp-for="@Model.TicketTypes[i].Price" type="hidden" id="templatePrice_@i" />
+            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i" />
+        }
+        <div asp-validation-for="All" class="text-danger"></div>
+        <fieldset class="px-lg-5">
+            <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <label asp-for="@Model.Event.Title" class="form-label mt-4">Title</label>
+                        <input asp-for="@Model.Event.Title" type="text" class="form-control" placeholder="required*">
+                        <span asp-validation-for="@Model.Event.Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label asp-for="@Model.Event.ShortDescription" class="form-label mt-4">Short Description</label>
+                        <textarea asp-for="@Model.Event.ShortDescription" class="form-control" rows="1" placeholder="Maximum 50 words"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label asp-for="@Model.Event.Description" class="form-label mt-4">Full Description</label>
+                <textarea asp-for="@Model.Event.Description" class="form-control" rows="3" placeholder="Maximum 1000 words"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="@Model.Event.StartDate" class="form-label mt-4">Start Event Date</label>
+                    <input asp-for="@Model.Event.StartDate" class="form-control" type="date" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="@Model.Event.EndDate" class="form-label mt-4">End Event Date</label>
+                    <input asp-for="@Model.Event.EndDate" class="form-control" type="date" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="@Model.Event.VenueName" class="form-label mt-4">Venue Name</label>
+                    <input asp-for="@Model.Event.VenueName" type="text" class="form-control" placeholder="Venue Name">
+                </div>
+            </div>
+
+            <div class="row mt-4 d-flex justify-content-center">
+                @*Map*@
+                <div class="col-12" id="map" style="width: 1000px; height: 320px;"></div>
+                <div class="col-md-6 mt-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">Latitude</span>
+                        <input asp-for="@Model.Event.Latitude" id="latitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="latitude input" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">Longitude</span>
+                        <input asp-for="@Model.Event.Longitude" id="longitude" type="text" class="form-control w-25 bg-secondary-subtle" aria-label="longitude input" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="@Model.Event.Country" class="form-label mt-4">Country</label>
+                    <input asp-for="@Model.Event.Country" id="countryName" type="text" class="form-control" placeholder="required">
+                </div>
+                <div class="col-md-8">
+                    <label asp-for="@Model.Event.Address" class="form-label mt-4">Address</label>
+                    <input asp-for="@Model.Event.Address" id="addressName" type="text" class="form-control" placeholder="required">
+                </div>
+            </div>
+            <div>
+                <label asp-for="@Model.ImagePath" class="form-label mt-4">Image</label>
+                <input type="file" asp-for="@Model.ImagePath" class="form-control">
+            </div>
+            <div></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <fieldset>
+                        <div class="form-group mt-4">
+                            <label asp-for="@Model.Event.Category" class="control-label"></label>
+                            <select asp-for="@Model.Event.Category" class="form-control" asp-items="@Model.Categories"></select>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-6">
+                    <fieldset>
+                        <legend class="mt-4">Transports</legend>
+                        @for (int i = 0; i < Model.Transports.Count(); i++)
+                        {
+                            <div class="form-check">
+                                <input type="hidden" asp-for="@Model.Transports[i].Text " />
+                                <input asp-for="@Model.Transports[i].Value" type="checkbox" class="form-check-input" />
+                                <label asp-for="@Model.Transports[i].Value" class="form-check-label">
+                                    @(Model.Transports[i].Text[..1].ToUpper() + @Model.Transports[i].Text[1..])
+                                </label>
+                            </div>
+                        }
+                    </fieldset>
+                </div>
+            </div>
+            <div>
+                <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
+                <select class="form-select w-auto" id="ticketTpyeCount">
+                    <option value="0" selected>Free</option>
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <div id="ticketTypesContainer"></div>
+            </div>
+            <div class="mt-4 text-end">
+                <button class="btn btn-danger">Delete Event</button>
+            </div>
+        </fieldset>
+    </form>
 </div>
+
+
+<script>
+    // Map
+    const _lat = document.getElementById("latitude");
+    const _long = document.getElementById("longitude");
+    const initialMap = [13.736717, 100.523186];
+
+    let map = L.map('map').setView(initialMap, 6);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let marker = L.marker(initialMap).addTo(map);
+
+    function onMapClick(e) {
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+
+        const latitude = e.latlng.lat;
+        const longitude = e.latlng.lng
+
+        _lat.value = latitude;
+        _long.value = longitude;
+        getCountryAndCity(latitude, longitude);
+    }
+    map.on('click', onMapClick);
+
+    // Get Country and City
+    const _countryName = document.getElementById("countryName");
+    const _addressName = document.getElementById("addressName");
+    function getCountryAndCity(lat, lng) {
+        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`;
+
+        fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+                _countryName.value = data.address.country;
+
+                const boundaryAddress = ["quarter", "suburb", "city", "postcode", "town", "state", "municipality", "county"];
+                const address = []
+                Object.entries(data.address).forEach(([key, value]) => {
+                    if (value !== undefined && boundaryAddress.includes(key))
+                        address.push(value)
+                    console.log(`${key}, ${value}`)
+                })
+
+                _addressName.value = address.join(", ");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    //Add number of tickettype
+    document.getElementById("ticketTpyeCount").addEventListener("change", function () {
+        const ticketTypeCount = parseInt(this.value);
+        const ticketTypeContainer = document.getElementById("ticketTypesContainer");
+        ticketTypeContainer.innerHTML = "";
+
+        for (let i = 0; i < ticketTypeCount; i++) {
+            const ticketType = document.createElement("div");
+            ticketType.className = "row"
+
+            ticketType.innerHTML = `
+            <div class="col-12">
+                <hr />
+                <span class="text-secondary">Ticket type No.${i + 1}</span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Ticket type</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="text" class="form-control" id="ticketTypeName_${i}" placeholder="name">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Detail</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="text" class="form-control" id="ticketTypeDetail_${i}" placeholder="detail">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Price</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="number" class="form-control" id="ticketTypePrice_${i}" placeholder="price">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label mt-4">Max Capital</label>
+                <span class="text-secondary">#${i + 1}</span>
+                <input type="number" class="form-control" id="ticketTypeMaxCapital_${i}" placeholder="max capital">
+            </div>
+            `;
+            ticketTypeContainer.appendChild(ticketType);
+
+            // Update hidden inputs based on the visible input values
+            document.getElementById(`ticketTypeName_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateName_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypeDetail_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateDetail_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypePrice_${i}`).addEventListener("input", function () {
+                document.getElementById(`templatePrice_${i}`).value = this.value;
+            });
+            document.getElementById(`ticketTypeMaxCapital_${i}`).addEventListener("input", function () {
+                document.getElementById(`templateMaxCapital_${i}`).value = this.value;
+            });
+        }
+    });
+    // Trigger change event on page load to initialize the form
+    document.getElementById("ticketTpyeCount").dispatchEvent(new Event("change"));
+</script>

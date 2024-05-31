@@ -2,6 +2,27 @@
 @model PaginatedList<Event>
 
 <div class="container pt-4 pb-4 bg-dark">
+    @{
+        string alertColor = "";
+        string tempDataAlerts = "";
+        if (TempData["Error"] is not null)
+        {
+            alertColor = "danger";
+            tempDataAlerts = TempData["Error"] as string;
+        }
+        else if (TempData["Success"] is not null)
+        {
+            alertColor = "success";
+            tempDataAlerts = TempData["Success"] as string;
+        }
+    }
+    @if (!string.IsNullOrEmpty(alertColor))
+    {
+        <div class="alert alert-@alertColor alert-dismissible fade show" role="alert">
+            <strong>@tempDataAlerts</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="row mb-3">
         <div class="col-md-6">
             <span class="h4">Event Manager</span>
@@ -21,27 +42,27 @@
             <thead>
                 <tr>
                     <th scope="col">
-                        <a asp-action="Index" 
+                        <a asp-action="Index"
                            asp-route-sortBy="@ViewData["IdSortParam"]"
                            asp-route-searchQuery="@ViewData["CurrentSearch"]">Id</a>
                     </th>
                     <th scope="col">
-                        <a asp-action="Index" 
+                        <a asp-action="Index"
                            asp-route-sortBy="@ViewData["NameSortParam"]"
                            asp-route-searchQuery="@ViewData["CurrentSearch"]">Name</a>
                     </th>
                     <th scope="col">
-                        <a asp-action="Index" 
+                        <a asp-action="Index"
                            asp-route-sortBy="@ViewData["CategorySortParam"]"
                            asp-route-searchQuery="@ViewData["CurrentSearch"]">Category</a>
                     </th>
                     <th scope="col">
-                        <a asp-action="Index" 
+                        <a asp-action="Index"
                            asp-route-sortBy="@ViewData["CountrySortParam"]"
                            asp-route-searchQuery="@ViewData["CurrentSearch"]">Country</a>
                     </th>
                     <th scope="col">
-                        <a asp-action="Index" 
+                        <a asp-action="Index"
                            asp-route-sortBy="@ViewData["DateSortParam"]"
                            asp-route-searchQuery="@ViewData["CurrentSearch"]">Date</a>
                     </th>
@@ -58,9 +79,9 @@
                         <td>@ev.Country</td>
                         <td>@ev.StartDate</td>
                         <td>
-                            <a href="/event/details/@ev.Id" class="btn btn-outline-success">View</a>
-                            <a asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-outline-success">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@ev.Id" class="btn btn-outline-success">Delete</a>
+                            <a href="/event/details/@ev.Id" class="text-secondary p-0">View</a>
+                            <a asp-action="Edit" asp-route-id="@ev.Id" class="text-secondary p-0">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@ev.Id" class="text-danger p-0">Delete</a>
                         </td>
                     </tr>
                 }

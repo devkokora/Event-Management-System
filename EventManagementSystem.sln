@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventManagementSystem", "Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventManagementSystem.Models", "EventManagementSystem.Model\EventManagementSystem.Models.csproj", "{14939708-FC08-49E3-8D5B-74CED9039C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementSystem.DataAccess", "EventManagementSystem.DataAccess\EventManagementSystem.DataAccess.csproj", "{4D628B16-BD1F-4F51-97B5-A9A2220AF250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventManagementSystem.DataAccess", "EventManagementSystem.DataAccess\EventManagementSystem.DataAccess.csproj", "{4D628B16-BD1F-4F51-97B5-A9A2220AF250}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

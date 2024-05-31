@@ -1,6 +1,13 @@
 ﻿@model Event
 
 <div class="container-fluid bg-dark py-4 px-4">
+    @if (TempData["Success"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@TempData["Success"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="text-white mb-2">
         <div class="row align-items-center">
             <div class="col-md-9 text-start">
@@ -23,7 +30,7 @@
         <div class="col-lg-4">
             <div class="bg-secondary text-black p-3 mb-3 rounded-3">
                 <h4 class="fw-bold">Event Details</h4>
-                <hr/>
+                <hr />
                 <p><strong>Country:</strong> @Model.Country</p>
                 <p><strong>Address:</strong> @Model.Address</p>
                 <p><strong>Venue Name:</strong> @Model.VenueName</p>
@@ -33,10 +40,10 @@
                     <strong>Transports:</strong>
                     @if (Model.Transports != null && Model.Transports.Any())
                     {
-                            @foreach (var transport in Model.Transports)
-                            {
-                                <span>@transport</span>
-                            }
+                        @foreach (var transport in Model.Transports)
+                        {
+                            <span>@transport</span>
+                        }
                     }
                     else
                     {
@@ -58,7 +65,7 @@
                             @foreach (var ticketType in Model.TicketTypes)
                             {
                                 <option value="@ticketType.Id">
-                            @ticketType.Name - ฿@ticketType.Price @(ticketType.MaxCapital <= ticketType.TotalTicketsSold ? "(SOLD OUT)" : "")
+                                    @ticketType.Name - ฿@ticketType.Price @(ticketType.MaxCapital <= ticketType.TotalTicketsSold ? "(SOLD OUT)" : "")
                                 </option>
                             }
                         </select>
