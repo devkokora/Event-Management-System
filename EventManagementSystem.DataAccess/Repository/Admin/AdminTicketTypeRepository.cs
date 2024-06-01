@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventManagementSystem.DataAccess.Repository
+namespace EventManagementSystem.DataAccess.Repository.Admin
 {
     public class AdminTicketTypeRepository : IAdminTicketTypeRepository
     {
@@ -37,6 +37,38 @@ namespace EventManagementSystem.DataAccess.Repository
             catch (Exception ex)
             {
                 throw new Exception($"Can't delete ticket type, {ex.Message}");
+            }
+        }
+
+        public async Task<int> DeleteAllAsync(IEnumerable<int> ticketTypeIds)
+        {
+            var allTicketTypeToDeletes = _eventManagementSystemDbContext.TicketTypes
+                .Where(tt => 
+                ticketTypeIds.Any(ti => ti == tt.Id)).ToList();
+
+            if (allTicketTypeToDeletes is not null &&
+                ticketTypeIds.Count() == allTicketTypeToDeletes.Count)
+            {
+                foreach (var ticketType in allTicketTypeToDeletes)
+                {
+                    try
+                    {
+                        if (ticketType.Tickets is not null)
+                        {
+                            _eventManagementSystemDbContext.RemoveRange(ticketType.Tickets);
+                        }
+                        _eventManagementSystemDbContext.Remove(ticketType);                        
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Can't delete ticket type {ticketType.Id} {ticketType.Name}, {ex.Message}");
+                    }
+                }
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Not all ticket type IDs to be deleted are correct. Try deleting one at a time.");
             }
         }
     }

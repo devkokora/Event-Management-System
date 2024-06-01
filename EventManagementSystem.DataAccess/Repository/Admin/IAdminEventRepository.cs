@@ -1,6 +1,6 @@
 ﻿using EventManagementSystem.Models;
 
-namespace EventManagementSystem.DataAccess.Repository
+namespace EventManagementSystem.DataAccess.Repository.Admin
 {
     public interface IAdminEventRepository
     {
