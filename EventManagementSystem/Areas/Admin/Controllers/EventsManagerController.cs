@@ -32,10 +32,9 @@ public class EventsManagerController : Controller
         _cloudinary = cloudinary;
         _adminTicketTypeRepository = adminTicketTypeRepository;
     }
-
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        TempData["Referer"] = context.HttpContext.Request.Headers.Referer.ToString();        
+        TempData["Referer"] = context.HttpContext.Request.Headers.Referer.ToString();
     }
 
     private int maxItem = 20;
@@ -91,66 +90,64 @@ public class EventsManagerController : Controller
             var user = await _userManager.GetUserAsync(User);
             if (user is not null)
             {
-                var isAdmin = await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
-                if (isAdmin)
-                {
-                    var uploadResult = new ImageUploadResult();
+                var uploadResult = new ImageUploadResult();
 
-                    using (var stream = eventViewModel.ImagePath.OpenReadStream())
+                using (var stream = eventViewModel.ImagePath.OpenReadStream())
+                {
+                    uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
                     {
-                        uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
+                        File = new FileDescription(eventViewModel.ImagePath.FileName, stream),
+                        PublicId = $"EventManager/{eventViewModel.Event.Category}/{Guid.NewGuid()}"
+                    });
+                }
+
+                if (uploadResult is not null)
+                {
+                    var ticketTypes = eventViewModel.TicketTypes?
+                        .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList();
+
+                    if (ticketTypes?.Count == 0)
+                    {
+                        ticketTypes = [];
+                        ticketTypes.Add(new TicketType()
                         {
-                            File = new FileDescription(eventViewModel.ImagePath.FileName, stream),
-                            PublicId = $"EventManager/{eventViewModel.Event.Category}/{Guid.NewGuid()}"
+                            Tickets = [],
+                            Name = "Free",
+                            Detail = $"Free Ticket on {eventViewModel.Event.Title}",
+                            EventId = eventViewModel.Event.Id,
+                            MaxCapital = int.MaxValue,
+                            Price = 0
                         });
                     }
 
-                    if (uploadResult != null)
+                    var newEvent = new Event()
                     {
-                        var ticketTypes = eventViewModel.TicketTypes?
-                            .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList();
+                        Title = eventViewModel.Event.Title,
+                        ShortDescription = eventViewModel.Event.ShortDescription,
+                        Description = eventViewModel.Event.Description,
+                        UserId = user.Id,
+                        User = user,
+                        Create_at = DateTime.Now,
+                        StartDate = eventViewModel.Event.StartDate,
+                        EndDate = eventViewModel.Event.EndDate,
+                        VenueName = eventViewModel.Event.VenueName,
+                        Latitude = eventViewModel.Event.Latitude,
+                        Longitude = eventViewModel.Event.Longitude,
+                        Country = eventViewModel.Event.Country,
+                        Address = eventViewModel.Event.Address,
+                        Image = uploadResult.Url.ToString(),
+                        Transports = eventViewModel.Transports
+                        .Where(t => t.Value == "true")
+                        .Select(st => (Transport)Enum.Parse(typeof(Transport), st.Text)).ToList(),
+                        Category = eventViewModel.Event.Category,
+                        TicketTypes = ticketTypes
+                    };
 
-                        if (ticketTypes?.Count == 0)
-                        {
-                            ticketTypes = [];
-                            ticketTypes.Add(new TicketType()
-                            {
-                                Tickets = [],
-                                Name = "Free",
-                                Detail = $"Free Ticket on {eventViewModel.Event.Title}",
-                                EventId = eventViewModel.Event.Id,
-                                MaxCapital = int.MaxValue,
-                                Price = 0
-                            });
-                        }
+                    await _adminEventRepository.CreateAsync(newEvent);
 
-                        var newEvent = new Event()
-                        {
-                            Title = eventViewModel.Event.Title,
-                            ShortDescription = eventViewModel.Event.ShortDescription,
-                            Description = eventViewModel.Event.Description,
-                            UserId = user.Id,
-                            User = user,
-                            Create_at = DateTime.Now,
-                            StartDate = eventViewModel.Event.StartDate,
-                            EndDate = eventViewModel.Event.EndDate,
-                            VenueName = eventViewModel.Event.VenueName,
-                            Latitude = eventViewModel.Event.Latitude,
-                            Longitude = eventViewModel.Event.Longitude,
-                            Country = eventViewModel.Event.Country,
-                            Address = eventViewModel.Event.Address,
-                            Image = uploadResult.Url.ToString(),
-                            Transports = eventViewModel.Transports
-                            .Where(t => t.Value == "true")
-                            .Select(st => (Transport)Enum.Parse(typeof(Transport), st.Text)).ToList(),
-                            Category = eventViewModel.Event.Category,
-                            TicketTypes = ticketTypes
-                        };
+                    TempData["Success"] = $"The event {newEvent.Title} was create successfully.";
 
-                        await _adminEventRepository.CreateAsync(newEvent);
-                        TempData["Success"] = $"The event {newEvent.Title} was create successfully.";
-                        return Redirect($"/event/details/{newEvent.Id}");
-                    }
+                    return Redirect($"/event/details/{newEvent.Id}");
                 }
             }
         }
@@ -181,8 +178,44 @@ public class EventsManagerController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Event? _event)
+    public async Task<IActionResult> Edit(EventViewModel eventViewModel)
     {
+        if (ModelState.IsValid)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is not null)
+            {
+                var uploadResult = new ImageUploadResult();
+                if (eventViewModel.ImagePath is not null)
+                {
+                    using var stream = eventViewModel.ImagePath.OpenReadStream();
+                     uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
+                    {
+                        File = new FileDescription(eventViewModel.ImagePath.FileName, stream),
+                        PublicId = $"EventManager/{eventViewModel.Event.Category}/{Guid.NewGuid()}"
+                    });
+                }
+
+                var eventToEdit = eventViewModel.Event;
+
+                //eventToEdit.Image = uploadResult ??
+
+                try
+                {
+                    await _adminEventRepository.EditAsync(eventToEdit);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        var backUrl = TempData["Referer"] as string;
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
         return RedirectToAction(nameof(Index));
     }
 
@@ -218,6 +251,11 @@ public class EventsManagerController : Controller
             }
         }
 
+        var backUrl = TempData["Referer"] as string;
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
         return RedirectToAction(nameof(Index));
     }
 
@@ -236,9 +274,9 @@ public class EventsManagerController : Controller
                 {
                     await _adminTicketTypeRepository.DeleteAllAsync(ticketTypeIds);
                 }
-                    TempData["Success"] = $"Deleted ticket type id:{string.Join(", ", ticketTypeIds)} successfuly. 😎";
-                    return RedirectToAction(nameof(Index));
-                
+                TempData["Success"] = $"Deleted ticket type id:{string.Join(", ", ticketTypeIds)} successfuly. 😎";
+                return RedirectToAction(nameof(Index));
+
             }
             catch (Exception ex)
             {

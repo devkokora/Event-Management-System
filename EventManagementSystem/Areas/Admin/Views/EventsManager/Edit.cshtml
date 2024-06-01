@@ -1,9 +1,10 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
+    <partial name="_AlertErrorSuccess" />
     <form class="px-md-5" asp-action="Edit" method="post" enctype="multipart/form-data">
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
-            <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
+            <legend class="text-center h1 fw-bold">EDIT EVENT</legend>
             <div class="row">
                 <div class="col-md-6">
                     <div>
@@ -66,38 +67,27 @@
             </div>
             <div>
                 <label asp-for="@Model.ImagePath" class="form-label mt-4">
-                Image <small><a href="@Model.Event.Image" target="_blank">:View current image</a></small>
+                    Image <small><a href="@Model.Event.Image" target="_blank">:View current image</a></small>
                 </label>
-                <input type="file" asp-for="@Model.ImagePath" class="form-control">
+                <input type="file" asp-for="@Model.ImagePath" value="@Model.Event.Image" class="form-control">
                 <div>
-                    
+
                 </div>
             </div>
-            <div></div>
             <div class="row">
                 <div class="col-md-6">
                     <fieldset>
-                        <div class="form-group mt-4">
-                            <label asp-for="@Model.Event.Category" class="control-label"></label>
-                            <select asp-for="@Model.Event.Category" class="form-control" asp-items="@Model.Categories"></select>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="col-md-6">
-                    <fieldset>
-                        @{ 
-                            List<int> selectedTransports = [];
-                            if (Model.Event.Transports is not null)
-                            {
-                                selectedTransports = Model.Event.Transports.Select(ts => (int)ts).ToList();
-                            }
-                        }
-                        <legend class="mt-4">Transports</legend>
+                        <p class="mt-4">Transports</p>
                         @for (int i = 0; i < Model.Transports.Count(); i++)
                         {
+                            if (Model.Event.Transports.Any(tt => (int)tt == i))
+                            {
+                                Model.Transports[i].Value = "true";
+                            }
                             <div class="form-check">
                                 <input type="hidden" asp-for="@Model.Transports[i].Text " />
-                                <input @(selectedTransports.Contains(i) ? "checked" : "") asp-for="@Model.Transports[i].Value" type="checkbox" class="form-check-input" />
+                                <input asp-for="@Model.Transports[i].Value" type="checkbox"
+                                       class="form-check-input" />
                                 <label asp-for="@Model.Transports[i].Value" class="form-check-label">
                                     @(Model.Transports[i].Text[..1].ToUpper() + @Model.Transports[i].Text[1..])
                                 </label>
@@ -105,14 +95,62 @@
                         }
                     </fieldset>
                 </div>
+                <div class="col-md-6">
+                    <fieldset>
+                        <div class="form-group mt-4">
+                            <label asp-for="@Model.Event.Category" class="control-label"></label>
+                            <select asp-for="@Model.Event.Category" class="form-control mt-2" asp-items="@Model.Categories"></select>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row mt-4">
+                @{
+                    var tickettypes = Model.Event.TicketTypes.ToList();
+                }
+                <p> Old tickket type</p>
+                <hr />
+                @for (int i = 0; i < tickettypes.Count; i++)
+                {
+                    <div class="col-12">
+                        <span class="text-secondary">Ticket type No.@(i + 1)</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="@Model.TicketTypes[i].Name" class="form-label mt-4">Ticket type</label>
+                        <span class="text-secondary">#@(i + 1)</span>
+                        <input asp-for="@tickettypes[i].Name" type="text" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="@Model.TicketTypes[i].Detail" class="form-label mt-4">Detail</label>
+                        <span class="text-secondary">#@(i + 1)</span>
+                        <input asp-for="@tickettypes[i].Detail" type="text" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="@Model.TicketTypes[i].Price" class="form-label mt-4">Price</label>
+                        <span class="text-secondary">#@(i + 1)</span>
+                        <input asp-for="@tickettypes[i].Price" type="number" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="@Model.TicketTypes[i].MaxCapital" class="form-label mt-4">Max Capital</label>
+                        <span class="text-secondary">#@(i + 1)</span>
+                        <input asp-for="@tickettypes[i].MaxCapital" type="number" class="form-control" readonly>
+                    </div>
+                }
             </div>
             <div>
-                <label for="ticketTpyeCount" class="form-label mt-4">Number of Ticket type</label>
+                @for (int i = tickettypes.Count; i < 10; i++)
+                {
+                    <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i" />
+                    <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i" />
+                    <input asp-for="@Model.TicketTypes[i].Price" type="hidden" id="templatePrice_@i" />
+                    <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i" />
+                }
+                <label for="ticketTpyeCount" class="form-label mt-4">Add more ticket type</label>
                 <select class="form-select w-auto" id="ticketTpyeCount">
-                    <option value="0" selected>Free</option>
-                    @for (int i = 1; i <= 10; i++)
+                    <option id="old-tickketType-count" value="@tickettypes.Count" selected>@tickettypes.Count</option>
+                    @for (int i = tickettypes.Count; i < 10; i++)
                     {
-                        <option value="@i">@i</option>
+                        <option value="@(i + 1)">@(i + 1)</option>
                     }
                 </select>
                 <div id="ticketTypesContainer"></div>
@@ -184,12 +222,13 @@
     }
 
     //Add number of tickettype
+    const oldCount = parseInt(document.getElementById("old-tickketType-count").value);
     document.getElementById("ticketTpyeCount").addEventListener("change", function () {
         const ticketTypeCount = parseInt(this.value);
         const ticketTypeContainer = document.getElementById("ticketTypesContainer");
         ticketTypeContainer.innerHTML = "";
 
-        for (let i = 0; i < ticketTypeCount; i++) {
+        for (let i = oldCount; i < ticketTypeCount; i++) {
             const ticketType = document.createElement("div");
             ticketType.className = "row"
 

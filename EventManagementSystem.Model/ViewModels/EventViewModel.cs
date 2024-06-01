@@ -10,7 +10,7 @@ namespace EventManagementSystem.Models.ViewModels
         public IEnumerable<SelectListItem> Categories { get; set; }
         public List<SelectListItem> Transports { get; set; }
         public List<TicketType>? TicketTypes { get; set; }
-        public IFormFile ImagePath { get; set; } = default!;
+        public IFormFile? ImagePath { get; set; } = default!;
 
         public EventViewModel()
         {

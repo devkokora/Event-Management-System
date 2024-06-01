@@ -1,26 +1,6 @@
 ﻿@model Event
 <div class="container bg-dark py-5 px-5">
-    @{
-        string alertColor = "";
-        string tempDataAlerts = "";
-        if (TempData["Error"] is not null)
-        {
-            alertColor = "danger";
-            tempDataAlerts = TempData["Error"] as string;
-        }
-        else if (TempData["Success"] is not null)
-        {
-            alertColor = "success";
-            tempDataAlerts = TempData["Success"] as string;
-        }
-    }
-    @if (!string.IsNullOrEmpty(alertColor))
-    {
-        <div class="alert alert-@alertColor alert-dismissible fade show" role="alert">
-            <strong>@tempDataAlerts</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+    <partial name="_AlertErrorSuccess" />
     <div asp-validation-for="All" class="text-danger px-md-5"></div>
     <fieldset class="px-lg-5">
         <legend class="text-center h1 fw-bold">DELETE EVENT</legend>
