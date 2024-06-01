@@ -2,27 +2,7 @@
 @model PaginatedList<Event>
 
 <div class="container pt-4 pb-4 bg-dark">
-    @{
-        string alertColor = "";
-        string tempDataAlerts = "";
-        if (TempData["Error"] is not null)
-        {
-            alertColor = "danger";
-            tempDataAlerts = TempData["Error"] as string;
-        }
-        else if (TempData["Success"] is not null)
-        {
-            alertColor = "success";
-            tempDataAlerts = TempData["Success"] as string;
-        }
-    }
-    @if (!string.IsNullOrEmpty(alertColor))
-    {
-        <div class="alert alert-@alertColor alert-dismissible fade show" role="alert">
-            <strong>@tempDataAlerts</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+    <partial name="_AlertErrorSuccess" />
     <div class="row mb-3">
         <div class="col-md-6">
             <span class="h4">Event Manager</span>

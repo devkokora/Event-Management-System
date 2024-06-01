@@ -1,12 +1,13 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
+    <partial name="_AlertErrorSuccess" />
     <form class="px-md-5" asp-action="Create" method="post" enctype="multipart/form-data">
         @for (int i = 0; i < Model.TicketTypes.Count; i++)
         {
-            <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i"/>
-            <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i"/>
+            <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i" />
+            <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i" />
             <input asp-for="@Model.TicketTypes[i].Price" type="hidden" id="templatePrice_@i" />
-            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i"/>
+            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i" />
         }
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
