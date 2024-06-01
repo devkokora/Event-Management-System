@@ -1,4 +1,4 @@
-﻿namespace EventManagementSystem.DataAccess.Repository
+﻿namespace EventManagementSystem.DataAccess.Repository.Admin
 {
     public interface IAdminUserRepository
     {

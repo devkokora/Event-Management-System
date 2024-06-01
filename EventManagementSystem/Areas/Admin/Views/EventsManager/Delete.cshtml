@@ -123,14 +123,20 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <form asp-action="DeleteAllTicketType" method="post">
-                        <input type="hidden" asp-for="@Model.TicketTypes" />
-                        <div class="text-sm-end text-center pt-sm-5 pt-3">
-                            <button type="submit" class="btn btn-danger">Delete all ticket type</button>
-                        </div>
-                    </form>
-                </div>
+                @if (Model.TicketTypes.Count > 0)
+                {
+                    <div class="col-sm-6">
+                        <form asp-controller="EventsManager" asp-action="DeleteTicketType" method="post" enctype="multipart/form-data">
+                            @foreach (var ticketType in Model.TicketTypes)
+                            {
+                                <input name="ticketTypeIds" value="@ticketType.Id" enctype="multipart/form-data" hidden/>
+                            }
+                            <div class="text-sm-end text-center pt-sm-5 pt-3">
+                                <button type="submit" class="btn btn-danger">Delete all ticket type</button>
+                            </div>
+                        </form>
+                    </div>
+                }
                 <div id="ticketTypesContainer" class="row">
                     @{
                         var tickettypes = Model.TicketTypes.ToList();
@@ -141,9 +147,9 @@
                         <div class="col-12">
                             <hr />
                             <span class="text-secondary">Ticket type No.@(i + 1)</span>
-                            <form asp-controller="EventsManager" asp-action="DeleteTicketType" method="post" >
+                            <form asp-controller="EventsManager" asp-action="DeleteTicketType" method="post">
                                 <div class="text-sm-end text-center">
-                                    <input name="ticketTypeId" value="@tickettypes[i].Id" hidden/>
+                                    <input name="ticketTypeIds" value="@tickettypes[i].Id" hidden />
                                     <button type="submit" class="btn btn-outline-danger">Delete</button>
                                 </div>
                             </form>

@@ -1,13 +1,6 @@
 ﻿@model EventViewModel
 <div class="container bg-dark py-5 px-5">
-    <form class="px-md-5" asp-action="Create" method="post" enctype="multipart/form-data">
-        @for (int i = 0; i < Model.TicketTypes.Count; i++)
-        {
-            <input asp-for="@Model.TicketTypes[i].Name" type="hidden" id="templateName_@i" />
-            <input asp-for="@Model.TicketTypes[i].Detail" type="hidden" id="templateDetail_@i" />
-            <input asp-for="@Model.TicketTypes[i].Price" type="hidden" id="templatePrice_@i" />
-            <input asp-for="@Model.TicketTypes[i].MaxCapital" type="hidden" id="templateMaxCapital_@i" />
-        }
+    <form class="px-md-5" asp-action="Edit" method="post" enctype="multipart/form-data">
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
             <legend class="text-center h1 fw-bold">CREATE EVENT</legend>
@@ -72,8 +65,13 @@
                 </div>
             </div>
             <div>
-                <label asp-for="@Model.ImagePath" class="form-label mt-4">Image</label>
+                <label asp-for="@Model.ImagePath" class="form-label mt-4">
+                Image <small><a href="@Model.Event.Image" target="_blank">:View current image</a></small>
+                </label>
                 <input type="file" asp-for="@Model.ImagePath" class="form-control">
+                <div>
+                    
+                </div>
             </div>
             <div></div>
             <div class="row">
@@ -87,12 +85,19 @@
                 </div>
                 <div class="col-md-6">
                     <fieldset>
+                        @{ 
+                            List<int> selectedTransports = [];
+                            if (Model.Event.Transports is not null)
+                            {
+                                selectedTransports = Model.Event.Transports.Select(ts => (int)ts).ToList();
+                            }
+                        }
                         <legend class="mt-4">Transports</legend>
                         @for (int i = 0; i < Model.Transports.Count(); i++)
                         {
                             <div class="form-check">
                                 <input type="hidden" asp-for="@Model.Transports[i].Text " />
-                                <input asp-for="@Model.Transports[i].Value" type="checkbox" class="form-check-input" />
+                                <input @(selectedTransports.Contains(i) ? "checked" : "") asp-for="@Model.Transports[i].Value" type="checkbox" class="form-check-input" />
                                 <label asp-for="@Model.Transports[i].Value" class="form-check-label">
                                     @(Model.Transports[i].Text[..1].ToUpper() + @Model.Transports[i].Text[1..])
                                 </label>
@@ -113,7 +118,7 @@
                 <div id="ticketTypesContainer"></div>
             </div>
             <div class="mt-4 text-end">
-                <button class="btn btn-danger">Delete Event</button>
+                <button class="btn btn-warning">Edit Event</button>
             </div>
         </fieldset>
     </form>
@@ -124,7 +129,9 @@
     // Map
     const _lat = document.getElementById("latitude");
     const _long = document.getElementById("longitude");
-    const initialMap = [13.736717, 100.523186];
+    const initial_lat = _lat.value;
+    const initial_long = _long.value;
+    const initialMap = [initial_lat, initial_long];
 
     let map = L.map('map').setView(initialMap, 6);
 

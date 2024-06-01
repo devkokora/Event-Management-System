@@ -8,6 +8,8 @@ using EventManagementSystem.Models;
 using EventManagementSystem.Models.ViewModels;
 using EventManagementSystem.Utilities;
 using Microsoft.AspNetCore.Mvc.Filters;
+using EventManagementSystem.DataAccess.Repository.Admin;
+using NuGet.Versioning;
 
 namespace EventManagementSystem.Areas.Admin.Controllers;
 
@@ -155,9 +157,27 @@ public class EventsManagerController : Controller
         return View(eventViewModel);
     }
 
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        return View();
+        if (id is not null && id != 0)
+        {
+            var eventToEdit = await _eventRepository.GetByIdAsync(id.Value);
+            if (eventToEdit is not null)
+            {
+                var eventViewModel = new EventViewModel()
+                {
+                    Event = eventToEdit,
+                };
+                return View(eventViewModel);
+            }
+        }
+
+        var backUrl = TempData["Referer"] as string;
+        if (!string.IsNullOrEmpty(backUrl))
+        {
+            return Redirect(backUrl);
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]
@@ -202,15 +222,23 @@ public class EventsManagerController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteTicketType(int? ticketTypeId)
+    public async Task<IActionResult> DeleteTicketType(IEnumerable<int>? ticketTypeIds)
     {
-        if (ticketTypeId is not null)
+        if (ticketTypeIds is not null && ticketTypeIds.Any() && ticketTypeIds.First() != 0)
         {
             try
             {
-                await _adminTicketTypeRepository.DeleteAsync(ticketTypeId.Value);
-                TempData["Success"] = $"Deleted ticket type id:{ticketTypeId} successfuly. 😎";
-                return RedirectToAction(nameof(Index));
+                if (ticketTypeIds.Count() == 1)
+                {
+                    await _adminTicketTypeRepository.DeleteAsync(ticketTypeIds.First());
+                }
+                else
+                {
+                    await _adminTicketTypeRepository.DeleteAllAsync(ticketTypeIds);
+                }
+                    TempData["Success"] = $"Deleted ticket type id:{string.Join(", ", ticketTypeIds)} successfuly. 😎";
+                    return RedirectToAction(nameof(Index));
+                
             }
             catch (Exception ex)
             {

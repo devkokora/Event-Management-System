@@ -2,7 +2,7 @@
 using EventManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventManagementSystem.DataAccess.Repository
+namespace EventManagementSystem.DataAccess.Repository.Admin
 {
     public class AdminEventRepository : IAdminEventRepository
     {
@@ -48,7 +48,7 @@ namespace EventManagementSystem.DataAccess.Repository
         }
 
         public async Task<int> GetAllEventsCountAsync()
-        {            
+        {
             return await _eventManagementSystemDbContext.Events.CountAsync();
         }
 
