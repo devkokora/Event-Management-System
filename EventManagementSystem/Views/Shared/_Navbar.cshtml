@@ -5,7 +5,7 @@
 @inject UserManager<User> UserManager
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-secondary fixed-top">
+    <nav class="navbar navbar-expand-lg bg-danger border-bottom border-secondary fixed-top">
         <div class="container">
             <a class="navbar-brand text-bg-danger px-2 rounded-2 fw-bold" href="/">EventJui</a>
             <button class="navbar-toggler bg-danger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,93 +14,97 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Events
-                        </a>
-                        <ul class="dropdown-menu bg-dark-subtle">
-                            <li>
-                                <a class="dropdown-item" href="/events/sport">
-                                    <i class="fa-solid fa-medal"></i> Sport
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/conferences">
-                                    <i class="fa-solid fa-comment"></i> Conferences
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/expo">
-                                    <i class="fa-solid fa-universal-access"></i> Expo
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/concert">
-                                    <i class="fa-solid fa-music"></i> Concert
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/festival">
-                                    <i class="fa-solid fa-tag"></i> Festival
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/art">
-                                    <i class="fa-solid fa-palette"></i> Art
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/events/community">
-                                    <i class="fa-solid fa-people-group"></i> Community
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="/events/holiday">
-                                    <i class="fa-solid fa-sun"></i> Holiday
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/events">All events</a></li>
-                        </ul>
+                        <div class="text-center">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Events
+                            </a>
+                            <ul class="dropdown-menu bg-dark-subtle">
+                                <li>
+                                    <a class="dropdown-item" href="/events/sport">
+                                        <i class="bi bi-trophy-fill"></i> Sport
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/conferences">
+                                        <i class="bi bi-chat-dots-fill"></i> Conferences
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/expo">
+                                        <i class="bi bi-cart-fill"></i> Expo
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/concert">
+                                        <i class="bi bi-music-note-beamed"></i> Concert
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/festival">
+                                        <i class="bi bi-bookmark-star-fill"></i> Festival
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/art">
+                                        <i class="bi bi-brush-fill"></i> Art
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/community">
+                                        <i class="bi bi-people-fill"></i> Community
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="/events/holiday">
+                                        <i class="bi bi-brightness-high-fill"></i> Holiday
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/events">All events</a></li>
+                            </ul>
+                        </div>
                     </li>
                     @{var user = await UserManager.GetUserAsync(User);
                         if (user is not null &&
                            UserManager.IsInRoleAsync(user, nameof(UserRoles.Admin)).Result)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Admin Controller
-                                </a>
-                                <ul class="dropdown-menu bg-dark-subtle">
-                                    <li><a class="dropdown-item" href="/admin">Dashboard</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/admin/eventsmanager/create">New Event</a></li>
-                                    <li><a class="dropdown-item" href="/admin/eventsmanager">Event manager</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/admin/usersmanager">User manager</a></li>
-                                </ul>
+                                <div class="text-center">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Admin Controller
+                                    </a>
+                                    <ul class="dropdown-menu bg-dark-subtle">
+                                        <li><a class="dropdown-item" href="/admin">Dashboard</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="/admin/eventsmanager/create">New Event</a></li>
+                                        <li><a class="dropdown-item" href="/admin/eventsmanager">Event manager</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="/admin/usersmanager">User manager</a></li>
+                                    </ul>
+                                </div>
                             </li>
                         }
                     }
-                    <li class="nav-item" style="padding-top: 0.15em;">
-                        @*data-enhance-nav="false"*@
-                        <form class="container-fluid">
-                            <div class="input-group">
-                                <input type="text" class="form-control border-0" placeholder="Search" aria-label="Search" aria-describedby="navbar-search">
-                            </div>
-                        </form>
-                        @*<form class="d-flex" role="search">
-                                <input class="form-control me-2 border-0" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-danger" type="submit">Search</button>
-                            </form>*@
+                    <li class="nav-item px-2" style="padding-top: 0.15em;">
+                        <div class="text-center">
+                            <button class="btn btn-outline-secondary btn-dark bg-dark text-white py-1 px-2" data-bs-target="#search-modal" data-bs-toggle="modal">
+                                <span>
+                                    <i class="bi bi-search" style="font-size: 1.2rem;"></i> Search
+                                </span>
+                                <span style="padding-left:7rem;">
+                                    🙂
+                                </span>
+                            </button>
+                        </div>
                     </li>
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <div class="d-flex">
-                        <div class="btn btn-outline-dark text-white p-0" type="button" data-bs-toggle="offcanvas"
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="btn-link text-white p-0" type="button" data-bs-toggle="offcanvas"
                              data-bs-target="#user-profile-offcanvas">
-                            👽 User controller
+                            <i class="bi bi-person-circle" style="font-size: 1.5rem; color: lightgray;"></i>
                         </div>
                     </div>
                 }
@@ -120,6 +124,25 @@
         </div>
     </nav>
 </header>
+
+<div class="modal fade" id="search-modal" tabindex="-1" aria-labelledby="search-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="search-modal-label">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="offcanvas offcanvas-end bg-dark border-start border-secondary" data-bs-scroll="true" tabindex="-1" id="user-profile-offcanvas"
      style="width:300px; border-radius:20px 0 0 20px">
     <div class="offcanvas-header">
@@ -127,12 +150,14 @@
     </div>
     <div class="offcanvas-body text-white bg-dark" style="border-radius: 20px 0 0 20px;">
         <div class="list-group">
-            <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <div id="manage" class="btn btn-outline-danger text-start nav-link ps-2 text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                 Hello @(UserManager.GetUserName(User))
-            </a>
+            </div>
             <hr />
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">Logout</button>
+                <div class="btn btn-outline-danger text-start nav-link ps-2 text-white">               
+                    <button id="logout" type="submit" class="border-0">Logout</button>
+                </div>
             </form>
         </div>
     </div>

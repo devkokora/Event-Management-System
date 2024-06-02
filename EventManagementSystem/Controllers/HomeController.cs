@@ -18,27 +18,6 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Signup()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Signup(User user)
-        {
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> SignIn()
-        {
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> Signout()
-        {
-            return RedirectToAction("Index");
-        }
-
         public IActionResult Privacy()
         {
             return View();
