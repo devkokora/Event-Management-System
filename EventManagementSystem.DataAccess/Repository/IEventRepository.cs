@@ -13,7 +13,7 @@ namespace EventManagementSystem.DataAccess.Repository
         Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId);
         Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId);
         Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId);
-        IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName);
+        IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName, List<Event>? tempEvents);
         IEnumerable<Event> GetAllByType(string? typeName);
     }
 }

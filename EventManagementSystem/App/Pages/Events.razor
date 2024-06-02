@@ -130,6 +130,7 @@
     [Inject]
     private IUserService UserService { get; set; } = default!;
 
+    public List<Event> TempEvents { get; private set; } = [];
     public List<Event> OtherEvents { get; private set; } = [];
     public List<Event> UpComingEvents { get; private set; } = [];
 
@@ -158,13 +159,17 @@
     private async Task InitializeEventCards()
     {
         CategoryName ??= string.Empty;
-        OtherEvents = [.. await EventRepository.GetAllByTypeAsync(CategoryName)];
 
-        if (OtherEvents is not null)
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        TempEvents = (await EventRepository.GetAllByTypeAsync(CategoryName))
+            .Where(e => e.StartDate >= today)
+            .ToList();
+
+        if (TempEvents is not null)
         {
-            UpComingEvents = [.. OtherEvents.OrderBy(e => e.StartDate).Take(12)];
+            UpComingEvents = [.. TempEvents.OrderBy(e => e.StartDate).Take(12)];
 
-            OtherEvents = OtherEvents.Where(other => !UpComingEvents.Contains(other)).ToList();
+            OtherEvents = [.. TempEvents.Where(other => !UpComingEvents.Contains(other))];
 
             TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
             TotalUpComingPages = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
@@ -217,11 +222,11 @@
         {
             if (SearchText.Length >= 2)
             {
-                OtherEvents = [.. EventRepository.SearchEventByType(SearchText, CategoryName)];
+                OtherEvents = [.. EventRepository.SearchEventByType(SearchText, CategoryName, TempEvents)];
             }
             else
             {
-                OtherEvents = [.. EventRepository.GetAllByType(CategoryName)];
+                OtherEvents = TempEvents;
             }
             OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Id == other.Id))];
             TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);

@@ -42,9 +42,62 @@ namespace EventManagementSystem.DataAccess.Repository.Admin
             }
         }
 
-        public Task<int> EditAsync(Event editEvent)
+        public async Task<int> EditAsync(Event editEvent)
         {
-            throw new NotImplementedException();
+            var eventToEdit = await _eventManagementSystemDbContext.Events.FindAsync(editEvent.Id);
+            if (eventToEdit is not null)
+            {
+                List<TicketType> ticketTypes = [];
+                foreach (var ticketType in editEvent.TicketTypes!)
+                {
+                    if (ticketType.Id != 0 && ticketType.EventId == eventToEdit.Id)
+                    {
+                        var ticketTypeToEdit = await _eventManagementSystemDbContext.TicketTypes
+                            .FindAsync(ticketType.Id);
+
+                        if (ticketTypeToEdit is not null)
+                        {
+                            if (ticketTypeToEdit.TotalTicketsSold > ticketType.MaxCapital)
+                            {
+                                throw new Exception($"Max capital in ticket type must be greater than the {ticketTypeToEdit.TotalTicketsSold:#,##} old  tickets sold.");
+                            }
+
+                            ticketTypeToEdit.Name = ticketType.Name;
+                            ticketTypeToEdit.Detail = ticketType.Detail;
+                            ticketTypeToEdit.Price = ticketType.Price;
+                            ticketTypeToEdit.MaxCapital = ticketType.MaxCapital;
+
+                            ticketTypes.Add(ticketTypeToEdit);
+                        }
+                    }
+                    else
+                    {
+                        ticketTypes.Add(ticketType);
+                    }
+                }
+
+                eventToEdit.Title = editEvent.Title;
+                eventToEdit.ShortDescription = editEvent.ShortDescription;
+                eventToEdit.Description = editEvent.Description;
+                eventToEdit.StartDate = editEvent.StartDate;
+                eventToEdit.EndDate = editEvent.EndDate;
+                eventToEdit.VenueName = editEvent.VenueName;
+                eventToEdit.Latitude = editEvent.Latitude;
+                eventToEdit.Longitude = editEvent.Longitude;
+                eventToEdit.Country = editEvent.Country;
+                eventToEdit.Address = editEvent.Address;
+                eventToEdit.Image = editEvent.Image;
+                eventToEdit.Transports = editEvent.Transports;
+                eventToEdit.Category = editEvent.Category;
+                eventToEdit.TicketTypes = ticketTypes;
+
+                _eventManagementSystemDbContext.Events.Update(eventToEdit);
+                return await _eventManagementSystemDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Event to edit not found.");
+            }
         }
 
         public async Task<int> GetAllEventsCountAsync()
