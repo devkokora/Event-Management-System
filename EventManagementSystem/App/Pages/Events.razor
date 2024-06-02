@@ -149,7 +149,7 @@
         while (!UserService.IsInitialize)
         {
             // Handle concurency better than random value Task.Delay on NavMenu.cs
-            await Task.Delay(31);
+            await Task.Delay(100);
         }
 
         await InitializeEventCards();
