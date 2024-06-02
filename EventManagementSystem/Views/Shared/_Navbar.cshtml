@@ -7,7 +7,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-danger border-bottom border-secondary fixed-top">
         <div class="container">
-            <a class="navbar-brand text-bg-danger px-2 rounded-2 fw-bold" href="/">EventJui</a>
+            <a class="navbar-brand text-bg-dark px-2 rounded-2 fw-bold" href="/">EventJui</a>
             <button class="navbar-toggler bg-danger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -150,14 +150,12 @@
     </div>
     <div class="offcanvas-body text-white bg-dark" style="border-radius: 20px 0 0 20px;">
         <div class="list-group">
-            <div id="manage" class="btn btn-outline-danger text-start nav-link ps-2 text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <a id="manage" class="btn btn-outline-danger text-start nav-link ps-2 text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                 Hello @(UserManager.GetUserName(User))
-            </div>
+            </a>
             <hr />
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <div class="btn btn-outline-danger text-start nav-link ps-2 text-white">               
-                    <button id="logout" type="submit" class="border-0">Logout</button>
-                </div>
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">              
+                    <button id="logout" type="submit" class="btn btn-outline-danger text-start nav-link ps-2 text-white w-100">Logout</button>
             </form>
         </div>
     </div>

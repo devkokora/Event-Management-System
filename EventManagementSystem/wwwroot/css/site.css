@@ -20,14 +20,14 @@ html {
     min-height: 100%;
 }
 
-body {
+body{
     font-family: 'Cascadia Mono';
-    /*background: url("/imgs/davide-ragusa-gcDwzUGuUoI-unsplash.jpg") no-repeat fixed;*/
     /*background: linear-gradient(0deg, rgb(220, 53, 50) 0%, rgb(33 37 41) 50%);*/
-    background: linear-gradient(0deg, rgba(170,63,42,1) 0%, rgba(55,22,11,1) 35%, rgba(16,17,19,1) 70%);
-    /*background-size: cover;*/
+    background: linear-gradient(0deg, rgb(33, 37, 41) 75%, rgb(126, 50, 35) 100%);
+    /*background: url("https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;*/
+    background-size: cover;
     /*background-attachment: fixed;*/
-} 
+}
 
 .dropdown-item:hover,
 .dropdown-item:focus {
@@ -48,12 +48,12 @@ main {
 
 .overview-static {
     font-weight: 600;
-    color: navajowhite;
+    color: antiquewhite;
     position: absolute;
     background-color: rgb(0 0 0 / 0.2);
     border-radius: 120px;
     /*box-shadow: inset 0px 0px 40px 16px rgb(47 21 12 /0.9);*/
-    box-shadow: inset 0px 0px 50px 16px rgb(119 43 21 / 0.90);
+    box-shadow: inset 0px 0px 50px 16px rgb(10 20 30 / 0.90);
     padding: 0;
     margin: 0;
     padding-top: 50px;
@@ -75,4 +75,11 @@ main {
     width: 100%;
     white-space: nowrap;
     line-height: 60px;
+}
+
+
+.overview-static {
+    background: url("https://images.unsplash.com/photo-1507878866276-a947ef722fee?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
+    background-size: cover;
+    background-attachment: fixed;
 }
