@@ -185,28 +185,54 @@ public class EventsManagerController : Controller
             var user = await _userManager.GetUserAsync(User);
             if (user is not null)
             {
-                var uploadResult = new ImageUploadResult();
                 if (eventViewModel.ImagePath is not null)
                 {
                     using var stream = eventViewModel.ImagePath.OpenReadStream();
-                     uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
+                    var uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams()
                     {
                         File = new FileDescription(eventViewModel.ImagePath.FileName, stream),
                         PublicId = $"EventManager/{eventViewModel.Event.Category}/{Guid.NewGuid()}"
                     });
+
+                    if (uploadResult is not null)
+                    {
+                        eventViewModel.Event.Image = uploadResult.Url.ToString();
+                    }
                 }
 
                 var eventToEdit = eventViewModel.Event;
 
-                //eventToEdit.Image = uploadResult ??
+                eventViewModel.TicketTypes ??= [];
+                var ticketTypes = eventViewModel.TicketTypes
+                    .Where(tt => !string.IsNullOrEmpty(tt.Name)).ToList();
+
+                if (ticketTypes?.Count == 0)
+                {
+                    ticketTypes = [];
+                    ticketTypes.Add(new TicketType()
+                    {
+                        Tickets = [],
+                        Name = "Free",
+                        Detail = $"Free Ticket on {eventViewModel.Event.Title}",
+                        EventId = eventViewModel.Event.Id,
+                        MaxCapital = int.MaxValue,
+                        Price = 0
+                    });
+                }
+
+                eventToEdit.TicketTypes = ticketTypes;
+                eventToEdit.Transports = eventViewModel.Transports
+                    .Where(ts => ts.Value == "true")
+                    .Select(ts => (Transport)Enum.Parse(typeof(Transport), ts.Text)).ToList();
 
                 try
                 {
                     await _adminEventRepository.EditAsync(eventToEdit);
+                    return Redirect($"/event/details/{eventToEdit.Id}");
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    TempData["Error"] = $"Edit event failed, {ex.Message}";
                 }
             }
         }

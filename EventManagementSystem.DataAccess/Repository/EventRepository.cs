@@ -18,6 +18,7 @@ namespace EventManagementSystem.DataAccess.Repository
         public async Task<Event?> GetByIdAsync(int eventId)
         {
             return await _eventManagementSystemDbContext.Events
+                .AsNoTracking()
                 .Include(e => e.TicketTypes)
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
@@ -26,8 +27,8 @@ namespace EventManagementSystem.DataAccess.Repository
         public async Task<IEnumerable<Event>> GetAllAsync()
         {
             return await _eventManagementSystemDbContext.Events
-                .OrderBy(e => e.Id)
                 .AsNoTracking()
+                .OrderBy(e => e.Id)
                 .ToListAsync();
         }
 
@@ -37,9 +38,9 @@ namespace EventManagementSystem.DataAccess.Repository
             if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
             {
                 return await _eventManagementSystemDbContext.Events
+                    .AsNoTracking()
                     .Where(e => e.Category.Equals((Category)existingCategory))
                     .Where(e => e.StartDate >= toDay)
-                    .AsNoTracking()
                     .ToListAsync();
             }
             return await GetAllAsync();
@@ -103,40 +104,47 @@ namespace EventManagementSystem.DataAccess.Repository
             }
         }
 
-        public IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName)
+        public IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName, List<Event>? tempEvents)
         {
-            var toDay = DateOnly.FromDateTime(DateTime.Now);
-            if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
+            if (tempEvents is not null && tempEvents.Count != 0)
+            {
+                return tempEvents
+                    .Where(e => e.Title.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                    e.ShortDescription.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                    e.Description.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                    e.Country.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                    e.Address.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
+            }
+            else if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
             {
                 return _eventManagementSystemDbContext.Events
+                .AsNoTracking()
                 .Where(e => e.Category.Equals((Category)existingCategory))
                 .Where(e => e.Title.Contains(searchQuery) ||
                     e.ShortDescription.Contains(searchQuery) ||
                     e.Description.Contains(searchQuery) ||
                     e.Country.Contains(searchQuery) ||
-                    e.Address.Contains(searchQuery))
-                .AsNoTracking();
+                    e.Address.Contains(searchQuery));
             }
             else
             {
                 return _eventManagementSystemDbContext.Events
+                .AsNoTracking()
                 .Where(e => e.Title.Contains(searchQuery) ||
                     e.ShortDescription.Contains(searchQuery) ||
                     e.Description.Contains(searchQuery) ||
                     e.Country.Contains(searchQuery) ||
-                    e.Address.Contains(searchQuery))
-                .AsNoTracking();
+                    e.Address.Contains(searchQuery));
             }
         }
 
         public IEnumerable<Event> GetAllByType(string? typeName)
         {
-            var toDay = DateOnly.FromDateTime(DateTime.Now);
             if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
             {
                 return _eventManagementSystemDbContext.Events
-                    .Where(e => e.Category.Equals((Category)existingCategory))
-                .AsNoTracking();
+                .AsNoTracking()
+                .Where(e => e.Category.Equals((Category)existingCategory));
             }
             else
             {

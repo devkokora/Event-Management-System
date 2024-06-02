@@ -2,6 +2,7 @@
 <div class="container bg-dark py-5 px-5">
     <partial name="_AlertErrorSuccess" />
     <form class="px-md-5" asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="@Model.Event.Id" />
         <div asp-validation-for="All" class="text-danger"></div>
         <fieldset class="px-lg-5">
             <legend class="text-center h1 fw-bold">EDIT EVENT</legend>
@@ -67,6 +68,7 @@
             </div>
             <div>
                 <label asp-for="@Model.ImagePath" class="form-label mt-4">
+                    <input type="hidden" asp-for="@Model.Event.Image"/>
                     Image <small><a href="@Model.Event.Image" target="_blank">:View current image</a></small>
                 </label>
                 <input type="file" asp-for="@Model.ImagePath" value="@Model.Event.Image" class="form-control">
@@ -112,28 +114,30 @@
                 <hr />
                 @for (int i = 0; i < tickettypes.Count; i++)
                 {
+                    <input type="hidden" asp-for="@tickettypes[i].Id"/>
+                    <input type="hidden" asp-for="@tickettypes[i].EventId"/>
                     <div class="col-12">
                         <span class="text-secondary">Ticket type No.@(i + 1)</span>
                     </div>
                     <div class="col-md-6">
                         <label asp-for="@Model.TicketTypes[i].Name" class="form-label mt-4">Ticket type</label>
                         <span class="text-secondary">#@(i + 1)</span>
-                        <input asp-for="@tickettypes[i].Name" type="text" class="form-control" readonly>
+                        <input asp-for="@tickettypes[i].Name" type="text" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <label asp-for="@Model.TicketTypes[i].Detail" class="form-label mt-4">Detail</label>
                         <span class="text-secondary">#@(i + 1)</span>
-                        <input asp-for="@tickettypes[i].Detail" type="text" class="form-control" readonly>
+                        <input asp-for="@tickettypes[i].Detail" type="text" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <label asp-for="@Model.TicketTypes[i].Price" class="form-label mt-4">Price</label>
                         <span class="text-secondary">#@(i + 1)</span>
-                        <input asp-for="@tickettypes[i].Price" type="number" class="form-control" readonly>
+                        <input asp-for="@tickettypes[i].Price" type="number" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <label asp-for="@Model.TicketTypes[i].MaxCapital" class="form-label mt-4">Max Capital</label>
                         <span class="text-secondary">#@(i + 1)</span>
-                        <input asp-for="@tickettypes[i].MaxCapital" type="number" class="form-control" readonly>
+                        <input asp-for="@tickettypes[i].MaxCapital" type="number" class="form-control">
                     </div>
                 }
             </div>
