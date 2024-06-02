@@ -11,9 +11,9 @@ html {
     }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+/*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+}*/
 
 html {
     position: relative;
@@ -22,9 +22,12 @@ html {
 
 body {
     font-family: 'Cascadia Mono';
-    background: url("/imgs/davide-ragusa-gcDwzUGuUoI-unsplash.jpg") no-repeat fixed;
-    background-size: cover;
-}
+    /*background: url("/imgs/davide-ragusa-gcDwzUGuUoI-unsplash.jpg") no-repeat fixed;*/
+    /*background: linear-gradient(0deg, rgb(220, 53, 50) 0%, rgb(33 37 41) 50%);*/
+    background: linear-gradient(0deg, rgba(170,63,42,1) 0%, rgba(55,22,11,1) 35%, rgba(16,17,19,1) 70%);
+    /*background-size: cover;*/
+    /*background-attachment: fixed;*/
+} 
 
 .dropdown-item:hover,
 .dropdown-item:focus {
@@ -43,99 +46,14 @@ main {
     justify-content: center;
 }
 
-.search-index {
-    position: relative;
-    height: 40px;
-}
-
-    .search-index .input-search-index {
-        background-color: #fff;
-        border: 0;
-        font-size: 18px;
-        padding: 15px;
-        height: 40px;
-        width: 40px;
-        transition: width 0.3s ease;
-    }
-
-.btn-search-index {
-    background-color: white;
-    border: 0;
-    cursor: pointer;
-    font-size: 18px;
-    position: absolute;
-    top: 0;
-    left: 0px;
-    height: 40px;
-    width: 40px;
-    transition: transform 0.3s ease;
-}
-
-    .btn-search-index:focus,
-    .input-search-index:focus {
-        outline: none;
-    }
-
-.search-index.active .input-search-index {
-    width: 300px;
-}
-
-.search-index.active .btn-search-index {
-    transform: translateX(298px);
-}
-
-.jumbotron-sport-event {
-    background: url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=100&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: bottom;
-    display: block;
-}
-
-.jumbotron-conferences-event {
-    background: url("https://orlandosydney.com/wp-content/uploads/2023/08/Conference-at-Darling-Harbour-Theatre-Interior-Photo%C2%B7-ICC-Sydney.-2500-seated-capacity.-Photography-By-orlandosydney.com-OS1_7156-1536x1026.webp") no-repeat fixed;
-    background-position-y:bottom;
-}
-
-.jumbotron-expo-event {
-    background: url("https://media.cntraveler.com/photos/605d11969d9a95de47693362/16:9/w_1920,c_limit/210115_Expo_Sustainability%20Pavilion_drone%20shot%20(6).jpg") no-repeat fixed;
-    background-position-y: bottom;
-}
-
-.jumbotron-concert-event {
-    background: url("https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=100&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: bottom;
-}
-
-.jumbotron-festival-event {
-    background: url("https://images.unsplash.com/photo-1505224628533-c4fc42c389e0?q=100&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: bottom;
-}
-
-.jumbotron-art-event {
-    background: url("https://images.unsplash.com/photo-1541264161754-445bbdd7de52?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat fixed;
-    background-position-y: bottom;
-}
-
-.jumbotron-community-event {
-    background: url("https://images.squarespace-cdn.com/content/v1/5b33e7389772ae094e7fed7d/b0a8a9c1-dcde-46a3-ac0a-b0b0077bbd28/harry-grout-4bzC0Bi12vY-unsplash.jpg?format=1500w") no-repeat fixed;
-    background-position-y: bottom;
-}
-
-.jumbotron {
-    height: 40vh;
-    background-size: cover;
-}
-
-/*.event-container {
-    background-color: black;
-}*/
-
 .overview-static {
     font-weight: 600;
-    color: #dc3545;
+    color: navajowhite;
     position: absolute;
-    background-color: rgb(0 0 0 / 0.75);
-    border-radius: 100px;
-    box-shadow: inset 0px 0px 40px 16px rgb(255 255 255 / 0.60);
+    background-color: rgb(0 0 0 / 0.2);
+    border-radius: 120px;
+    /*box-shadow: inset 0px 0px 40px 16px rgb(47 21 12 /0.9);*/
+    box-shadow: inset 0px 0px 50px 16px rgb(119 43 21 / 0.90);
     padding: 0;
     margin: 0;
     padding-top: 50px;
