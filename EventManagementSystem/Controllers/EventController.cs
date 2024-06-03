@@ -41,6 +41,14 @@ public class EventController : Controller
 
                 ViewBag.GoogleMap = $"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345090644!2d{existingEvent.Longitude}!3d{existingEvent.Latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b68364c12aef!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618973873610!5m2!1sen!2sau";
 
+                existingEvent.TicketTypes = [.. existingEvent.TicketTypes!.OrderBy(tt => tt.Price)];
+
+                foreach (var TicketType in existingEvent.TicketTypes)
+                {
+                    TicketType.Tickets  = [.. await _ticketTypeRepository
+                        .GetTicketsByTickeyTypeIdAsync(TicketType.Id)];                    
+                }
+
                 return View(existingEvent);
             }
         }
@@ -50,7 +58,7 @@ public class EventController : Controller
     [Route("ConfirmTicket")]
     public async Task<IActionResult> ConfirmTicket(int ticketTypeId)
     {
-        var ticketType = await _eventRepository.GetTicketTypeByIdAsync(ticketTypeId);
+        var ticketType = await _ticketTypeRepository.GetTicketTypeByIdAsync(ticketTypeId);
 
         if (ticketType is not null)
         {
@@ -75,7 +83,7 @@ public class EventController : Controller
         if (ModelState.IsValid)
         {
             var user = await _userManager.GetUserAsync(User);
-            var existingTicketType = await _eventRepository.GetTicketTypeByIdAsync(ticketType.Id);
+            var existingTicketType = await _ticketTypeRepository.GetTicketTypeByIdAsync(ticketType.Id);
 
             if (user is null || existingTicketType is null || existingTicketType.Event is null)
             {

@@ -1,5 +1,6 @@
 ﻿using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,15 @@ public class TicketTypeRepository : ITicketTypeRepository
     public TicketTypeRepository(EventManagementSystemDbContext eventManagementSystemDbContext)
     {
         _eventManagementSystemDbContext = eventManagementSystemDbContext;
+    }
+
+    public async Task<IEnumerable<Ticket>> GetTicketsByTickeyTypeIdAsync(int ticketTypeId)
+    {
+        return await _eventManagementSystemDbContext.Tickets
+            .AsNoTracking()
+            .Where(t => t.TicketTypeId == ticketTypeId)
+            .Include(t => t.User)
+            .ToListAsync();
     }
 
     public async Task<int> UpdateTicketTypeAsync(TicketType ticketType)
@@ -35,5 +45,14 @@ public class TicketTypeRepository : ITicketTypeRepository
         {
             throw new ArgumentException("Ticket type not found.");
         }
+    }
+
+    public async Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId)
+    {
+        return await _eventManagementSystemDbContext.TicketTypes
+            .AsNoTracking()
+            .Include(tt => tt.Tickets)
+            .Include(tt => tt.Event)
+            .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
     }
 }
