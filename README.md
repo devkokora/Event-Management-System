@@ -1,5 +1,5 @@
 # Event Management System
-[Sample](Sample-page) - [Model](Model-diagram) - [Future](Future)
+[Sample](#Sample-page) - [Model](#Model-diagram) - [Future](#Future)
 ## Features:
 1. **User Registration and Authentication:** 
   - 🟢 Basic user registration and login functionality using ASP.NET Core Identity.
