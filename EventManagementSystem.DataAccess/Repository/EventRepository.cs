@@ -44,26 +44,7 @@ namespace EventManagementSystem.DataAccess.Repository
                     .ToListAsync();
             }
             return await GetAllAsync();
-        }
-
-        public Task<IEnumerable<Ticket>> GetAllTicketAsync(int eventId, int ticketTypeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Ticket?> GetTicketByIdAsync(int eventId, int ticketTypeId, int ticketId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<TicketType?> GetTicketTypeByIdAsync(int ticketTypeId)
-        {
-            return await _eventManagementSystemDbContext.TicketTypes
-                .AsNoTracking()
-                .Include(tt => tt.Tickets)
-                .Include(tt => tt.Event)
-                .FirstOrDefaultAsync(tt => tt.Id == ticketTypeId);
-        }
+        }        
 
         // Use on test.
         public async Task<int> UpdateTicketTypeAsync(Event updateEvent)

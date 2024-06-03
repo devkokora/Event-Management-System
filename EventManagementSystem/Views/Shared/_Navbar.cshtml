@@ -86,7 +86,7 @@
                             </li>
                         }
                     }
-                    <li class="nav-item px-2" style="padding-top: 0.15em;">
+                    @*<li class="nav-item px-2" style="padding-top: 0.15em;">
                         <div class="text-center">
                             <button class="btn btn-outline-secondary btn-dark bg-dark text-white py-1 px-2" data-bs-target="#search-modal" data-bs-toggle="modal">
                                 <span>
@@ -97,7 +97,7 @@
                                 </span>
                             </button>
                         </div>
-                    </li>
+                    </li>*@
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
@@ -125,7 +125,7 @@
     </nav>
 </header>
 
-<div class="modal fade" id="search-modal" tabindex="-1" aria-labelledby="search-modal-label" aria-hidden="true">
+@*<div class="modal fade" id="search-modal" tabindex="-1" aria-labelledby="search-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,7 +141,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 <div class="offcanvas offcanvas-end bg-dark border-start border-secondary" data-bs-scroll="true" tabindex="-1" id="user-profile-offcanvas"
      style="width:300px; border-radius:20px 0 0 20px">
