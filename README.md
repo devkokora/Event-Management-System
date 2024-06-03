@@ -1,5 +1,6 @@
-## Event Management System
-### Features:
+# Event Management System
+[Sample](Sample-page) - [Model](Model-diagram) - [Future](Future)
+## Features:
 1. **User Registration and Authentication:** 
   - 🟢 Basic user registration and login functionality using ASP.NET Core Identity.
   - 🟢 Different roles for users, such as Admin and Regular User.
@@ -18,11 +19,14 @@
 6. **Admin Dashboard:** 
   - 🟢 A page for admins to manage events: create, update, delete events.
   - 🟢 A list of users registered for each event.
+
+## Sample page
 <img src="EventManagementSystem/wwwroot/imgs/interface_1.png" alt="Alt text" />
 
+## Model diagram
 ![Alt text](EventManagementSystem/wwwroot/imgs/Mini%20Event%20(1).svg)
 
-### Future
+## Future
  - User profile.
  - User can edit infomation.
  - User can feedback event.
