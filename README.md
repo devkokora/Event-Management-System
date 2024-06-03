@@ -16,10 +16,20 @@
   - 🟢 Logged-in users can register for events.
   - 🟢 Once registered, an event's capacity should decrease accordingly.
 6. **Admin Dashboard:** 
-  - ⚫ A page for admins to manage events: create, update, delete events.
-  - ⚫ A list of users registered for each event.
-
+  - 🟢 A page for admins to manage events: create, update, delete events.
+  - 🟢 A list of users registered for each event.
 <img src="EventManagementSystem/wwwroot/imgs/interface_1.png" alt="Alt text" />
 
 ![Alt text](EventManagementSystem/wwwroot/imgs/Mini%20Event%20(1).svg)
+
+**Future**
+ - User profile.
+ - User can edit infomation.
+ - User can feedback event.
+ - User address for billed/ticket paper. 
+ - Stripe payment.
+ - Admin user dashboard.
+ - Admin Site dashboard.
+ - Site shop / Event shop.
+ - Home page detail.
 <!-- <img src="EventManagementSystem/wwwroot/imgs/Event.png" alt="Alt text" /> --!>
