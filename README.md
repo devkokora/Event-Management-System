@@ -22,7 +22,7 @@
 
 ![Alt text](EventManagementSystem/wwwroot/imgs/Mini%20Event%20(1).svg)
 
-**Future**
+### Future
  - User profile.
  - User can edit infomation.
  - User can feedback event.
