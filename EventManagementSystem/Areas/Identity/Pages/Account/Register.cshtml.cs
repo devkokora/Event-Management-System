@@ -105,6 +105,7 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
                     {
 
                         _logger.LogInformation("User created a new account with password.");
+                        return Redirect("/Identity/Account/Login");
                     }
                     else
                     {
