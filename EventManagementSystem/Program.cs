@@ -13,6 +13,7 @@ using dotenv.net;
 using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.DataAccess.Repository;
 using EventManagementSystem.DataAccess.Repository.Admin;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,13 +27,12 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages(); // for identity ui
 builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add blazor server
 
-/* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
+/* ====Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor==== */
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddSession();
-builder.Services.AddHttpContextAccessor();
-/* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
+builder.Services.AddMemoryCache();
+/* ====Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor==== */
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<RoleInitializer>();
@@ -79,7 +79,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseSession();
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -105,6 +105,7 @@ app.UseAntiforgery(); // blazor protect anonymous data
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
 
+// ========================FOR INITIALIZE===========================
 //using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
 //{
 //    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
@@ -127,5 +128,6 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazo
 //    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
 //    DbInitializer.Seed(context);
 //}
+// ========================FOR INITIALIZE===========================
 
 app.Run();

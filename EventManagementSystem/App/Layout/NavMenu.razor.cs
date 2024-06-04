@@ -35,7 +35,7 @@ public partial class NavMenu : ComponentBase
                     isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
                 }
             }
-            UserService.Initailize();
         }
+        UserService.Initailize();
     }
 }
