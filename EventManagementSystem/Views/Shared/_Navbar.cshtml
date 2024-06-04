@@ -121,7 +121,7 @@
     <div class="offcanvas-body text-white bg-dark" style="border-radius: 20px 0 0 20px;">
         <div class="list-group">
             <a id="manage" class="btn btn-outline-danger text-start nav-link ps-2 text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hello @(UserManager.GetUserName(User))
+                Hello @(UserManager.GetUserAsync(User).Result?.DisplayName)
             </a>
             <hr />
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">              

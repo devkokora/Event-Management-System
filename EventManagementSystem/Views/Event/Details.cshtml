@@ -32,8 +32,8 @@
             <p>@Model.Description</p>
             @if (SignInManager.IsSignedIn(User))
             {
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">Users registered</button>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">Feedback</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#showRegisteredModal">Users registered</button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#FeedbackModal">Feedback</button>
             }
         </div>
 
@@ -71,7 +71,7 @@
                 <form asp-action="ConfirmTicket" method="get">
                     <div class="form-group">
                         <label for="selectticketTypeId" class="control-label">Select Ticket</label>
-                        <select name="ticketTypeId" class="form-select" id="selectticketTypeId"> 
+                        <select name="ticketTypeId" class="form-select" id="selectticketTypeId">
                             @foreach (var ticketType in Model.TicketTypes)
                             {
                                 <option value="@ticketType.Id">
@@ -89,11 +89,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="modal fade" id="singleRegisteredModal" tabindex="-1" aria-labelledby="singleRegisteredModalLabel" aria-hidden="true">
+    <div class="modal fade" id="FeedbackModal" tabindex="-1" aria-labelledby="FeedbackModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content bg-dark">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="singleRegisteredModalLabel">New message</h1>
+                    <h1 class="modal-title fs-5" id="FeedbackModalLabel">New message</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -115,16 +115,14 @@
             </div>
         </div>
     </div>
-
-    @if (Model.TicketTypes.Count == 1)
-    {
-        <div class="modal fade" id="multiRegisteredModal" aria-hidden="true"
-             aria-labelledby="multiRegisteredModalLabel" tabindex="-1">
+    <div class="modal fade" id="showRegisteredModal" aria-hidden="true" aria-labelledby="showRegisteredModalLabel" tabindex="-1">
+        @if (Model.TicketTypes.Count == 1)
+        {
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content bg-dark">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="multiRegisteredModalLabel">
-                        @Model.TicketTypes.First().Name
+                        <h1 class="modal-title fs-5" id="showRegisteredModalLabel">
+                            @Model.TicketTypes.First().Name
                         </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -135,17 +133,15 @@
                             {
                                 displayNames.Add(ticket.User.DisplayName);
                             }
-                            string showUserName = string.Join(", ", displayNames);
+                            string displayAllUserNames = string.Join(", ", displayNames);
                         }
-                        <p>@showUserName</p>
+                        <p>@displayAllUserNames</p>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-    else
-    {
-        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        }
+        else
+        {
             <div class="modal-dialog modal-dialog-scrollable modal-sm">
                 <div class="modal-content bg-dark">
                     <div class="modal-header bg-secondary p-2">
@@ -168,33 +164,33 @@
                     </div>
                 </div>
             </div>
-        </div>
+        }
+    </div>
 
-        @foreach (var ticketType in Model.TicketTypes)
-        {
-            <div class="modal fade" id="@($"ticketType{ticketType.Id}")" aria-hidden="true"
-                 aria-labelledby="@($"ticketType{ticketType.Id}Label")" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content bg-dark">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="@($"ticketType{ticketType.Id}Label")">@ticketType.Name</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            @{
-                                List<string> displayNames = [];
-                                foreach (var ticket in ticketType.Tickets)
-                                {
-                                    displayNames.Add(ticket.User.DisplayName);
-                                }
-                                string showUserName = string.Join(", ", displayNames);
+    @foreach (var ticketType in Model.TicketTypes)
+    {
+        <div class="modal fade" id="@($"ticketType{ticketType.Id}")" aria-hidden="true"
+             aria-labelledby="@($"ticketType{ticketType.Id}Label")" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="@($"ticketType{ticketType.Id}Label")">@ticketType.Name</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @{
+                            List<string> displayNames = [];
+                            foreach (var ticket in ticketType.Tickets)
+                            {
+                                displayNames.Add(ticket.User.DisplayName);
                             }
-                            <p>@showUserName</p>
-                        </div>
+                            string showUserName = string.Join(", ", displayNames);
+                        }
+                        <p>@showUserName</p>
                     </div>
                 </div>
             </div>
-        }
+        </div>
     }
 }
 
