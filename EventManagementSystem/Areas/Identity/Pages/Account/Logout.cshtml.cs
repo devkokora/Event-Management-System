@@ -18,19 +18,19 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
-        private readonly IUserService _userService;
+        //private readonly IUserService _userService;
 
-        public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger, IUserService userService)
+        public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger/*, IUserService userService*/)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _userService = userService;
+            //_userService = userService;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            _userService.SignOut();
+            //_userService.SignOut();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {

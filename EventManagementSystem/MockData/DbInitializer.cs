@@ -62,7 +62,7 @@ public class DbInitializer
                     newEvent.TicketTypes = ticketTypes;
                     newEvent.PageVisitorCount = pageVisitorCount;
                     newEvent.Category = Enum.Parse<Category>(categoty);
-                    newEvent.UserId = "e05558fb-2578-4d6a-8728-88704c057ebd";                     
+                    newEvent.UserId = "d7b13edd-b503-4391-89a9-38634c3a086c";                     
                     
                     context.Events.Add(newEvent);
                     context.SaveChanges();

@@ -11,7 +11,8 @@
 <div class="container-fluid event-container pt-4 pb-5 bg-dark">
     <p class="h2 fw-bold text-center">Upcomming @CategoryName event</p>
     <div class="row">
-        @if (UpComingEvents is not null)
+        @if (UpComingEvents is not null && UpComingEvents.Count > 0)
+        {
             for (int i = 0; i < UpComingEvents.Count; i++)
             {
                 <div class="col-lg-3 col-md-4 mb-3 px-1 card-container"
@@ -41,6 +42,22 @@
                     </div>
                 </div>
             }
+        }
+        else
+        {
+            <div class="container-fluid d-flex align-items-center justify-content-center" style="height:460px;">
+                <div class="text-center">
+                    <h2></h2>
+                </div>
+            </div>
+            <div class="pagination-dots text-center">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    int selected = i;
+                    <span class="dot"></span>
+                }
+            </div>
+        }
     </div>
     <div class="pagination-dots text-center">
         @for (int i = 1; i <= TotalUpComingPages; i++)
@@ -60,9 +77,9 @@
         <div class="col-md-9">
             <form class="container-fluid">
                 <div class="input-group justify-content-end">
-                    <input type="text" 
-                           class="border-0" 
-                           placeholder="Search on @(string.IsNullOrEmpty(CategoryName) ? "events" : CategoryName)." 
+                    <input type="text"
+                           class="border-0"
+                           placeholder="Search on @(string.IsNullOrEmpty(CategoryName) ? "events" : CategoryName)."
                            style="max-width:350px;"
                            @bind-value="SearchText"
                            @bind-value:event="oninput"
@@ -130,6 +147,9 @@
     [Inject]
     private IUserService UserService { get; set; } = default!;
 
+    [Inject]
+    private IHttpContextAccessor HttpContextAccessor { get; set; }
+
     public List<Event> TempEvents { get; private set; } = [];
     public List<Event> OtherEvents { get; private set; } = [];
     public List<Event> UpComingEvents { get; private set; } = [];
@@ -147,34 +167,38 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        while (!UserService.IsInitialize)
+        // Wait for UserService initialization
+        string? initializedState = HttpContextAccessor?.HttpContext?.Session.GetString("IsInitialize");
+        if (initializedState != "true")
         {
-            // Handle concurency better than random value Task.Delay on NavMenu.cs
-            await Task.Delay(100);
+            await UserService.Initialization;
         }
-
         await InitializeEventCards();
     }
 
     private async Task InitializeEventCards()
     {
-        CategoryName ??= string.Empty;
-
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        TempEvents = (await EventRepository.GetAllByTypeAsync(CategoryName))
-            .Where(e => e.StartDate >= today)
-            .ToList();
-
-        if (TempEvents is not null)
+        string? initializedState = HttpContextAccessor?.HttpContext?.Session.GetString("IsInitialize");
+        if (initializedState == "true")
         {
-            UpComingEvents = [.. TempEvents.OrderBy(e => e.StartDate).Take(12)];
+            CategoryName ??= string.Empty;
 
-            OtherEvents = [.. TempEvents.Where(other => !UpComingEvents.Contains(other))];
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            TempEvents = (await EventRepository.GetAllByTypeAsync(CategoryName))
+                .Where(e => e.StartDate >= today)
+                .ToList();
 
-            TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
-            TotalUpComingPages = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
+            if (TempEvents is not null)
+            {
+                UpComingEvents = [.. TempEvents.OrderBy(e => e.StartDate).Take(12)];
 
-            CalcWidthProcress(UpComingEvents);
+                OtherEvents = [.. TempEvents.Where(other => !UpComingEvents.Contains(other))];
+
+                TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+                TotalUpComingPages = (int)Math.Ceiling((double)UpComingEvents.Count() / 4);
+
+                CalcWidthProcress(UpComingEvents);
+            }
         }
     }
 

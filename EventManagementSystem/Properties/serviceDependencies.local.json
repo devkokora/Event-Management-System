@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/southeastasia/connectors/ConnectionStringsEventManagementSystemDb_0A850EBC4F",
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/eventmanagementsystemdbserver/databases/EventManagementSystem_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:EventManagementSystemDbContextConnection",
+      "dynamicId": null
+    }
+  }
+}

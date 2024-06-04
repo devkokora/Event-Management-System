@@ -86,18 +86,6 @@
                             </li>
                         }
                     }
-                    @*<li class="nav-item px-2" style="padding-top: 0.15em;">
-                        <div class="text-center">
-                            <button class="btn btn-outline-secondary btn-dark bg-dark text-white py-1 px-2" data-bs-target="#search-modal" data-bs-toggle="modal">
-                                <span>
-                                    <i class="bi bi-search" style="font-size: 1.2rem;"></i> Search
-                                </span>
-                                <span style="padding-left:7rem;">
-                                    🙂
-                                </span>
-                            </button>
-                        </div>
-                    </li>*@
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
@@ -124,24 +112,6 @@
         </div>
     </nav>
 </header>
-
-@*<div class="modal fade" id="search-modal" tabindex="-1" aria-labelledby="search-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="search-modal-label">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>*@
 
 <div class="offcanvas offcanvas-end bg-dark border-start border-secondary" data-bs-scroll="true" tabindex="-1" id="user-profile-offcanvas"
      style="width:300px; border-radius:20px 0 0 20px">
