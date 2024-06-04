@@ -21,35 +21,21 @@ public partial class NavMenu : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        if (UserService.User is null && (UserService.IsLogin || !UserService.IsInitialize))
+        UserService.Clear();
+        if (AuthenticationStateProvider is not null && UserManager is not null)
         {
-            if (AuthenticationStateProvider is not null && UserManager is not null)
-            {
-                AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                ClaimsPrincipal? UserClaims = authState.User;
+            AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            ClaimsPrincipal? UserClaims = authState.User;
 
-                if (UserClaims.Identity!.IsAuthenticated)
-                {
-                    CurrentUser = await UserManager.GetUserAsync(UserClaims);
-                    if (CurrentUser is not null)
-                    {
-                        isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
-                        UserService.User = CurrentUser;
-                        UserService.IsLogin = true;
-                        if (isAdmin)
-                            UserService.IsAdmin = isAdmin;                        
-                    }
-                }                
-            }
-            UserService.IsInitialize = true;
-        }
-        else
-        {
-            if (UserService.IsLogin)
+            if (UserClaims.Identity!.IsAuthenticated)
             {
-                CurrentUser = UserService.User;
-                isAdmin = UserService.IsAdmin;
+                CurrentUser = await UserManager.GetUserAsync(UserClaims);
+                if (CurrentUser is not null)
+                {
+                    isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
+                }
             }
+            UserService.Initailize();
         }
     }
 }

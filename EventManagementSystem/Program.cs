@@ -29,7 +29,9 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents(); // Add b
 /* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<UserManager<User>>();
-builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 /* Provide ClaimsPrincipal and Handle concurrent connection to Database issues in Blazor */
 
 builder.Services.AddHttpClient();
@@ -72,13 +74,12 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -104,27 +105,27 @@ app.UseAntiforgery(); // blazor protect anonymous data
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
 
-using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
-{
-    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
-    roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
-}
+//using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
+//{
+//    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
+//    roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
+//}
 
-using (var scopeAddAdmin = app.Services.CreateScope())
-{
-    var adminManager = scopeAddAdmin.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var admin = await adminManager.FindByNameAsync("admin@eventjui.com");
-    if (admin is not null)
-    {
-        var changeRoleResult = await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
-        Console.WriteLine(changeRoleResult.ToString());
-    }
-}
+//using (var scopeAddAdmin = app.Services.CreateScope())
+//{
+//    var adminManager = scopeAddAdmin.ServiceProvider.GetRequiredService<UserManager<User>>();
+//    var admin = await adminManager.FindByNameAsync("admin@eventjui.com");
+//    if (admin is not null)
+//    {
+//        await adminManager.RemoveFromRoleAsync(admin, nameof(UserRoles.User));
+//        await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
+//    }
+//}
 
-using (var scopeDbInit = app.Services.CreateScope())
-{
-    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
-    DbInitializer.Seed(context);
-}
+//using (var scopeDbInit = app.Services.CreateScope())
+//{
+//    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
+//    DbInitializer.Seed(context);
+//}
 
 app.Run();

@@ -1,25 +1,28 @@
-﻿using EventManagementSystem.Models;
+﻿using EventManagementSystem.DataAccess.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace EventManagementSystem.Services
 {
     public class UserService : IUserService
     {
-        public User? User { get ; set; }
-        public bool IsAdmin { get ; set; }
-        public bool IsLogin { get; set; }
-        public bool IsInitialize { get; set; } = false;
+        private readonly TaskCompletionSource<bool> taskCompletionSource = new();
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public Task Initialization => taskCompletionSource.Task;
 
-        public void SignIn()
+        public UserService(IHttpContextAccessor httpContextAccessor)
         {
-            IsLogin = true;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public void SignOut()
+        public void Initailize()
         {
-            User = default;
-            IsAdmin = default;
-            IsLogin = false;
-            IsInitialize = false;
+            _httpContextAccessor.HttpContext?.Session.SetString("IsInitialize", "true");
+            taskCompletionSource.SetResult(true);
+        }
+
+        public void Clear()
+        {
+            _httpContextAccessor.HttpContext?.Session.Clear();
         }
     }
 }
