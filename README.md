@@ -22,6 +22,7 @@
 
 ## Sample page
 <img src="EventManagementSystem/wwwroot/imgs/interface_1.png" alt="Alt text" />
+<img src="EventManagementSystem/wwwroot/imgs/interface_2.png" alt="Alt text" />
 
 ## Model diagram
 ![Alt text](EventManagementSystem/wwwroot/imgs/Mini%20Event%20(1).svg)
