@@ -9,29 +9,23 @@ namespace EventManagementSystem.Services
     {
         private readonly TaskCompletionSource<bool> _taskCompletionSource = new();
         private readonly IMemoryCache _memoryCache;
-
+        private const string Key = "InitailizeCache";
+        public Task Initialization => _taskCompletionSource.Task;
         public bool IsInitialized
         {
             get
             {
-                string key = "InitailizeCache";
-                return _memoryCache.Get(key).ToString() == "true";
+                return _memoryCache.Get(Key)?.ToString() == "true";
             }
             set
             {
-                var key = "InitailizeCache";
-                if (!string.IsNullOrEmpty(key))
+                _memoryCache.Set(Key, value ? "true" : "false");
+                if (value)
                 {
-                    _memoryCache.Set(key, value ? "true" : "false");
-                    if (value)
-                    {
-                        _taskCompletionSource.TrySetResult(true);
-                    }
+                    _taskCompletionSource.TrySetResult(true);
                 }
             }
         }
-
-        public Task Initialization => _taskCompletionSource.Task;
 
         public UserService(IMemoryCache memoryCache)
         {
@@ -51,13 +45,12 @@ namespace EventManagementSystem.Services
 
         public void SetCache(string? value)
         {
-            string key = "InitailizeCache";
-            var encodedCache = _memoryCache.Get(key);
+            var encodedCache = _memoryCache.Get(Key);
 
             if (encodedCache == null)
             {
                 var options = new MemoryCacheEntryOptions();
-                _memoryCache.Set(key, value);
+                _memoryCache.Set(Key, value, options);
             }
         }
     }
