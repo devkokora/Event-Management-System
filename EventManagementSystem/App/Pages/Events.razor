@@ -141,8 +141,10 @@
 </div>
 
 @code {
+    //[Inject]
+    //private IEventRepository EventRepository { get; set; } = default!;
     [Inject]
-    private IEventRepository EventRepository { get; set; } = default!;
+    private IEventService EventService { get; set; } = default!;
 
     [Inject]
     private IUserService UserService { get; set; } = default!;
@@ -162,29 +164,37 @@
     [Parameter]
     public string? CategoryName { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         // Wait for UserService initialization
-        if (!UserService.IsInitialized)
-        {
-            await UserService.Initialization;
-        }
-        await InitializeEventCards();
+        //if (!UserService.IsInitialized)
+        //{
+        //    await UserService.Initialization;
+        //}
+        InitializeEventCards();
     }
 
-    private async Task InitializeEventCards()
+    private void InitializeEventCards()
     {
-        if (!UserService.IsInitialized)
-        {
-            return;
-        }
+        //if (!UserService.IsInitialized)
+        //{
+        //    return;
+        //}
 
         CategoryName ??= string.Empty;
 
         var today = DateOnly.FromDateTime(DateTime.Now);
-        TempEvents = (await EventRepository.GetAllByTypeAsync(CategoryName))
-            .Where(e => e.StartDate >= today)
-            .ToList();
+        //TempEvents = await EventRepository.GetAllByTypeAsync(CategoryName);
+        if (Enum.TryParse(typeof(Category), CategoryName, true, out var existingCategory))
+        {
+            TempEvents = EventService.Events.Where(e => e.Category.Equals((Category)existingCategory))
+                .Where(e => e.StartDate >= today)
+                .ToList();
+        }
+        else
+        {
+            TempEvents = EventService.Events.Where(e => e.StartDate >= today).ToList();
+        }
 
         if (TempEvents is not null)
         {
@@ -239,11 +249,11 @@
     private void Search()
     {
         OtherEvents.Clear();
-        if (EventRepository is not null)
+        if (EventService.Events is not null)
         {
             if (SearchText.Length >= 2)
             {
-                OtherEvents = [.. EventRepository.SearchEventByType(SearchText, CategoryName, TempEvents)];
+                OtherEvents = [.. SearchEventByType(SearchText, CategoryName, TempEvents)];
             }
             else
             {
@@ -251,6 +261,51 @@
             }
             OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Id == other.Id))];
             TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+        }
+        //if (EventRepository is not null)
+        //{
+        //    if (SearchText.Length >= 2)
+        //    {
+        //        OtherEvents = [.. EventRepository.SearchEventByType(SearchText, CategoryName, TempEvents)];
+        //    }
+        //    else
+        //    {
+        //        OtherEvents = TempEvents;
+        //    }
+        //    OtherEvents = [.. OtherEvents.Where(other => !UpComingEvents.Any(ue => ue.Id == other.Id))];
+        //    TotalOtherPages = (int)Math.Ceiling((double)OtherEvents.Count() / 4);
+        //}
+    }
+
+    public IEnumerable<Event> SearchEventByType(string searchQuery, string? typeName, List<Event>? tempEvents)
+    {
+        if (tempEvents is not null && tempEvents.Count != 0)
+        {
+            return tempEvents
+                .Where(e => e.Title.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                e.ShortDescription.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                e.Description.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                e.Country.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                e.Address.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase));
+        }
+        else if (Enum.TryParse(typeof(Category), typeName, true, out var existingCategory))
+        {
+            return EventService.Events
+            .Where(e => e.Category.Equals((Category)existingCategory))
+            .Where(e => e.Title.Contains(searchQuery) ||
+                e.ShortDescription.Contains(searchQuery) ||
+                e.Description.Contains(searchQuery) ||
+                e.Country.Contains(searchQuery) ||
+                e.Address.Contains(searchQuery));
+        }
+        else
+        {
+            return EventService.Events
+            .Where(e => e.Title.Contains(searchQuery) ||
+            e.ShortDescription.Contains(searchQuery) ||
+            e.Description.Contains(searchQuery) ||
+            e.Country.Contains(searchQuery) ||
+            e.Address.Contains(searchQuery));
         }
     }
 }

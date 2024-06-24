@@ -49,7 +49,12 @@ namespace EventManagementSystem.Services
 
             if (encodedCache == null)
             {
-                var options = new MemoryCacheEntryOptions();
+                var options = new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    Priority = CacheItemPriority.Normal,
+                    SlidingExpiration = TimeSpan.FromMinutes(5)
+                };
                 _memoryCache.Set(Key, value, options);
             }
         }

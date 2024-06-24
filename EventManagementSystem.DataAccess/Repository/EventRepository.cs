@@ -13,7 +13,7 @@ namespace EventManagementSystem.DataAccess.Repository
         public EventRepository(EventManagementSystemDbContext eventManagementSystemDbContext)
         {
             _eventManagementSystemDbContext = eventManagementSystemDbContext;
-        }
+        }        
 
         public async Task<Event?> GetByIdAsync(int eventId)
         {
@@ -22,6 +22,16 @@ namespace EventManagementSystem.DataAccess.Repository
                 .Include(e => e.TicketTypes)
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
+        }
+
+        public IEnumerable<Event> GetAll()
+        {
+            return _eventManagementSystemDbContext.Events
+                .AsNoTracking()
+                .Include(e => e.TicketTypes)
+                .Include(e => e.User)
+                .OrderBy(e => e.Id)
+                .ToList();
         }
 
         public async Task<IEnumerable<Event>> GetAllAsync()
