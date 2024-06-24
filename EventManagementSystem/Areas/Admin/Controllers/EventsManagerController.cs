@@ -10,6 +10,7 @@ using EventManagementSystem.Utilities;
 using Microsoft.AspNetCore.Mvc.Filters;
 using EventManagementSystem.DataAccess.Repository.Admin;
 using NuGet.Versioning;
+using EventManagementSystem.Services;
 
 namespace EventManagementSystem.Areas.Admin.Controllers;
 
@@ -20,17 +21,19 @@ public class EventsManagerController : Controller
     private readonly IAdminEventRepository _adminEventRepository;
     private readonly IEventRepository _eventRepository;
     private readonly IAdminTicketTypeRepository _adminTicketTypeRepository;
+    private readonly IEventService _eventService;
     private readonly UserManager<User> _userManager;
     private readonly Cloudinary _cloudinary;
     private const int MaximumTicketTypes = 10;
 
-    public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager, Cloudinary cloudinary, IWebHostEnvironment webHostEnvironment, IAdminTicketTypeRepository adminTicketTypeRepository)
+    public EventsManagerController(IAdminEventRepository adminEventRepository, IEventRepository eventRepository, UserManager<User> userManager, Cloudinary cloudinary, IWebHostEnvironment webHostEnvironment, IAdminTicketTypeRepository adminTicketTypeRepository, IEventService eventService)
     {
         _adminEventRepository = adminEventRepository;
         _eventRepository = eventRepository;
         _userManager = userManager;
         _cloudinary = cloudinary;
         _adminTicketTypeRepository = adminTicketTypeRepository;
+        _eventService = eventService;
     }
     public override void OnActionExecuting(ActionExecutingContext context)
     {
@@ -147,6 +150,7 @@ public class EventsManagerController : Controller
 
                     TempData["Success"] = $"The event {newEvent.Title} was create successfully.";
 
+                    _eventService.SetEvents();
                     return Redirect($"/event/details/{newEvent.Id}");
                 }
             }
@@ -228,6 +232,7 @@ public class EventsManagerController : Controller
                 try
                 {
                     await _adminEventRepository.EditAsync(eventToEdit);
+                    _eventService.SetEvents();
                     return Redirect($"/event/details/{eventToEdit.Id}");
                 }
                 catch (Exception ex)
@@ -269,6 +274,7 @@ public class EventsManagerController : Controller
             try
             {
                 await _adminEventRepository.DeleteAsync(id.Value);
+                _eventService.SetEvents();
                 TempData["Success"] = "Deleted event successfuly. 🤩";
             }
             catch (Exception ex)
@@ -301,6 +307,7 @@ public class EventsManagerController : Controller
                     await _adminTicketTypeRepository.DeleteAllAsync(ticketTypeIds);
                 }
                 TempData["Success"] = $"Deleted ticket type id:{string.Join(", ", ticketTypeIds)} successfuly. 😎";
+                _eventService.SetEvents();
                 return RedirectToAction(nameof(Index));
 
             }

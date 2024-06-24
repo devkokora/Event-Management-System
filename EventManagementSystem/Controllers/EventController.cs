@@ -1,5 +1,6 @@
 ﻿using EventManagementSystem.DataAccess.Repository;
 using EventManagementSystem.Models;
+using EventManagementSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,14 +14,19 @@ public class EventController : Controller
     private readonly IEventRepository _eventRepository;
     private readonly IUserRepository _userRepository;
     private readonly ITicketTypeRepository _ticketTypeRepository;
+    private readonly IEventService _eventService;
     private readonly UserManager<User> _userManager;
+    private IEnumerable<Event> events;
 
-    public EventController(IEventRepository eventRepository, UserManager<User> userManager, IUserRepository userRepository, ITicketTypeRepository ticketTypeRepository)
+    public EventController(IEventRepository eventRepository, UserManager<User> userManager, IUserRepository userRepository, ITicketTypeRepository ticketTypeRepository, IEventService eventService)
     {
         _eventRepository = eventRepository;
         _userManager = userManager;
         _userRepository = userRepository;
         _ticketTypeRepository = ticketTypeRepository;
+        _eventService = eventService;
+
+        events = _eventService.Events;
     }
 
     [Route("Index")]
@@ -34,7 +40,8 @@ public class EventController : Controller
     {
         if (id is not null)
         {
-            var existingEvent = await _eventRepository.GetByIdAsync(id.Value);
+            //var existingEvent = await _eventRepository.GetByIdAsync(id.Value);
+            var existingEvent = events.FirstOrDefault(e => e.Id == id);
             if (existingEvent is not null)
             {
                 await _eventRepository.UpdateVisitorCountAsync(existingEvent.Id);                

@@ -42,6 +42,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 
+builder.Services.AddScoped<IEventService, EventService>();
+
 builder.Services.AddDbContext<EventManagementSystemDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("EventManagementSystemDbContextConnection"));
