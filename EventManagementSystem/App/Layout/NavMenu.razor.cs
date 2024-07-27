@@ -15,27 +15,31 @@ public partial class NavMenu : ComponentBase
     [Inject]
     private UserManager<User>? UserManager { get; set; }
     [Inject]
-    private IUserService UserService { get; set; }
+    // private IUserService UserService { get; set; }
     private User? CurrentUser { get; set; }
     private bool isAdmin = false;
 
     protected override async Task OnInitializedAsync()
     {
-        UserService.Clear();
+        // UserService.Clear();
         if (AuthenticationStateProvider is not null && UserManager is not null)
         {
-            AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            // Used .GetAwaiter().GetResult() for blocking async problem on blazor with Identity
+            //AuthenticationState? authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            AuthenticationState? authState = AuthenticationStateProvider.GetAuthenticationStateAsync().GetAwaiter().GetResult();
             ClaimsPrincipal? UserClaims = authState.User;
 
             if (UserClaims.Identity!.IsAuthenticated)
             {
-                CurrentUser = await UserManager.GetUserAsync(UserClaims);
+                // CurrentUser = await UserManager.GetUserAsync(UserClaims);
+                CurrentUser = UserManager.GetUserAsync(UserClaims).GetAwaiter().GetResult();
                 if (CurrentUser is not null)
                 {
-                    isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
+                    // isAdmin = await UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin));
+                    isAdmin = UserManager.IsInRoleAsync(CurrentUser, nameof(UserRoles.Admin)).GetAwaiter().GetResult();
                 }
             }
         }
-        UserService.Initailize();
+        // UserService.Initailize();
     }
 }
