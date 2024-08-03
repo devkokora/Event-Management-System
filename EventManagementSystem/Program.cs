@@ -109,28 +109,28 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazo
 
 // ========================FOR INITIALIZE===========================
 
-//using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
-//{
-//    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
-//    roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
-//}
+using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
+{
+    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
+    roleInitializer.InitializeRolesAsync().Wait(); // Seeding roles
+}
 
-//using (var scopeAddAdmin = app.Services.CreateScope())
-//{
-//    var adminManager = scopeAddAdmin.ServiceProvider.GetRequiredService<UserManager<User>>();
-//    var admin = await adminManager.FindByNameAsync("admin@eventjui.com");
-//    if (admin is not null)
-//    {
-//        await adminManager.RemoveFromRoleAsync(admin, nameof(UserRoles.User));
-//        await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
-//    }
-//}
+using (var scopeAddAdmin = app.Services.CreateScope())
+{
+    var adminManager = scopeAddAdmin.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var admin = await adminManager.FindByNameAsync("admin@eventjui.com");
+    if (admin is not null)
+    {
+        await adminManager.RemoveFromRoleAsync(admin, nameof(UserRoles.User));
+        await adminManager.AddToRoleAsync(admin, nameof(UserRoles.Admin));
+    }
+}
 
-//using (var scopeDbInit = app.Services.CreateScope())
-//{
-//    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
-//    DbInitializer.Seed(context);
-//}
+using (var scopeDbInit = app.Services.CreateScope())
+{
+    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
+    DbInitializer.Seed(context);
+}
 //======================== FOR INITIALIZE ===========================
 
 app.Run();
