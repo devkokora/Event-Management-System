@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 using EventManagementSystem.DataAccess.Data;
 using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventManagementSystem.MockData;
 
 public class DbInitializer
-{   
+{
     public static void Seed(EventManagementSystemDbContext context)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
@@ -62,7 +63,7 @@ public class DbInitializer
                     newEvent.TicketTypes = ticketTypes;
                     newEvent.PageVisitorCount = pageVisitorCount;
                     newEvent.Category = Enum.Parse<Category>(categoty);
-                    newEvent.UserId = "d7b13edd-b503-4391-89a9-38634c3a086c";                     
+                    newEvent.UserId = "815af121-d77a-4431-9f43-024e7f0406b1";                     
                     
                     context.Events.Add(newEvent);
                     context.SaveChanges();

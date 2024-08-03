@@ -108,6 +108,7 @@ app.UseAntiforgery(); // blazor protect anonymous data
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazor server
 
 // ========================FOR INITIALIZE===========================
+
 //using (var scopeInitializeRole = app.Services.CreateScope()) // Calling RoleInitializer
 //{
 //    var roleInitializer = scopeInitializeRole.ServiceProvider.GetRequiredService<RoleInitializer>();
@@ -130,6 +131,6 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode(); // plug-in blazo
 //    var context = scopeDbInit.ServiceProvider.GetRequiredService<EventManagementSystemDbContext>();
 //    DbInitializer.Seed(context);
 //}
-// ========================FOR INITIALIZE===========================
+//======================== FOR INITIALIZE ===========================
 
 app.Run();
