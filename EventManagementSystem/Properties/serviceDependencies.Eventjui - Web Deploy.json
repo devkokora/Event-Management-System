@@ -1,11 +1,3 @@
 {
-  "dependencies": {
-    "mssql1": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Eventjui/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsEventManagementSystemDb_0A850EBC4F",
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/eventmanagementsystemdbserver/databases/EventManagementSystem_db",
-      "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:EventManagementSystemDbContextConnection"
-    }
-  }
+  "dependencies": {}
 }
